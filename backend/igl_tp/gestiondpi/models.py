@@ -17,6 +17,7 @@ class Employe(models.Model):
     role = models.CharField(max_length=20, choices=[('medecin', 'Medecin'),
                                                     ('administratif', 'Administratif'),
                                                     ('infirmier', 'Infirmier'),
+                                                    ('radiologue', 'radiologue'),
                                                     ('pharmacien', 'Pharmacien'),
                                                     ('laboratorien', 'Laboratorien')])
     telephone = models.CharField(max_length=35, blank=True, null=True)

@@ -85,6 +85,7 @@ REST_FRAMEWORK = {
         'gestiondpi.permissions.IsPharmacien',
         'gestiondpi.permissions.IsMedecin',
         'gestiondpi.permissions.IsInfirmier',
+        'gestiondpi.permissions.IsRadiologue',
         'gestiondpi.permissions.IsPatient',
         'gestiondpi.permissions.IsLaboratorien',
         'gestiondpi.permissions.IsAdministratif',
