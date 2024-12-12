@@ -3,9 +3,9 @@
   <component name="FacetManager">
     <facet type="django" name="Django">
       <configuration>
-        <option name="rootFolder" value="$MODULE_DIR$/main" />
-        <option name="settingsModule" value="main/settings.py" />
-        <option name="manageScript" value="$MODULE_DIR$/main/manage.py" />
+        <option name="rootFolder" value="$MODULE_DIR$/igl_tp" />
+        <option name="settingsModule" value="igl_tp/settings.py" />
+        <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
         <option name="trackFilePattern" value="migrations" />
