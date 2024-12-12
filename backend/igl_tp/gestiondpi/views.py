@@ -6,7 +6,7 @@ from rest_framework import status
 
 
 class CreateRolesGroupsView(APIView):
-    permission_classes = []  # Only allow admins to create groups
+    permission_classes = [IsAdminUser]  # Only allow admins to create groups
 
     def get(self, request):
         roles = ['medecin', 'administratif', 'infirmier', 'pharmacien','radiologue', 'laboratorien', 'patient']

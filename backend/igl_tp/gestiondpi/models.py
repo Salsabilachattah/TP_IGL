@@ -30,7 +30,7 @@ class Employe(models.Model):
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nss = models.BigIntegerField(unique=True)  # National Social Security number
+    nss = models.BigIntegerField(primary_key=True)
     nom = models.CharField(max_length=45)
     prenom = models.CharField(max_length=45)
     date_de_naissance = models.DateField()
@@ -91,7 +91,16 @@ class Outil(models.Model):
 class ConsultationOutil(models.Model):
     consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE)
     outil = models.ForeignKey(Outil, on_delete=models.CASCADE)
+
+class BilanBioTest(models.Model):
+    bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.CASCADE)
+    type = models.CharField(max_length=20, choices=[('choice1', 'Choice1'),
+                                                    ('choice3', 'Choice2'),
+                                                    ('ext...', 'Ext..')
+                                                    ])
     valeur = models.FloatField()
+
+
 
 
 class Medicament(models.Model):
