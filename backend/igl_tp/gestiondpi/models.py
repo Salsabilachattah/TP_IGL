@@ -74,21 +74,9 @@ class Consultation(models.Model):
     bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.SET_NULL, blank=True, null=True)
     bilan_radiologique = models.ForeignKey(BilanRadiologique, on_delete=models.SET_NULL, blank=True, null=True)
     ordonance = models.ForeignKey(Ordonance, on_delete=models.SET_NULL, blank=True, null=True)
+    resume = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-class Resume(models.Model):
-    consultation = models.ForeignKey(Consultation, on_delete=models.CASCADE, related_name="resumes")
-    diagnosis = models.TextField(blank=True, null=True)
-    symptoms = models.TextField(blank=True, null=True)
-    measures_taken = models.TextField(blank=True, null=True)
-    next_consultation_date = models.DateTimeField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # To track when the résumé was created
-
-    def __str__(self):
-        return f"Résumé for consultation on {self.consultation.date}"
-
-
 
 class Outil(models.Model):
     nom = models.CharField(max_length=45)
