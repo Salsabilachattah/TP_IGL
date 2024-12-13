@@ -29,8 +29,8 @@ class Employe(models.Model):
 
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nss = models.BigIntegerField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nom = models.CharField(max_length=45)
     prenom = models.CharField(max_length=45)
     date_de_naissance = models.DateField()
@@ -41,7 +41,7 @@ class Patient(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.nom} {self.prenom}"
+         return f"{self.nom} {self.prenom}"
 
 
 class BilanBiologique(models.Model):
@@ -61,8 +61,8 @@ class BilanRadiologique(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Ordonance(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)  
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -152,13 +152,12 @@ class SoinMedicament(models.Model):
 class SoinInfirmier(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    description = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField()
 
 class ObservationEtat(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    observation = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-
+    observation = models.TextField()
 
 
 class Traitement(models.Model):
