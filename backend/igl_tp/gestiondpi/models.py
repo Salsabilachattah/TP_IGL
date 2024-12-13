@@ -74,6 +74,7 @@ class Consultation(models.Model):
     bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.SET_NULL, blank=True, null=True)
     bilan_radiologique = models.ForeignKey(BilanRadiologique, on_delete=models.SET_NULL, blank=True, null=True)
     ordonance = models.ForeignKey(Ordonance, on_delete=models.SET_NULL, blank=True, null=True)
+    diagnostique = models.TextField(blank=True, null=True)
     resume = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
