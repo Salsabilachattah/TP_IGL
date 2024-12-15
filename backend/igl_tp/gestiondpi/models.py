@@ -126,6 +126,7 @@ class ImageRadio(models.Model):
 
 class Soin(models.Model):
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     observation = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -133,23 +134,20 @@ class Soin(models.Model):
 
 class SoinMedicament(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
-    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     medicament = models.ForeignKey(Medicament, on_delete=models.CASCADE)
     dose = models.FloatField()
     date_time = models.DateTimeField()
 
 class SoinInfirmier(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
-    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField()
 
 class ObservationEtat(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
-    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     observation = models.TextField()
 
 
-class Traitement(models.Model):
+class MedecinPatient(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True, related_name="patients")
 
