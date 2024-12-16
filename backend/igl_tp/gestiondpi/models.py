@@ -62,7 +62,7 @@ class Consultation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class BilanBiologique(models.Model):
-    consultation = models.ForeignKey(Consultation,primary_key=True, on_delete=models.CASCADE)
+    consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
     laborantin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -72,7 +72,7 @@ class BilanBiologique(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class BilanRadiologique(models.Model):
-    consultation = models.ForeignKey(Consultation,primary_key=True, on_delete=models.CASCADE)
+    consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     radiologue = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
