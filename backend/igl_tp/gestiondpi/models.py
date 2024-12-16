@@ -94,9 +94,9 @@ class ConsultationOutil(models.Model):
 
 class BilanBioTest(models.Model):
     bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.CASCADE)
-    type = models.CharField(max_length=20, choices=[('choice1', 'Choice1'),
-                                                    ('choice3', 'Choice2'),
-                                                    ('ext...', 'Ext..')
+    type = models.CharField(max_length=20, choices=[('cholesterol', 'Cholestérol'),
+                                                    ('fer', 'Fer Tests'),
+                                                    ('hypertension', 'Hypertension')
                                                     ])
     valeur = models.FloatField()
     class Meta:
@@ -128,7 +128,7 @@ class ImageRadio(models.Model):
 
 
 class Soin(models.Model):
-    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     observation = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -145,11 +145,13 @@ class SoinInfirmier(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField()
+    date_time = models.DateTimeField()
 
 class ObservationEtat(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     observation = models.TextField()
+    date_time = models.DateTimeField()
 
 
 class Traitement(models.Model):
