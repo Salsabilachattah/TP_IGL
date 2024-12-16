@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest
+from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer
 from ..permissions.bilan import BilanPermissions
