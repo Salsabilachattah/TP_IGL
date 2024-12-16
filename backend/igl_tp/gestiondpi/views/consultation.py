@@ -25,16 +25,16 @@ class ResumeView(APIView):
 
 
 class DiagnostiqueView(APIView):
-    def get(self, request, id):
-        # Get the consultation instance by id
-        consultation = get_object_or_404(Consultation, id=id)
+    def get(self, request, pk):
+        # Get the consultation instance by primary key
+        consultation = get_object_or_404(Consultation, pk=pk)
 
         # Return the resume field as part of the response
         return Response({"resume": consultation.diagnostique}, status=status.HTTP_200_OK)
 
 
-    def patch(self, request, id):
-        consultation = get_object_or_404(Consultation, id=id)
+    def patch(self, request, pk):
+        consultation = get_object_or_404(Consultation, pk=pk)
         serializer = DiagnostiqueSerializer(consultation, data=request.data, partial=True)
 
         if serializer.is_valid():
