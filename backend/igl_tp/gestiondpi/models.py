@@ -68,8 +68,8 @@ class BilanBiologique(models.Model):
     description = models.TextField(blank=True, null=True)
     resultat = models.TextField(blank=True, null=True)
     valide=models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_debut = models.DateTimeField(auto_now_add=True)
+    date_fin = models.DateTimeField(auto_now=True)
 
 class BilanRadiologique(models.Model):
     consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
