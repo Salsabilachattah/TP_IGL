@@ -66,10 +66,11 @@ class PatientView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 #  to directly get patient info when the patient is authenticated
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsPatient])  # only if authenticated and is a patient
-def get_patient_info(request, pk):
+def get_patient_info(request):
     patient = get_object_or_404(Patient, user__id=request.user.id)
     serializer = PatientSerializer(patient)
     return Response(serializer.data, status=status.HTTP_200_OK)

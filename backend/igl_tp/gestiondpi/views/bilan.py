@@ -47,7 +47,7 @@ class BilanBiologiqueView(APIView):
 
 
 
-class BilaRadiologiqueView(APIView):
+class BilanRadiologiqueView(APIView):
     permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
 
     def get(self, request, consultation_id):
