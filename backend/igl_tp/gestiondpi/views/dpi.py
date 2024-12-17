@@ -1,28 +1,31 @@
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from io import BytesIO
 from django.http import HttpResponse
 from qrcode import *
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from ..models import Patient
-from ..permissions.dpi_view import PatientViewPermissions
+from ..permissions.auth import IsPatient
+from ..permissions.dpi import PatientViewPermissions
 from ..serializers.patient import PatientSerializer
 from ..permissions import *
 from django.http import FileResponse
 
 
-class PatientListCreateAPIView(APIView):
+class PatientView(APIView):
     permission_classes = [PatientViewPermissions]
+
+    # refactor by removing try,catch and using 'get_object_or_404'
     def get(self, request, nss=None):
-        if nss :#and (nss == request.user.patient.nss or request.user.group.name != "patient"):
+        if nss:
             # Fetch a single patient by NSS
-            try:
-                patient = Patient.objects.get(nss=nss)
-                serializer = PatientSerializer(patient)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            except Patient.DoesNotExist:
-                return Response({"error": "Patient not found"}, status=status.HTTP_404_NOT_FOUND)
+            patient = get_object_or_404(Patient, nss=nss)
+            serializer = PatientSerializer(patient)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             # Fetch all patients
             patients = Patient.objects.all()
@@ -38,6 +41,9 @@ class PatientListCreateAPIView(APIView):
         password = f"patient_{patient_data.get('nss')}"
         username = f"{patient_data.get('nom').lower()}_{patient_data.get('prenom').lower()}"
         user = User.objects.create_user(username=username, password=password)
+
+        # add the user to 'patient' group for permissions stuff
+        user.groups.add(Group.objects.get(name='patient'))
 
         # Attach the created User to the Patient data
         patient_data['user'] = user.id
@@ -59,3 +65,11 @@ class PatientListCreateAPIView(APIView):
 
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#  to directly get patient info when the patient is authenticated
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,IsPatient])  # only if authenticated and is a patient
+def get_patient_info(request, pk):
+    patient = get_object_or_404(Patient, user__id=request.user.id)
+    serializer = PatientSerializer(patient)
+    return Response(serializer.data, status=status.HTTP_200_OK)
