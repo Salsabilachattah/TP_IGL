@@ -6,12 +6,14 @@ from django.http import HttpResponse
 from qrcode import *
 from django.contrib.auth.models import User
 from ..models import Patient
+from ..permissions.dpi_view import PatientViewPermissions
 from ..serializers.patient import PatientSerializer
 from ..permissions import *
 from django.http import FileResponse
 
 
 class PatientListCreateAPIView(APIView):
+    permission_classes = [PatientViewPermissions]
     def get(self, request, nss=None):
         if nss :#and (nss == request.user.patient.nss or request.user.group.name != "patient"):
             # Fetch a single patient by NSS
@@ -27,7 +29,7 @@ class PatientListCreateAPIView(APIView):
             serializer = PatientSerializer(patients, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
     
-    # permission_classes = [IsAdministratif, IsMedecin]
+
     def post(self, request):
         # to add a new patient
         patient_data = request.data
