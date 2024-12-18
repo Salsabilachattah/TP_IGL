@@ -1,9 +1,10 @@
 .table-container {
   max-width: 1500px;
-  margin: 0 auto;
+  margin: auto;
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
+  margin-bottom: 5%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -11,12 +12,13 @@ table {
   width: 100%;
   border-collapse: collapse;
   background-color: #ffffff;
+ 
 }
 
 thead {
   background-color: #356BBA;
   color: white;
-  font-size: large;
+  font-size: x-large;
   line-height: 1.5;
 }
 
@@ -29,21 +31,21 @@ th, td {
 .tous {
   display: flex;
   flex-direction: row;
-  gap: 10px; /* Ajuste la distance entre les boutons */
+  gap: 10px;
 }
 
 .btns {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 10px; /* Ajuste la distance entre les boutons */
+  gap: 10px; 
 }
 
 .tous {
   display: flex;
   flex-direction: row;
-  gap: 50%; /* Ajuste pour le fond à droite du bouton */
-  align-items: center; /* Pour centrer verticalement les boutons */
+  gap: 50%; 
+  align-items: center; 
 }
 
 .tous .btns {
@@ -54,5 +56,14 @@ th, td {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 10px; /* Ajuste la distance entre les boutons */
+  gap: 10px; 
 }
+
+.plus {
+  display: block; 
+  padding: 0.5% 0%;
+  cursor: pointer;
+  text-align: center; 
+}
+
+

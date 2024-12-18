@@ -1,7 +1,9 @@
 
-<button class="learn-more">
+<button class="learn-more"(click)="toggleInfo()">
   <span class="circle" aria-hidden="true">
   <span class="icon arrow"></span>
   </span>
   <span class="button-text">Afficher plus</span>
 </button>
+
+<app-infodisplay *ngIf="showInfo"></app-infodisplay>
