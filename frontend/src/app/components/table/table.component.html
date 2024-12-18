@@ -1,0 +1,27 @@
+<div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Numero de securite sociale</th>
+          <th>Plus d'informations personnelles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data">
+          <td>{{ item.nom }}</td>
+          <td>{{ item.prenom }}</td>
+          <td>{{ item.nss }}</td>
+          <td class="tous">
+            <app-showmorebutton></app-showmorebutton>
+            <div class="btns"> 
+              <app-deletebutton></app-deletebutton>
+              <app-editbutton></app-editbutton>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
