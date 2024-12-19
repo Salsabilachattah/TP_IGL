@@ -30,4 +30,3 @@ class IsLaboratorien(BasePermission):
 class IsPatient(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.groups.filter(name='patient').exists()
-

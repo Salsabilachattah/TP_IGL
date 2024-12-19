@@ -44,21 +44,6 @@ class Patient(models.Model):
          return f"{self.nom} {self.prenom}"
 
 
-class BilanBiologique(models.Model):
-    laborantin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    resultat = models.TextField(blank=True, null=True)
-    valide=models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class BilanRadiologique(models.Model):
-    radiologue = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    compte_rendu = models.TextField(blank=True, null=True)
-    valide=models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 class Ordonance(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)  
@@ -72,14 +57,33 @@ class Consultation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=False, null=True, related_name="consultations")
     date = models.DateTimeField()
-    bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.SET_NULL, blank=True, null=True)
-    bilan_radiologique = models.ForeignKey(BilanRadiologique, on_delete=models.SET_NULL, blank=True, null=True)
     ordonance = models.ForeignKey(Ordonance, on_delete=models.SET_NULL, blank=True, null=True)
     diagnostique = models.TextField(blank=True, null=True)
     resume = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+
+
+class BilanBiologique(models.Model):
+
+    consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
+    laborantin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    resultat = models.TextField(blank=True, null=True)
+    valide=models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class BilanRadiologique(models.Model):
+    consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
+    radiologue = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    compte_rendu = models.TextField(blank=True, null=True)
+    valide=models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Outil(models.Model):
@@ -128,12 +132,15 @@ class ImageRadio(models.Model):
 
 
 class Soin(models.Model):
+    patient = models.OneToOneField(Patient,primary_key=True, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    observation = models.TextField()
+    observation = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+    def __str__(self): 
+     return f"Soin for {self.patient} by {self.infirmier}"
+    
 class SoinMedicament(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
@@ -145,11 +152,14 @@ class SoinInfirmier(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField()
+    date_time = models.DateTimeField()
 
 class ObservationEtat(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     observation = models.TextField()
+    date_time = models.DateTimeField()
+
 
 
 class Traitement(models.Model):
