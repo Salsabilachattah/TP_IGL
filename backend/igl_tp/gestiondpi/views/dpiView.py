@@ -6,29 +6,30 @@ from django.http import HttpResponse
 from qrcode import *
 from django.contrib.auth.models import User
 from ..models import Patient
-from ..serializers.patient import PatientSerializer
+from ..serializers import PatientSerializer , OrdonnanceSerializer
 from ..permissions import *
 from django.http import FileResponse
-
+from ..permissions import IsAdministratif, IsMedecin
 
 class PatientListCreateAPIView(APIView):
     def get(self, request, nss=None):
-        if nss :#and (nss == request.user.patient.nss or request.user.group.name != "patient"):
+        if nss and (IsAdministratif(request.user) or IsMedecin(request.user)) and request.user.is_authenticated:
             # Fetch a single patient by NSS
             try:
                 patient = Patient.objects.get(nss=nss)
-                serializer = PatientSerializer(patient)
+                serializer = PatientSerializer.PatientSerializer(patient)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except Patient.DoesNotExist:
                 return Response({"error": "Patient not found"}, status=status.HTTP_404_NOT_FOUND)
         else:
             # Fetch all patients
             patients = Patient.objects.all()
-            serializer = PatientSerializer(patients, many=True)
+            serializer = PatientSerializer.PatientSerializer(patients, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
     
     # permission_classes = [IsAdministratif, IsMedecin]
     def post(self, request):
+     if IsAdministratif(request.user) or IsMedecin(request.user):
         # to add a new patient
         patient_data = request.data
 
@@ -40,7 +41,7 @@ class PatientListCreateAPIView(APIView):
         # Attach the created User to the Patient data
         patient_data['user'] = user.id
 
-        serializer = PatientSerializer(data=patient_data)
+        serializer = PatientSerializer.PatientSerializer(data=patient_data)
         if serializer.is_valid():
             patient = serializer.save()
 
@@ -57,3 +58,23 @@ class PatientListCreateAPIView(APIView):
 
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+     
+class OrdonnanceCreateAPIView(APIView):
+        def post(self, request, nss):
+            if IsMedecin(request.user) and request.user.is_authenticated:
+                try:
+                    patient = Patient.objects.get(nss=nss)
+                except Patient.DoesNotExist:
+                    return Response({"error": "Patient not found"}, status=status.HTTP_404_NOT_FOUND)
+
+                ordonnance_data = request.data
+                ordonnance_data['patient'] = patient.id
+                ordonnance_data['medecin'] = request.user.id
+
+                serializer = OrdonnanceSerializer.OrdonnanceSerializer(data=ordonnance_data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
