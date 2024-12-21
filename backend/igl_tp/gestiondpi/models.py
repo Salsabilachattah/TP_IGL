@@ -11,7 +11,7 @@ class Hopital(models.Model):
 
 class Employe(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    hopital = models.ForeignKey(Hopital, on_delete=models.CASCADE)
+    hopital = models.ForeignKey(Hopital, on_delete=models.SET_NULL,null=True)
     nom = models.CharField(max_length=45, blank=True, null=True)
     prenom = models.CharField(max_length=45, blank=True, null=True)
     role = models.CharField(max_length=20, choices=[('medecin', 'Medecin'),
@@ -53,8 +53,7 @@ class Ordonance(models.Model):
 
 class Consultation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=False, null=True, related_name="consultations")
-    date = models.DateTimeField()
+    medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL,null=True ,related_name="consultations")
     ordonance = models.ForeignKey(Ordonance, on_delete=models.SET_NULL, blank=True, null=True)
     diagnostique = models.TextField(blank=True, null=True)
     resume = models.TextField(blank=True, null=True)

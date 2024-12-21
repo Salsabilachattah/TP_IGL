@@ -1,18 +1,9 @@
 from rest_framework import serializers
+
+from .commun import PatientInfoSerializer, EmployeInfoSerializer
 from ..models import BilanBiologique, Patient, Employe, BilanRadiologique, BilanBioTest, ImageRadio
 
 
-# Serializer for Patient
-class PatientInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Patient
-        fields = ['nss', 'nom', 'prenom']  # Include ID (nss), name (nom), and surname (prenom)
-
-# Serializer for Laborantin (Employe)
-class EmployeInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Employe
-        fields = ['id', 'nom', 'prenom', 'role']  # Include ID, name, surname, and role
 
 # Serializer for BilanBiologique
 class BilanBioTestSerializer(serializers.ModelSerializer):
