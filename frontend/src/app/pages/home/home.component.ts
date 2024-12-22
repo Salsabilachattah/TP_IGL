@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Importer CommonModule
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
+
 @Component({
   selector: 'app-home',
-  imports: [BackgroundVideoComponent],
+  standalone: true, // Assurez-vous que votre composant est standalone
+  imports: [CommonModule, BackgroundVideoComponent], // Ajoutez CommonModule ici
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  onLearnMore(): void {
-    console.log('En savoir plus sur l\'application');
-    // Ajoute ici une navigation ou une logique
-  }
+  showLoginForm = false; // Variable pour contrôler l'affichage du formulaire
 
-  onContactUs(): void {
-    console.log('Contactez-nous bouton cliqué');
-    // Ajoute ici une redirection ou une logique de contact
+  // Méthode pour afficher le formulaire de connexion
+  showForm() {
+    this.showLoginForm = true; // Met à jour la variable pour afficher le formulaire
   }
 }
