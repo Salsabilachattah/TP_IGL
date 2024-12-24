@@ -1,0 +1,77 @@
+<div class="relative h-screen w-full overflow-hidden">
+    <app-background-video></app-background-video>
+
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-white">
+        <h1 *ngIf="!showLoginForm" class="text-4xl font-bold">Bienvenue </h1>
+        
+        <button *ngIf="!showLoginForm" (click)="showForm()" class="mt-2 relative flex items-center px-3 pl-3 pr-10 py-2 transition-all duration-600 ease-in-out from-cyan-400 to-purple-600 text-white rounded-full text-xs font-medium uppercase focus:outline-none">
+            Commencer
+            <div class="absolute right-0.5 flex items-center justify-center w-7 h-7 bg-white rounded-full transition-all duration-600 ease-in-out hover:w-full hover:ml-9 ml-3">
+                <svg class="w-4 h-4 transition-transform duration-300 text-[#ffc934]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </button>
+
+        <!-- Formulaire de connexion affiché conditionnellement -->
+        <div *ngIf="showLoginForm" class="relative w-full max-w-[400px] p-6 mx-auto mt-10 bg-white/90 shadow-lg rounded-lg flex flex-col items-center max-h-[80vh] overflow-auto">
+            <p class="text-[#ffc934] text-center text-2xl font-bold mb-8 tracking-wide">Se connecter</p>
+            <form class="w-full">
+                <div class="relative mb-8">
+                    <input 
+                        type="text" 
+                        id="email" 
+                        required 
+                        class="peer w-full bg-transparent text-[#356bba] border-b border-[#356bba] outline-none p-2 focus:ring-0 placeholder-transparent" 
+                        placeholder=" " 
+                    />
+                    <label 
+                        for="email" 
+                        class="absolute left-0 -top-5 text-[#356bba] text-sm transition-all duration-200 ease-in-out 
+                            peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#356bba] 
+                            peer-focus:-top-5 peer-focus:text-sm peer-focus:text-[#356bba]">
+                        Adresse Mail
+                    </label>
+                </div>
+                
+                <div class="relative mb-8">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required 
+                        class="peer w-full bg-transparent text-[#356bba] border-b border-[#356bba] outline-none p-2 focus:ring-0 placeholder-transparent" 
+                        placeholder=" " 
+                    />
+                    <label 
+                        for="password" 
+                        class="absolute left-0 -top-5 text-[#356bba] text-sm transition-all duration-200 ease-in-out 
+                            peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#356bba] 
+                            peer-focus:-top-5 peer-focus:text-sm peer-focus:text-[#356bba]">
+                        Mot de passe
+                    </label>
+                </div>
+                
+
+                <!-- Conteneur pour centrer le bouton Soumettre -->
+                <div class="flex justify-center">
+                    <a href="#" class="relative inline-block text-[#356bba] text-sm font-bold uppercase overflow-hidden tracking-wide mt-10 px-5 py-3 border border-transparent transition-all hover:bg-[#356bba] hover:text-white rounded">
+                        <span class="absolute top-0 left-[-100%] w-full h-[2px] bg-gradient-to-r from-transparent to-[#356bba] animate-btn1"></span>
+                        <span class="absolute top-[-100%] right-0 w-[2px] h-full bg-gradient-to-b from-transparent to-[#356bba] animate-btn2"></span>
+                        <span class="absolute bottom-0 right-[-100%] w-full h-[2px] bg-gradient-to-l from-transparent to-[#356bba] animate-btn3"></span>
+                        <span class="absolute bottom-[-100%] left-0 w-[2px] h-full bg-gradient-to-t from-transparent to-[#356bba] animate-btn4"></span>
+                        Soumettre
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vidéo en arrière-plan -->
+    <video id="background-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover">
+        <source src="assets/videos/background.mp4" type="video/mp4" />
+        Votre navigateur ne supporte pas les vidéos HTML5.
+    </video>
+
+    <div class="absolute inset-0 bg-[#356bba] bg-opacity-50"></div>
+</div>

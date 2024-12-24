@@ -20,12 +20,11 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+          "assets": [
+  "src/favicon.ico",
+  "src/assets"
+],
+
             "styles": [
               "src/styles.css"
             ],
@@ -92,6 +91,9 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "b1398e43-647e-4c00-aea6-8c8c3b097325"
   }
 }
 
