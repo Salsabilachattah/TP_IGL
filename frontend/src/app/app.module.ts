@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common'; // Importation de CommonModule
 import { AppComponent } from './app.component';
 import { TableComponent } from './components/table/table.component'; // Assurez-vous que le chemin est correct
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -11,9 +14,12 @@ import { TableComponent } from './components/table/table.component'; // Assurez-
   ],
   imports: [
     BrowserModule,
-    CommonModule // Importation de CommonModule
+    CommonModule, 
+   
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
