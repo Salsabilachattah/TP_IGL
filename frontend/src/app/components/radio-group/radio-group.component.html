@@ -1,0 +1,31 @@
+<div class="flex space-x-2  rounded-xl select-none">
+    <label
+      *ngFor="let option of options"
+      class="radio flex-grow cursor-pointer flex items-center justify-center p-1 rounded-lg"
+    >
+      <input
+        type="radio"
+        name="radio"
+        [value]="option.value"
+        class="peer hidden"
+        (change)="onOptionChange(option.value)"
+        [checked]="selectedValue === option.value"
+      />
+      <span
+        class="tracking-widest 
+              peer-checked:bg-[#87CAE9] 
+              peer-checked:text-white 
+              text-gray-700 
+              p-2 
+              rounded-lg 
+              transition 
+              duration-150 
+              ease-in-out 
+              bg-white 
+              flex-grow flex items-center justify-center"
+      >
+        {{ option.label }}
+      </span>
+    </label>
+  </div>
+  

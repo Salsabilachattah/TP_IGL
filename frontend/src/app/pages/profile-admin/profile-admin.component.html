@@ -1,7 +1,26 @@
-<app-menu/>
-<div>
-    <h1 class="font-semibold text-lg ml-[20rem] ">Création d’un nouveau dossier de patient informatisé (DPI)</h1>
-    <div> 
-        <app-form [labels]="fields"/>
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <app-left-sidebar
+    [isLeftSidebarCollapsed]="isSidebarCollapsed"
+    [items]="sidebarItems"
+    (changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
+    (loadDynamicComponent)="displayDynamicComponent($event)"
+    ></app-left-sidebar>
+    
+    <div class="flex-1 p-4">
+    <ng-container *ngIf="currentComponent">
+      <ng-container *ngComponentOutlet="currentComponent"></ng-container>
+    </ng-container>
     </div>
-</div>
+
+    
+  
+    <!-- Contenu principal -->
+    <div class="flex-1 p-4 overflow-auto">
+      <h1 class="font-semibold text-lg">Création d’un nouveau dossier de patient informatisé (DPI)</h1>
+      <div>
+        <app-form [labels]="fields"></app-form>
+      </div>
+    </div>
+  </div>
+  

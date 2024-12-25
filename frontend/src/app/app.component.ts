@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Page1Component } from './components/page1/page1.component';
 
 
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,Page1Component],

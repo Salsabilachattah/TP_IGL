@@ -1,0 +1,28 @@
+:root {
+    --color-pure: #000;
+    --color-primary: #e8e8e8;
+    --color-secondary: #212121;
+    --muted: #b8b8b8;
+  }
+  
+  .mode:checked ~ .container {
+    --color-pure: #fff;
+    --color-primary: #212121;
+    --color-secondary: #fff;
+    --muted: #383838;
+  }
+  
+  .container {
+    background-color: var(--color-secondary);
+  }
+  
+  .label:hover {
+    background-color: var(--muted);
+  }
+  
+  .label:hover ~ .slidebar {
+    transform: translateX(100%) scaleX(1);
+  }
+  
+  /* Autres styles pour .bar et .slidebar, selon votre besoin */
+  
