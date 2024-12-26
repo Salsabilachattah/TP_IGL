@@ -11,7 +11,7 @@ from ..serializers.soin import *
 from django.shortcuts import get_object_or_404
 
 class SoinView(APIView):
-   # permission_classes = [IsAuthenticated,SoinPermissions]
+   # permission_classes = [SoinPermissions]
 
     def get(self, request, soin_id):
         soin = get_object_or_404(Soin, pk=soin_id)
@@ -40,7 +40,7 @@ class SoinView(APIView):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated,IsInfirmier])
+#@permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinMedicamentSerializer(data=request.data)
@@ -52,7 +52,7 @@ def add_soin_medicament(request, soin_id):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated,IsInfirmier])
+#@permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = ObservationEtatSerializer(data=request.data)
@@ -63,7 +63,7 @@ def add_observation_etat(request, soin_id):
 
 
 @api_view(['POST'])
-#@permission_classes([IsAuthenticated,IsInfirmier])
+#@permission_classes([IsInfirmier])
 def add_soin_infermier(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinInfirmierSerializer(data=request.data)
