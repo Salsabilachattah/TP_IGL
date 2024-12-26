@@ -1,2 +1,16 @@
+<app-acceuil-medecin/>
 
 <app-tableau  [labels]="fields"/>
+
+<div class="flex flex-col gap-16">
+    <app-menu/>
+    <div class="w-full">
+        <div class=" flex ml-16 mr-24 flex-row  gap-10">
+            <app-searchbar class="w-3/4 " />
+            <app-stats class="w-1/4 "/>
+        </div>
+    </div>
+
+    <app-tableau2 [labels]="fields2" [buttonsArray]="list"/>
+</div>
+
