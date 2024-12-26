@@ -1,0 +1,21 @@
+<div class="flex h-screen ">
+  <!-- Sidebar -->
+  <app-left-sidebar
+    [isLeftSidebarCollapsed]="isSidebarCollapsed"
+    [items]="sidebarItems"
+    (changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
+    (loadDynamicComponent)="displayDynamicComponent($event)"
+  ></app-left-sidebar>
+ 
+  <ng-container *ngIf="showVideo">
+    <app-background-video></app-background-video>
+  </ng-container>
+ 
+  <!-- Main Content -->
+  <div class="flex-auto   transition-all duration-300">
+    <ng-container *ngIf="currentComponent">
+      <ng-container *ngComponentOutlet="currentComponent"></ng-container>
+    </ng-container>
+    </div>
+  
+</div>

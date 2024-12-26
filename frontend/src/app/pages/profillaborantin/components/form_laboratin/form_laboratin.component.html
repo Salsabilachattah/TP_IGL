@@ -1,0 +1,58 @@
+<div class="p-4 rounded-lg mx-auto my-8 sm:max-w-4xl">
+  <!-- Header for Patient Info -->
+  <div class="patient-info mb-0 text-black space-y-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <label for="nom" class="font-semibold text-lg">Nom: </label>
+        <span id="nom" class="text-base">{{ nom }}</span> <!-- Replace with actual data -->
+      </div>
+      <div>
+        <label for="prenom" class="font-semibold text-lg">Prénom: </label>
+        <span id="prenom" class="text-base">{{ prenom }}</span> <!-- Replace with actual data -->
+      </div>
+      <div>
+        <label for="numDossier" class="font-semibold text-lg">Numéro de dossier: </label>
+        <span id="numDossier" class="text-base">{{ numDossier }}</span> <!-- Replace with actual data -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Line Below -->
+  <div class="border-b-2 border-gray-300 mt-4"></div>
+</div>
+
+<div class="container bg-[#507bbc] p-8 rounded-lg mx-auto my-8 max-w-full sm:max-w-4xl">
+  <h1 class="title text-white text-3xl font-bold mb-6 mb-0 text-center">Bilan</h1>
+
+  <!-- Displaying static information (Nom, Medcin, Date, Description) -->
+  <div class="details mb-6 text-white space-y-4">
+    <div>
+      <span id="medcin" class="text-lg">Dr. Jean Dupont</span>
+    </div>
+
+    <div>
+      <span id="date" class="text-lg">25 Décembre 2024</span>
+    </div>
+
+    <div>
+      <span id="description" class="text-lg">Consultation pour évaluation de la santé générale.</span>
+    </div>
+  </div>
+
+  <!-- Form Component -->
+  <div class="mb-6">
+    <app-form [labels]="fields"></app-form>
+  </div>
+</div>
+
+<!-- Last Button Aligned to the Right -->
+<div class="flex justify-end p-4">
+  <button
+    class="shadow-xl bg-[#356bba] w-full sm:w-60 h-10 text-white rounded"
+    type="button"
+    (click)="generateGraph()"
+  >
+    Générer graphique
+  </button>
+</div>
+<canvas id="myChart"></canvas>
