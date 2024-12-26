@@ -1,0 +1,25 @@
+
+<div class="flex flex-col place-content-center place-items-center">
+    <div class="h-screen flex flex-col place-content-center w-3/4">
+        <p class="text-lg font-semibold text-gray-800 text-left my-4">Rédaction de la demande du bilan radiologique</p>
+        <div class="bg-[#D9D9D9] w-full p-4">
+            <h1>Bilan Radiologique</h1>
+        </div>
+        
+        <input 
+          type="text" 
+          placeholder="Veuillez saisir votre requête au radiologue" 
+          class="w-full h-1/2 text-start border-2 p-4" 
+          [(ngModel)]="bilanRadio" 
+        />
+        
+        <div class="w-full flex place-items-end place-content-end">
+            <button 
+              (click)="save()" 
+              class="bg-[#1890FF] text-white px-8 py-2 my-4 rounded font-semibold place-content-center place-items-center hover:bg-[#1075D2]"
+            >
+              Enregistrer
+            </button>
+        </div>
+    </div>
+</div>

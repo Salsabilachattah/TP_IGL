@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlusbuttonComponent } from '../../../../components/plusbutton/plusbutton.component';
 import { FormComponent } from '../form/form.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-tableau2',
   imports: [CommonModule, PlusbuttonComponent, FormComponent],
@@ -24,6 +24,8 @@ export class Tableau2Component {
     { nom: 'Hassam', prenom: 'Amar' }
   ];
 
+  
+
   @Input() buttonsArray: Array<string> = [];
 
   dataKeys: string[] = Object.keys(this.allData[0]);
@@ -31,7 +33,7 @@ export class Tableau2Component {
   itemsPerPage = 4;
   displayedData: any[] = [];
 
-  constructor() {
+  constructor(private router : Router) {
     this.displayedData = this.allData.slice(0, this.itemsPerPage);
   }
 
@@ -54,6 +56,7 @@ export class Tableau2Component {
       this.consultation = !this.consultation;
       this.info = false;
       this.dossier = false;
+      this.router.navigate(['/medecin/consultation'])
     }
   }
 }
