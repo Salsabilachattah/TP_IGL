@@ -134,3 +134,45 @@ def add_bilanradio_image(request, pk):
         'message': 'Image added successfully',
         'image_url': image_url
     }, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated,IsLaboratorien])  # Add the IsAuthenticated permission
+def add_bilanbio_test(request, pk):
+
+    # Get the BilanBiologique instance for the given consultation (consultation id is pk)
+    bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
+
+    # Extract the data for the new test
+    test_type = request.data.get('type')
+    test_valeur = request.data.get('valeur')
+
+    if test_type is None or test_valeur is None:
+        return Response({'detail': 'Missing required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Create the BilanBioTest instance directly
+    test = BilanBioTest.objects.create(
+        type=test_type,
+        valeur=test_valeur,
+        bilan_biologique=bilan_biologique
+    )
+
+    # Return the created test as a response
+    return Response({
+        'message':"Test added successfully",
+    }, status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_last_two_bilans(request, patient_id):
+    # Get the last two BilanBiologique for the given patient
+    bilans = BilanBiologique.objects.filter(patient__id=patient_id).order_by('-date_debut')[:2]
+
+    if not bilans:
+        return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Serialize the data
+    serializer = BilanBioSerializer(bilans, many=True)
+
+    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)

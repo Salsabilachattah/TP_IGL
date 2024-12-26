@@ -46,7 +46,7 @@ class Patient(models.Model):
 
 
 class Ordonance(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)  
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -63,28 +63,25 @@ class Consultation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
-
 class BilanBiologique(models.Model):
-
     consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
     laborantin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     resultat = models.TextField(blank=True, null=True)
     valide=models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_debut = models.DateTimeField(auto_now_add=True)
+    date_fin = models.DateTimeField(auto_now=True)
 
 class BilanRadiologique(models.Model):
     consultation = models.OneToOneField(Consultation,primary_key=True, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     radiologue = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     compte_rendu = models.TextField(blank=True, null=True)
     valide=models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
 class Outil(models.Model):
     nom = models.CharField(max_length=45)
@@ -99,12 +96,13 @@ class ConsultationOutil(models.Model):
 
 class BilanBioTest(models.Model):
     bilan_biologique = models.ForeignKey(BilanBiologique, on_delete=models.CASCADE)
-    type = models.CharField(max_length=20, choices=[('choice1', 'Choice1'),
-                                                    ('choice3', 'Choice2'),
-                                                    ('ext...', 'Ext..')
+    type = models.CharField(max_length=20, choices=[('cholesterol', 'Cholestérol'),
+                                                    ('fer', 'Fer Tests'),
+                                                    ('hypertension', 'Hypertension')
                                                     ])
     valeur = models.FloatField()
-
+    class Meta:
+        unique_together = ('bilan_biologique', 'type')
 
 
 
@@ -127,7 +125,7 @@ class OrdonanceMedicament(models.Model):
 
 
 class ImageRadio(models.Model):
-    link = models.URLField()
+    image = models.ImageField()
     bilan_radiologique = models.ForeignKey(BilanRadiologique, on_delete=models.CASCADE)
 
 
@@ -153,6 +151,7 @@ class SoinInfirmier(models.Model):
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField()
     date_time = models.DateTimeField()
+    date_time = models.DateTimeField()
 
 class ObservationEtat(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
@@ -168,3 +167,5 @@ class Traitement(models.Model):
 
     class Meta:
         unique_together = ('patient', 'medecin')
+
+

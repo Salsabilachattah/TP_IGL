@@ -19,9 +19,6 @@ class CreateRolesGroupsView(APIView):
                 created_groups.append(group.name)
 
         return Response({"created_groups": created_groups}, status=status.HTTP_201_CREATED)
-    
-
-
 
 
 from django.contrib.auth import authenticate, login, logout

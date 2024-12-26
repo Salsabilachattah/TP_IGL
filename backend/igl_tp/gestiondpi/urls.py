@@ -6,7 +6,7 @@ from .views.consultation import ResumeView,DiagnostiqueView
 from .views.bilan import BilanBiologiqueView,BilanRadiologiqueView
 from django.conf import settings
 from .views.auth import CreateRolesGroupsView
-from .views.dpiView import PatientListCreateAPIView
+from .views.dpi import PatientListCreateAPIView
 from .views.consulterView import *
 from .views.infermier import AddInfirmierView
 from django.conf import settings
