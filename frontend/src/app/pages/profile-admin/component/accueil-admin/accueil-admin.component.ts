@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { MenuComponent } from '../../pages/profile-admin/component/menu/menu.component';
-import { CommonModule } from '@angular/common';
-
+import { WelcomeMessageComponent } from '../../../../components/welcome-message/welcome-message.component'; 
 @Component({
   selector: 'app-accueil-admin',
-  imports: [MenuComponent,CommonModule],
+  imports: [WelcomeMessageComponent],
   templateUrl: './accueil-admin.component.html',
   styleUrl: './accueil-admin.component.css'
 })
 export class AccueilAdminComponent {
-
+  userName: string = 'Admin'; 
 }

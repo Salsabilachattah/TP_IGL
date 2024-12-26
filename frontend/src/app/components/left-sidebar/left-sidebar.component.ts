@@ -9,7 +9,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./left-sidebar.component.css'], // Utilisez vos styles personnalisés
 })
 export class LeftSidebarComponent {
-    @Input() isLeftSidebarCollapsed: boolean = false;
+    @Input() isLeftSidebarCollapsed: boolean = true;
     @Input() items: Array<{ icon: string; label: string; component: string }> = []; // Accept dynamic items
     @Output() changeIsLeftSidebarCollapsed = new EventEmitter<boolean>();
     @Output() loadDynamicComponent = new EventEmitter<string>();
