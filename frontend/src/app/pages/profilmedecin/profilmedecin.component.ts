@@ -12,9 +12,10 @@ import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar
 import { InfoPersoComponent } from './components/info-perso/info-perso.component';
 import { FormsModule } from '@angular/forms';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
+import { ListePatientComponent } from './components/liste-patient/liste-patient.component';
 @Component({
   selector: 'app-profilmedecin',
-  imports: [FormsModule,InfoPersoComponent,BackgroundVideoComponent,LeftSidebarComponent,RouterModule,TableauComponent,SearchbarComponent,StatsComponent,Tableau2Component,CommonModule,MenuComponent,AcceuilMedecinComponent,NouvelleConsultationComponent],
+  imports: [ListePatientComponent,FormsModule,InfoPersoComponent,BackgroundVideoComponent,LeftSidebarComponent,RouterModule,TableauComponent,SearchbarComponent,StatsComponent,Tableau2Component,CommonModule,MenuComponent,AcceuilMedecinComponent,NouvelleConsultationComponent],
   templateUrl: './profilmedecin.component.html',
   styleUrl: './profilmedecin.component.css'
 })
@@ -35,9 +36,9 @@ export class ProfilmedecinComponent {
       component: 'AcceuilMedecinComponent',
     },
     {
-      icon: 'mdi:file-document',
-      label: 'Créer un nouveau DPI',
-      component: 'CreedpiComponent',
+      icon: 'mdi:account-multiple',
+      label: 'Liste des Patients ',
+      component: 'ListePatientComponent',
     },
     {
       icon: 'mdi:account-card-details',
@@ -54,13 +55,13 @@ export class ProfilmedecinComponent {
     // Mappez le nom de la chaîne à la référence du composant
     if (component === 'AcceuilMedecinComponent') {
    this.currentComponent = AcceuilMedecinComponent;
-    } else if (component === 'AccueilAdminComponent') {
-   //  this.currentComponent = AccueilAdminComponent;
+    } else if (component === 'ListePatientComponent') {
+    this.currentComponent = ListePatientComponent;
     } 
     else if (component === 'InfoPersoComponent') {
       this.currentComponent = InfoPersoComponent;
      }else {
-      //this.currentComponent = null;
+      this.currentComponent = null;
     }
   }
 }

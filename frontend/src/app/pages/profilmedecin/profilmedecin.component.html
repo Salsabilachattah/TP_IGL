@@ -1,42 +1,20 @@
-<!--<app-tableau  [labels]="fields"/>-->
-
-<!--
-<div class="flex flex-col gap-16  mt-28">
-    <div class="w-full">
-        <div class=" flex ml-16 mr-24 flex-row  gap-10">
-            <app-searchbar class="w-3/4 " />
-            <app-stats class="w-1/4 "/>
-        </div>
-    </div>
-
-    <app-tableau2 [labels]="fields2" [buttonsArray]="list" />
-</div>
--->
-<!--
-<app-tableau2 [labels]="fields2" [buttonsArray]="list" />
-<app-nouvelle-consultation />
--->
-
-
-
 <div class="flex h-screen ">
-    <!-- Sidebar -->
-    <app-left-sidebar
-      [isLeftSidebarCollapsed]="isSidebarCollapsed"
-      [items]="sidebarItems"
-      (changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
-      (loadDynamicComponent)="displayDynamicComponent($event)"
-    ></app-left-sidebar>
-   
-    <app-background-video></app-background-video>
-
-   
-    <!-- Main Content -->
-    <div class="flex-auto   transition-all duration-300">
-      <ng-container *ngIf="currentComponent">
-        <ng-container *ngComponentOutlet="currentComponent"></ng-container>
-      </ng-container>
-      </div>
     
-  </div>
+  <app-left-sidebar
+    [isLeftSidebarCollapsed]="isSidebarCollapsed"
+    [items]="sidebarItems"
+    (changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
+    (loadDynamicComponent)="displayDynamicComponent($event)"
+  ></app-left-sidebar>
+ 
+  <app-background-video></app-background-video>
+
+ 
+   
+  <div class="flex-auto   transition-all duration-300">
+    <ng-container *ngIf="currentComponent">
+      <ng-container *ngComponentOutlet="currentComponent"></ng-container>
+    </ng-container>
+    </div>
   
+</div>

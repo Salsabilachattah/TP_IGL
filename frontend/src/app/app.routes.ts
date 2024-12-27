@@ -18,8 +18,8 @@ import { DemandebioComponent } from './pages/profilmedecin/components/demandebio
 import { DemanderadioComponent } from './pages/profilmedecin/components/demanderadio/demanderadio.component';
  import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
 export const routes: Routes = [
-  { path: '', component: HomeComponent }, // Route pour la page d'accueil
-  //{ path: '', component:  ProfileinfirmierComponent },
+  //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
+  { path: '', component:  ProfilmedecinComponent },
   { path: 'infirmier', component: ProfileinfirmierComponent },
   { path: 'medecin', component:ProfilmedecinComponent  },
   {path:'testt', component: TestComponent }, 

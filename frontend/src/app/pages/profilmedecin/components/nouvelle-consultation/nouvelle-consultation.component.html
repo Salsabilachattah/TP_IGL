@@ -1,21 +1,65 @@
-<div class="mx-20 sm:mx-52 ">
-    <app-affichageinfo/>
-    <p class="text-lg font-semibold text-gray-800 text-left my-4">Nouvelle consultation</p>
-
-    <div class="flex place-items-center place-content-center   gap-8 text-black flex-col lg:flex-row">
-        <button (click)="redigerordonnance()" class="border-2 items-center justify-center border-[#D9D9D9] flex gap-5 px-6 py-3 font-medium text-sm hover:bg-[#D9D9D9] transition duration-300 w-80">
-            Rédiger une ordonnance<br /> (Si le diagnostic est établi)
-            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                <path d="M14.0479 4.57031H5.47652C4.46617 4.57031 3.4972 4.97167 2.78278 5.6861C2.06835 6.40052 1.66699 7.36949 1.66699 8.37984V25.5227C1.66699 26.533 2.06835 27.502 2.78278 28.2164C3.4972 28.9309 4.46617 29.3322 5.47652 29.3322H24.5241C25.5345 29.3322 26.5035 28.9309 27.2179 28.2164C27.9323 27.502 28.3337 26.533 28.3337 25.5227V16.9513" stroke="black" stroke-opacity="0.93" stroke-width="2.38095" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M24.5242 6.47891L26.3395 8.38367M28.3338 2.60653C28.8424 3.13112 29.1242 3.83485 29.1182 4.56555C29.1121 5.29626 28.8187 5.99521 28.3014 6.51129L15.0004 19.8122L9.28613 21.717L11.1909 16.0027L24.4995 2.58177C24.9676 2.11069 25.5936 1.82973 26.2567 1.79314C26.9197 1.75656 27.5729 1.96694 28.0899 2.38367L28.3338 2.60653Z" stroke="black" stroke-opacity="0.93" stroke-width="2.38095" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+<div class="h-screen flex items-center justify-center bg-white mx-20 sm:mx-52">
+    <div class="text-center">
+      <app-affichageinfo />
+      <p class="text-lg font-semibold text-gray-800 my-4">
+        Nouvelle consultation
+      </p>
+  
+      <div
+        class="flex place-items-center place-content-center gap-8 text-black flex-col lg:flex-row"
+      >
+        <button
+          (click)="redigerordonnance()"
+          class="border-2 items-center justify-center border-[#D9D9D9] flex gap-5 px-6 py-3 font-medium text-sm hover:bg-[#D9D9D9] transition duration-300 w-80"
+        >
+          Rédiger une ordonnance<br />
+          (Si le diagnostic est établi)
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="31"
+            height="31"
+            viewBox="0 0 31 31"
+            fill="none"
+          >
+            <path
+              d="M14.0479 4.57031H5.47652C4.46617 4.57031 3.4972 4.97167 2.78278 5.6861C2.06835 6.40052 1.66699 7.36949 1.66699 8.37984V25.5227C1.66699 26.533 2.06835 27.502 2.78278 28.2164C3.4972 28.9309 4.46617 29.3322 5.47652 29.3322H24.5241C25.5345 29.3322 26.5035 28.9309 27.2179 28.2164C27.9323 27.502 28.3337 26.533 28.3337 25.5227V16.9513"
+              stroke="black"
+              stroke-opacity="0.93"
+              stroke-width="2.38095"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M24.5242 6.47891L26.3395 8.38367M28.3338 2.60653C28.8424 3.13112 29.1242 3.83485 29.1182 4.56555C29.1121 5.29626 28.8187 5.99521 28.3014 6.51129L15.0004 19.8122L9.28613 21.717L11.1909 16.0027L24.4995 2.58177C24.9676 2.11069 25.5936 1.82973 26.2567 1.79314C26.9197 1.75656 27.5729 1.96694 28.0899 2.38367L28.3338 2.60653Z"
+              stroke="black"
+              stroke-opacity="0.93"
+              stroke-width="2.38095"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </button>
-
-        <button (click)="redigerbilan()" class="border-2 items-center justify-center border-[#D9D9D9] flex gap-5 px-6 py-3 font-medium text-sm hover:bg-[#D9D9D9] transition duration-300 w-80">
-            Rédiger un bilan <br />(Si le diagnostic n'est pas établi)
-            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 23 18" fill="none">
-                <path d="M0.671875 0.296875H6.34375V2.48438H0.671875V0.296875ZM0.671875 5.21875H6.34375V7.40625H0.671875V5.21875ZM0.671875 10.1406H6.34375V12.3281H0.671875V10.1406ZM0.671875 15.0625H6.34375V17.25H0.671875V15.0625ZM13.5625 0.296875H22.3281V2.48438H13.5625V0.296875ZM13.5625 5.21875H22.3281V7.40625H13.5625V5.21875ZM13.5625 10.1406H22.3281V12.3281H13.5625V10.1406ZM13.5625 15.0625H22.3281V17.25H13.5625V15.0625ZM8.92188 0.296875H10.9844V2.48438H8.92188V0.296875ZM8.92188 5.21875H10.9844V7.40625H8.92188V5.21875ZM8.92188 10.1406H10.9844V12.3281H8.92188V10.1406ZM8.92188 15.0625H10.9844V17.25H8.92188V15.0625Z" fill="black" />
-            </svg>
+  
+        <button
+          (click)="redigerbilan()"
+          class="border-2 items-center justify-center border-[#D9D9D9] flex gap-5 px-6 py-3 font-medium text-sm hover:bg-[#D9D9D9] transition duration-300 w-80"
+        >
+          Rédiger un bilan <br />
+          (Si le diagnostic n'est pas établi)
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="31"
+            height="31"
+            viewBox="0 0 23 18"
+            fill="none"
+          >
+            <path
+              d="M0.671875 0.296875H6.34375V2.48438H0.671875V0.296875ZM0.671875 5.21875H6.34375V7.40625H0.671875V5.21875ZM0.671875 10.1406H6.34375V12.3281H0.671875V10.1406ZM0.671875 15.0625H6.34375V17.25H0.671875V15.0625ZM13.5625 0.296875H22.3281V2.48438H13.5625V0.296875ZM13.5625 5.21875H22.3281V7.40625H13.5625V5.21875ZM13.5625 10.1406H22.3281V12.3281H13.5625V10.1406ZM13.5625 15.0625H22.3281V17.25H13.5625V15.0625ZM8.92188 0.296875H10.9844V2.48438H8.92188V0.296875ZM8.92188 5.21875H10.9844V7.40625H8.92188V5.21875ZM8.92188 10.1406H10.9844V12.3281H8.92188V10.1406ZM8.92188 15.0625H10.9844V17.25H8.92188V15.0625Z"
+              fill="black"
+            />
+          </svg>
         </button>
+      </div>
     </div>
-</div>
+  </div>
+  

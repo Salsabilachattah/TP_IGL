@@ -1,4 +1,4 @@
-/* :host {
+ :host {
     position: absolute;
     top: 0;
     left: 0;
@@ -17,16 +17,5 @@
     min-width: 100%;
     transform: translate(-50%, -50%);
     object-fit: cover;  }
-  */
-
-  :host {
-    position: relative;
-    width: 100%;
-    height: 100vh; /* ou toute autre hauteur souhaitée */
-    overflow: hidden; /* Pour éviter les débordements */
-  }
   
-  video {
-    object-fit: cover; /* Assure que la vidéo couvre tout l'espace */
-  }
   
