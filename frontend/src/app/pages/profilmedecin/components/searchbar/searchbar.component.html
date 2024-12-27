@@ -1,0 +1,61 @@
+<div class="flex justify-center px-4 sm:px-8">
+    <div class="w-full max-w-[500px] lg:max-w-[800px] flex flex-col border">
+        <h1 class="border font-thin bg-gray-100 px-6 md:px-[4rem] py-[0.75rem] text-center sm:text-left">Rechercher le patient par</h1>
+        <div class="place-content-center place-items-center p-4">
+            <div class="flex flex-col gap-4 sm:flex-row bg-[#FDFDFD] items-center">
+                <input 
+                    placeholder="Introduire le numéro de sécurité sociale ..." 
+                    class="w-full sm:w-[20rem] px-4 py-2 rounded-3xl bg-[#FDFDFD] border border-gray-300" 
+                    [(ngModel)]="nss" />
+                <svg 
+                    (click)="rechercher()" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="cursor-pointer" 
+                    width="26" height="21" viewBox="0 0 26 21" fill="none">
+                    <g clip-path="url(#clip0_24_1694)">
+                      <path d="M22.2333 20.3672L15.4083 13.5422C14.8667 13.9755 14.2438 14.3186 13.5396 14.5714C12.8354 14.8241 12.0861 14.9505 11.2917 14.9505C9.32361 14.9505 7.65817 14.2687 6.29533 12.9052C4.9325 11.5416 4.25072 9.87619 4.25 7.90885C4.24928 5.94152 4.93106 4.27608 6.29533 2.91252C7.65961 1.54897 9.32506 0.867188 11.2917 0.867188C13.2583 0.867188 14.9241 1.54897 16.2891 2.91252C17.6541 4.27608 18.3355 5.94152 18.3333 7.90885C18.3333 8.7033 18.2069 9.4526 17.9542 10.1568C17.7014 10.8609 17.3583 11.4839 16.925 12.0255L23.75 18.8505L22.2333 20.3672ZM11.2917 12.7839C12.6458 12.7839 13.7971 12.3101 14.7453 11.3625C15.6936 10.415 16.1674 9.26374 16.1667 7.90885C16.1659 6.55397 15.6922 5.4031 14.7453 4.45627C13.7985 3.50944 12.6473 3.0353 11.2917 3.03385C9.93606 3.03241 8.7852 3.50655 7.83908 4.45627C6.89297 5.40599 6.41883 6.55685 6.41667 7.90885C6.4145 9.26085 6.88864 10.4121 7.83908 11.3625C8.78953 12.313 9.94039 12.7867 11.2917 12.7839Z" fill="black" fill-opacity="0.2"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_24_1694">
+                        <rect width="26" height="19.2174" fill="white" transform="translate(0 0.867188)"/>
+                      </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="flex flex-row bg-[#FDFDFD] rounded-3xl mt-1">
+                <button 
+                    class="w-full sm:w-[20rem] px-4 py-1 text-left text-[#9CA3AF]" 
+                    (click)="scanQR()">
+                    Scanner le code QR
+                </button>
+                <img 
+                    src="../../../../../assets/Images/healthicons_qr-code-outline.svg" 
+                    alt="QR Code Icon" 
+                    class="w-6 h-6 ml-2" />
+            </div>
+            <div *ngIf="isCamOpened" class="flex flex-col mt-4">
+                <webcam 
+                  [trigger]="triggerObservable" 
+                  (imageCapture)="handleImage($event)">
+                </webcam>
+                <button 
+                    (click)="capturePhoto()" 
+                    class="bg-[#1890FF] text-white px-4 py-2 rounded mt-2">
+                    Prendre une photo
+                </button>
+            </div>
+            <div *ngIf="webcamImage" class="mt-4">
+                <h3>Photo capturée :</h3>
+                <img 
+                    [src]="webcamImage.imageAsDataUrl" 
+                    alt="Image capturée" 
+                    class="rounded border mt-2" />
+            </div>
+        </div>
+        <button 
+            (click)="rechercher()" 
+            class="shadow-xl bg-[#87CAE9] px-10 py-2 mb-1 mt-0 mx-auto text-white rounded-md w-full sm:w-1/2 h-10 transition-colors duration-300 hover:bg-[#356bba]"
+          >  Rechercher
+        </button>
+    </div>
+</div>

@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../../components/form/form.component';
 import { TableComponent } from '../../../../components/table/table.component';
-// Enregistrer les composants de Chart.js
+import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 
+// Enregistrer les composants de Chart.js
+import { MenuComponent } from '../../../../components/menu/menu.component';
 @Component({
   selector: 'app-form_radiologue',
-  imports:[FormComponent ,CommonModule],
+  imports:[BouttonretourComponent,MenuComponent,FormComponent ,CommonModule],
   templateUrl: './form-radiologue.component.html',
   styleUrls: ['./form-radiologue.component.css']
 })

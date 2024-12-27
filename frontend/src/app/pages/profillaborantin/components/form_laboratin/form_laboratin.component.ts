@@ -4,12 +4,13 @@ import { Chart, ChartType, registerables } from 'chart.js';
 import { FormComponent } from '../../../../components/form/form.component';
 import { TableComponent } from '../../../../components/table/table.component';
 import { ActivatedRoute } from '@angular/router';
-// Enregistrer les composants de Chart.js
+import { MenuComponent } from '../../../../components/menu/menu.component'; // Enregistrer les composants de Chart.js
+import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-form_laboratin',
-  imports:[FormComponent   ,CommonModule],
+  imports:[BouttonretourComponent,MenuComponent, FormComponent   ,CommonModule],
   templateUrl: './form_laboratin.component.html',
   styleUrls: ['./form_laboratin.component.css']
 })

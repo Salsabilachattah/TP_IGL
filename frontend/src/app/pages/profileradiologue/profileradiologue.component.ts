@@ -10,13 +10,13 @@ import { DemandeRadiologueComponent } from './components/demande-radiologue/dema
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
 import{AccueilRadiologueComponent}from '../profileradiologue/components/accueil-radiologue/accueil-radiologue.component';
 import { InfoPersoComponent } from './components/info-perso/info-perso.component';
-
+import { BouttonretourComponent } from '../../components/bouttonretour/bouttonretour.component';
 // Enregistrer les composants de Chart.js
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-profilradiologue',
-  imports: [LeftSidebarComponent,AccueilRadiologueComponent,BackgroundVideoComponent,form_radiologueComponent,DemandeRadiologueComponent, DemandeLaboratinComponent, form_laboratinComponent, CommonModule],
+  imports: [BouttonretourComponent,LeftSidebarComponent,AccueilRadiologueComponent,BackgroundVideoComponent,form_radiologueComponent,DemandeRadiologueComponent, DemandeLaboratinComponent, form_laboratinComponent, CommonModule],
   templateUrl: './profileradiologue.component.html',
   styleUrls: ['./profileradiologue.component.css']
 })

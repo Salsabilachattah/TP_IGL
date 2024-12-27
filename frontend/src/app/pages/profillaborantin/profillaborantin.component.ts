@@ -9,12 +9,12 @@ import {form_radiologueComponent}from "../profileradiologue/components/form-radi
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
 import { AccueilLaborantinComponent } from './components/accueil-laborantin/accueil-laborantin.component';
 import { InfoPersoComponent } from './components/info-perso/info-perso.component';
-// Enregistrer les composants de Chart.js
+ import { BouttonretourComponent } from '../../components/bouttonretour/bouttonretour.component';  // Enregistrer les composants de Chart.js
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-profillaborantin',
-  imports: [LeftSidebarComponent,InfoPersoComponent,AccueilLaborantinComponent,BackgroundVideoComponent ,form_radiologueComponent, DemandeLaboratinComponent, form_laboratinComponent, CommonModule, ],
+  imports: [BouttonretourComponent,LeftSidebarComponent,InfoPersoComponent,AccueilLaborantinComponent,BackgroundVideoComponent ,form_radiologueComponent, DemandeLaboratinComponent, form_laboratinComponent, CommonModule, ],
   templateUrl: './profillaborantin.component.html',
   styleUrls: ['./profillaborantin.component.css']
 })

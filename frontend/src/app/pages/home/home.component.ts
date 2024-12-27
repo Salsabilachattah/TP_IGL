@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importer CommonModule
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true, // Assurez-vous que votre composant est standalone
@@ -10,6 +10,14 @@ import { BackgroundVideoComponent } from '../../components/background-video/back
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  
+  constructor(private router: Router) {}
+
+  navigateToPage(): void {
+    this.router.navigate(['/infirmier']); // Remplacez par votre route
+  }
+  
+  
   showLoginForm = false; // Variable pour contrôler l'affichage du formulaire
 
   // Méthode pour afficher le formulaire de connexion

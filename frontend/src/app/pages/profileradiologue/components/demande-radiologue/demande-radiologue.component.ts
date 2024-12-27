@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { form_laboratinComponent } from '../../../profillaborantin/components/form_laboratin/form_laboratin.component';
+import { MenuComponent } from '../../../../components/menu/menu.component';
 @Component({
   selector: 'app-demande-radiologue',
-  imports: [CommonModule,  RouterModule , form_laboratinComponent],
+  imports: [MenuComponent,CommonModule,  RouterModule , form_laboratinComponent],
   templateUrl: './demande-radiologue.component.html',
   styleUrl: './demande-radiologue.component.css'
 })
