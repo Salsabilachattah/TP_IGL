@@ -1,0 +1,30 @@
+<div class="container mx-auto p-6 bg-[#87CAE9] text-white rounded-lg shadow-lg">
+
+  <!-- Table for Dates and Résumé Buttons -->
+  <div class="overflow-hidden rounded-lg">
+    <table class="w-full text-left">
+      <!-- Table Header -->
+      <thead>
+        <tr>
+          <th class="px-4 py-2 border-b-2">Date de Consultation</th>
+          <th class="px-4 py-2 border-b-2">Résume</th>
+        </tr>
+      </thead>
+
+      <!-- Table Body -->
+      <tbody>
+        <tr *ngFor="let consultation of consultations" class="border-b border-blue-300">
+          <td class="px-4 py-2">{{ consultation.date }}</td>
+          <td class="px-4 py-2">
+            <button
+              class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
+              (click)="displayResume(consultation)"
+            >
+              Résumé
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

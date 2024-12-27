@@ -1,0 +1,16 @@
+<div class="flex justify-center items-center min-h-screen mt-0" >
+    <div class="flex flex-col w-[40vw] bg-[#87CAE9] p-4 rounded-lg">
+     
+      <div *ngFor="let item of items" class="place-items-center place-content-center">
+        <tr *ngFor="let key of dataKeys" class="font-light text-white text-left">
+          <th class="w-1/2 border-b border-white p-1 pr-8">
+            {{key}}
+          </th>
+          <td class="w-1/2 border-b border-white">
+            {{item[key]}}
+          </td>
+        </tr>
+      </div>
+    </div>
+  </div>
+  

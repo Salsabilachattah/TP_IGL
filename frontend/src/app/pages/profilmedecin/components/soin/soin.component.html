@@ -1,0 +1,33 @@
+<div class="container mx-auto p-6 bg-[#87CAE9] text-white rounded-lg shadow-lg">
+
+    <!-- Table for Dates and Résumé Buttons -->
+    <div class="overflow-hidden rounded-lg">
+      <table class="w-full text-left">
+        <!-- Table Header -->
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border-b-2">Date des soins</th>
+            <th class="px-4 py-2 border-b-2">Soins</th>
+            <th class="px-4 py-2 border-b-2">Infermier traitant</th>
+          </tr>
+        </thead>
+  
+        <!-- Table Body -->
+        <tbody>
+          <tr *ngFor="let soin of soins" class="border-b border-blue-300">
+            <td class="px-4 py-2">{{ soin.date }}</td>
+            <td class="px-4 py-2">
+              <button
+                class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
+                (click)="displaySoin(soin)"
+              >
+                Soins
+              </button>
+            </td>
+            <td class="px-4 py-2">{{ soin.infermier }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

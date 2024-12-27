@@ -28,7 +28,9 @@
       (loadDynamicComponent)="displayDynamicComponent($event)"
     ></app-left-sidebar>
    
-    <app-background-video></app-background-video>
+    <ng-container *ngIf="showVideo">
+      <app-background-video></app-background-video>
+    </ng-container>
 
    
     <!-- Main Content -->

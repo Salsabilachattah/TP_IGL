@@ -11,9 +11,14 @@ import { NouvelleConsultationComponent } from './components/nouvelle-consultatio
 import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar.component';
 import { InfoPersoComponent } from './components/info-perso/info-perso.component';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
+import { ConsultationComponent } from './components/consultation/consultation.component';
+import { BilanComponent } from './components/bilan/bilan.component';
+import { PrescriptionComponent } from './components/prescription/prescription.component';
+import { SoinComponent } from './components/soin/soin.component';
+import { InfoPersoMedComponent } from './components/info-perso-med/info-perso-med.component'
 @Component({
   selector: 'app-profilmedecin',
-  imports: [InfoPersoComponent,BackgroundVideoComponent,LeftSidebarComponent,RouterModule,TableauComponent,SearchbarComponent,StatsComponent,Tableau2Component,CommonModule,MenuComponent,AcceuilMedecinComponent,NouvelleConsultationComponent],
+  imports: [InfoPersoComponent,SoinComponent,InfoPersoMedComponent ,PrescriptionComponent,BilanComponent,ConsultationComponent,BackgroundVideoComponent,LeftSidebarComponent,RouterModule,TableauComponent,SearchbarComponent,StatsComponent,Tableau2Component,CommonModule,MenuComponent,AcceuilMedecinComponent,NouvelleConsultationComponent],
   templateUrl: './profilmedecin.component.html',
   styleUrl: './profilmedecin.component.css'
 })
@@ -36,7 +41,7 @@ export class ProfilmedecinComponent {
     {
       icon: 'mdi:file-document',
       label: 'Créer un nouveau DPI',
-      component: 'CreedpiComponent',
+      component: 'InfoPersoMedComponent',
     },
     {
       icon: 'mdi:account-card-details',
@@ -48,16 +53,18 @@ export class ProfilmedecinComponent {
   toggleSidebar(collapsed: boolean): void {
     this.isSidebarCollapsed = collapsed;
   }
-
+  showVideo: boolean = true;
   displayDynamicComponent(component: string): void {
     // Mappez le nom de la chaîne à la référence du composant
     if (component === 'AcceuilMedecinComponent') {
    this.currentComponent = AcceuilMedecinComponent;
-    } else if (component === 'AccueilAdminComponent') {
-   //  this.currentComponent = AccueilAdminComponent;
+   this.showVideo = true;
+    } else if (component === 'InfoPersoMedComponent') {
+     this.currentComponent = InfoPersoMedComponent;
+     this.showVideo = false;
     } 
-    else if (component === 'InfoPersoComponent') {
-      this.currentComponent = InfoPersoComponent;
+    else if (component === 'consultation') {
+      this.currentComponent = ConsultationComponent;
      }else {
       //this.currentComponent = null;
     }
