@@ -12,7 +12,9 @@ import { DemandebioComponent } from './pages/profilmedecin/components/demandebio
 import { ResumeComponent } from './pages/profilmedecin/components/resume/resume.component';
 import { AcceuilMedecinComponent } from './pages/profilmedecin/components/acceuil-medecin/acceuil-medecin.component';
 import { NouvelleConsultationComponent } from './pages/profilmedecin/components/nouvelle-consultation/nouvelle-consultation.component';
-
+import { ProfileinfirmierComponent } from './pages/profileinfirmier/profileinfirmier.component';
+import { AccueilinfirmierComponent } from './pages/profileinfirmier/components/accueilinfirmier/accueilinfirmier.component';
+import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
 export const routes: Routes = [
   {path: '', component: HomeComponent }, 
   {path:'medecin' , component: AcceuilMedecinComponent},
@@ -24,6 +26,10 @@ export const routes: Routes = [
   {path:'medecin/resume' , component:ResumeComponent },
   {path:'medecin/bilans/demandebio' , component: DemandebioComponent},
   {path:'medecin/bilans/demanderadio' , component: DemanderadioComponent},
+
+  {path:'infirmier' , component: AccueilinfirmierComponent},
+  {path:'infirmier/patients' , component:ProfileinfirmierComponent},
+  {path:'infirmier/soins' , component:SoinsGComponent},
 
   { path: 'admin' , component: ProfileAdminComponent},
   { path: '**', redirectTo: '' }, 
