@@ -4,7 +4,7 @@ import { AccueilAdminComponent } from './component/accueil-admin/accueil-admin.c
 import { FormComponent } from '../../components/form/form.component';
 import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar.component';
 import { CreedpiComponent } from './component/creedpi/creedpi.component';
-import { InfoPersoComponent } from './component/info-perso/info-perso.component';
+import { InfoPersoComponent } from './component/info-perso/info-perso.component'; 
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
   @Component({
   selector: 'app-profile-admin',
