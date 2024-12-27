@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 @Component({
   selector: 'app-bilans',
-  imports: [],
+  imports: [AffichageinfoComponent],
   templateUrl: './bilans.component.html',
   styleUrl: './bilans.component.css'
 })

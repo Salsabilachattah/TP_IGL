@@ -11,6 +11,7 @@ import { BackgroundVideoComponent } from '../../components/background-video/back
 })
 export class HomeComponent {
   showLoginForm = false; // Variable pour contrôler l'affichage du formulaire
+  
 
   // Méthode pour afficher le formulaire de connexion
   showForm() {

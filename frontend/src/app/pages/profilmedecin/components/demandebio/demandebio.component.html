@@ -1,5 +1,8 @@
 
 <div class="flex flex-col place-content-center place-items-center">
+    <app-affichageinfo
+    [data]="rowData"
+  [fieldOrder]="fieldOrder"/>
     <div class="h-screen flex flex-col place-content-center w-3/4">
         <p class="text-lg font-semibold text-gray-800 text-left my-4">Rédaction de la demande du bilan biologique</p>
         <div class="bg-[#D9D9D9] w-full p-4">

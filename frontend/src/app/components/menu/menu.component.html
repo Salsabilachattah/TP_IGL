@@ -1,4 +1,5 @@
-<div class="max-h-screen flex-grow flex flex-col  sm:h-auto sm:place-items-center sm:pb-20">
+
+    <div class="max-h-screen flex flex-col  sm:h-auto sm:place-items-center ">
     <div class="hidden  absolute top-2 right-5 sm:flex w-full justify-end h-24 p-4">
         <div class="w-32 h-full bg-[#edf1f4] rounded-3xl p-2 flex flex-row items-center justify-end gap-3">
             <div class="w-12 h-12 rounded-full flex justify-center items-center text-[#87CAE9]" (click)="toggleCall()">
@@ -16,7 +17,7 @@
     </div>
 
    
-    <div *ngIf="openCall" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]" (click)="closeOverlays()">
+    <div *ngIf="openCall" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1000]" (click)="closeOverlays()">
         <div class="w-64 absolute top-24 right-5 bg-[#edf1f4] rounded-xl h-fit flex flex-col place-content-between place-items-center p-5" (click)="$event.stopPropagation()">
             <p class="text-sm font-extralight">Contacter nous sur ce numero :<br/> 05 55 55 55 55</p>
             <p class="text-sm font-extralight">Ou bien sur cette adresse email :<br/> tpIgl&#64;esi.dz</p>
@@ -24,7 +25,7 @@
     </div>
 
   
-    <div *ngIf="openProfile" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]" (click)="closeOverlays()">
+    <div *ngIf="openProfile" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1000]" (click)="closeOverlays()">
         <div class="w-64 absolute top-24 right-5 bg-[#edf1f4] rounded-xl h-fit flex flex-col" (click)="$event.stopPropagation()">
             <h2 class="w-full p-2 border-b border-gray-300">Hi, {{user.name}} 👋</h2>
             <a [routerLink]="['/']" class="w-full p-2 border-b border-gray-300 flex gap-2 items-center">
@@ -39,7 +40,6 @@
         </div>
     </div>
 
-    <div class="w-full flex place-content-center place-items-start h-full overflow-y-scroll">
-        <router-outlet></router-outlet>
-    </div>
+    
 </div>
+

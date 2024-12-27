@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 @Component({
   selector: 'app-nouvelle-consultation',
-  imports: [],
+  imports: [AffichageinfoComponent],
   templateUrl: './nouvelle-consultation.component.html',
   styleUrl: './nouvelle-consultation.component.css',
 })

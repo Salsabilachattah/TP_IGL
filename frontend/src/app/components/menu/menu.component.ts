@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
+ 
   openCall: boolean = false;
   openProfile: boolean = false;
-  user = { name: 'John Doe', ssn: '123-45-6789' };  // Example user data
-  usertype = 'admin';  // Example usertype
+  user = { name: 'John Doe', ssn: '123-45-6789' };  
+  usertype = 'admin';  
 
   closeOverlays() {
     this.openCall = false;

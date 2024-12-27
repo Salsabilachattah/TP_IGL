@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 @Component({
   selector: 'app-demanderadio',
-  imports: [FormsModule],
+  imports: [FormsModule,AffichageinfoComponent],
   templateUrl: './demanderadio.component.html',
   styleUrl: './demanderadio.component.css'
 })

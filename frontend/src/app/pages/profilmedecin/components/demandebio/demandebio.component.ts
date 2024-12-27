@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 @Component({
   selector: 'app-demandebio',
-  imports: [FormsModule],
+  imports: [FormsModule,AffichageinfoComponent],
   templateUrl: './demandebio.component.html',
   styleUrl: './demandebio.component.css'
 })
@@ -21,5 +21,16 @@ export class DemandebioComponent {
       alert("Remplissez d'abord!")
     }
   }
+
+  rowData = {
+    numero: '001',
+    nom: 'Doe',
+    prenom: 'John'
+  };
+
+  fieldOrder = ['numero', 'nom', 'prenom'];
+
+
+
 
 }

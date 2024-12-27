@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 @Component({
   selector: 'app-ordonnance',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,AffichageinfoComponent],
   templateUrl: './ordonnance.component.html',
   styleUrl: './ordonnance.component.css',
 })
