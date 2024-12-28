@@ -1,0 +1,19 @@
+
+<div class="flex items-center justify-center w-full">
+    <div class="flex items-center justify-center w-3/4  bg-[#87CAE9] pb-8">
+        <table class="w-full text-white ">
+            <!-- En-tête de la table -->
+            <thead class="text-white border-b-[0.1rem] border-white">
+                <tr class="h-10">
+                    <th *ngFor="let label of labels" class="text-left font-medium text-xs uppercase pt-4">{{ label }}</th>
+                </tr>
+            </thead>
+            <!-- Corps de la table -->
+            <tbody>
+                <tr *ngFor="let data of allData" class="border-b-[0.1rem] h-10 border-white">
+                    <td *ngFor="let key of dataKeys" class="font-light">{{ data[key] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

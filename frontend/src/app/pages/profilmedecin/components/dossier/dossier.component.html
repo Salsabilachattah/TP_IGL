@@ -1,0 +1,40 @@
+<div class="flex flex-col items-center justify-center ">
+    <app-menu></app-menu> <!-- Conteneur central avec une largeur fixe ou responsive -->
+    
+    <div class="w-full max-w-4xl">
+      <!-- Conteneur pour Affichage Info -->
+      <div class="w-full">
+        <app-affichageinfo [data]="data" [fieldOrder]="fieldOrder"></app-affichageinfo>
+      </div>
+      
+      <!-- Radio Group -->
+      <app-radio-group
+        [options]="radioOptions"
+        (selectionChange)="onSelectionChange($event)"
+      ></app-radio-group>
+  
+      <!-- Conteneur des options -->
+      <div class="w-full mt-0">
+        <ng-container *ngIf="selectedOption === 'A'">
+        <app-perso-med></app-perso-med> 
+        </ng-container>
+        <ng-container *ngIf="selectedOption === 'B'">
+         <app-date-resume-container></app-date-resume-container>
+        </ng-container>
+        <ng-container *ngIf="selectedOption === 'C'">
+        <app-bilan></app-bilan>
+        </ng-container>
+        <ng-container *ngIf="selectedOption === 'D'">
+        <app-prescription></app-prescription>   
+          </ng-container>
+          <ng-container *ngIf="selectedOption === 'E'">
+           <app-soin></app-soin>
+          </ng-container>
+      </div>
+  
+     
+    </div>
+  </div>
+   <div class="absolute bottom-0 left-4">
+        <app-bouttonretour></app-bouttonretour>
+      </div>  

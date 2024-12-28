@@ -6,9 +6,10 @@ import { RadioGroupComponent } from '../../../../components/radio-group/radio-gr
 import { CommonModule } from '@angular/common';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
+import { MenuComponent } from '../../../../components/menu/menu.component';
 @Component({
   selector: 'app-soins-g',
-  imports: [BouttonretourComponent,AffichageinfoComponent,CommonModule,RadioGroupComponent,AdministrationMedComponent,SoinsComponent,ObservationsComponent],
+  imports: [MenuComponent,BouttonretourComponent,AffichageinfoComponent,CommonModule,RadioGroupComponent,AdministrationMedComponent,SoinsComponent,ObservationsComponent],
   templateUrl: './soins-g.component.html',
   styleUrl: './soins-g.component.css'
 })

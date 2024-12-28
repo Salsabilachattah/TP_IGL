@@ -9,70 +9,46 @@ import { AffichageinfoComponent } from '../../components/affichageinfo/affichage
   templateUrl: './profile-patient.component.html',
 })
 export class ProfilePatientComponent {
+   
   
-  selectedOption: string | null = null;
-
-  // Exemple d'options
-  options = [
-    { value: 'html', label: 'HTML' },
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue' }
-  ];
-
-  onSelectionChange(value: string) {
-    this.selectedOption = value; // Mettre à jour la valeur sélectionnée
-  }
-
-
-
-
-  rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
-  };
-
-  fieldOrder = ['numero', 'nom', 'prenom'];
-
-
-
-
-
-
-
-
-  //hadi tae side bar
-
-  isSidebarCollapsed: boolean = false;
-  currentComponent: any = null;
-
-  // Définition des éléments de la barre latérale dynamiquement
-  sidebarItems = [
-    {
-      icon: 'mdi:account-circle',
-      label: 'Mon Profil',
-      component: 'ProfileComponent',
-    },
-    {
-      icon: 'mdi:file-document',
-      label: 'Mon DPI',
-      component: 'DpiComponent',
-    },
-  ];
-
-  toggleSidebar(collapsed: boolean): void {
-    this.isSidebarCollapsed = collapsed;
-  }
-
-  displayDynamicComponent(component: string): void {
-    // Mappez le nom de la chaîne à la référence du composant
-    if (component === 'ProfileComponent') {
-  //    this.currentComponent = ProfileComponent;
-    } else if (component === 'DpiComponent') {
- //     this.currentComponent = DpiComponent;
-    } else {
-      this.currentComponent = null;
+    isSidebarCollapsed: boolean = true;
+    currentComponent: any = null;
+    
+    // Définition des éléments de la barre latérale dynamiquement
+    sidebarItems = [
+      {
+        icon: 'mdi:account-circle',
+        label: 'Mon Profil',
+        component: 'AcceuilMedecinComponent',
+      },
+      {
+        icon: 'mdi:account-multiple',
+        label: 'Liste des Patients ',
+        component: 'ListePatientComponent',
+      },
+      {
+        icon: 'mdi:account-card-details',
+        label: ' informations personnelles',
+        component: 'InfoPersoComponent',
+      },
+    ];
+  
+    toggleSidebar(collapsed: boolean): void {
+      this.isSidebarCollapsed = collapsed;
+    }
+  
+    displayDynamicComponent(component: string): void {
+      // Mappez le nom de la chaîne à la référence du composant
+      if (component === 'AcceuilMedecinComponent') {
+    // this.currentComponent = AcceuilMedecinComponent;
+      } else if (component === 'ListePatientComponent') {
+    //  this.currentComponent = ListePatientComponent;
+      } 
+      else if (component === 'InfoPersoComponent') {
+     //   this.currentComponent = InfoPersoComponent;
+       }else {
+        this.currentComponent = null;
+      }
     }
   }
-
-}
+  

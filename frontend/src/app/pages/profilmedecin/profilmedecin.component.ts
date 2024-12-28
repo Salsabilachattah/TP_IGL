@@ -20,11 +20,7 @@ import { ListePatientComponent } from './components/liste-patient/liste-patient.
   styleUrl: './profilmedecin.component.css'
 })
 export class ProfilmedecinComponent {
-  fields : Array<string> = ["nom", "prenom","nss","age"];
-  fields2 :Array<string> = ["Nom", "Prénom","Plus d'informations","Dossier du patient","Consultation"];
-  list :Array<string> = ["Afficher","Visualiser","Commencer"];
-
-
+ 
   isSidebarCollapsed: boolean = true;
   currentComponent: any = null;
   

@@ -1,38 +1,20 @@
-<app-affichageinfo
-    [data]="rowData"
-  [fieldOrder]="fieldOrder">
+<div class="flex h-screen ">
+    
+  <app-left-sidebar
+    [isLeftSidebarCollapsed]="isSidebarCollapsed"
+    [items]="sidebarItems"
+    (changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
+    (loadDynamicComponent)="displayDynamicComponent($event)"
+  ></app-left-sidebar>
+ 
+  <app-background-video></app-background-video>
 
-  </app-affichageinfo>
-
-
-<app-radio-group [options]="options" (selectionChange)="onSelectionChange($event)"></app-radio-group>
-
-<div *ngIf="selectedOption === 'html'">
-  <app-left-sidebar></app-left-sidebar> 
-</div>
-
-<div *ngIf="selectedOption === 'react'">
-    <app-left-sidebar></app-left-sidebar> 
-</div>
-
-<div *ngIf="selectedOption === 'vue'">
-    <app-left-sidebar></app-left-sidebar> 
-</div>
-
-
-
-
-
-
-<app-left-sidebar
-[isLeftSidebarCollapsed]="isSidebarCollapsed"
-[items]="sidebarItems"
-(changeIsLeftSidebarCollapsed)="toggleSidebar($event)"
-(loadDynamicComponent)="displayDynamicComponent($event)"
-></app-left-sidebar>
-
-<div class="flex-1 p-4">
-<ng-container *ngIf="currentComponent">
-  <ng-container *ngComponentOutlet="currentComponent"></ng-container>
-</ng-container>
+ 
+   
+  <div class="flex-auto   transition-all duration-300">
+    <ng-container *ngIf="currentComponent">
+      <ng-container *ngComponentOutlet="currentComponent"></ng-container>
+    </ng-container>
+    </div>
+  
 </div>

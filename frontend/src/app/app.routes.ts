@@ -17,11 +17,15 @@ import { ResumeComponent } from './pages/profilmedecin/components/resume/resume.
 import { DemandebioComponent } from './pages/profilmedecin/components/demandebio/demandebio.component';
 import { DemanderadioComponent } from './pages/profilmedecin/components/demanderadio/demanderadio.component';
  import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
-export const routes: Routes = [
+import { DossierComponent } from './pages/profilmedecin/components/dossier/dossier.component';
+import { ProfilePatientComponent } from './pages/profile-patient/profile-patient.component';
+ export const routes: Routes = [
   //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
-  { path: '', component:  ProfilmedecinComponent },
+  { path: '', component: ProfilmedecinComponent  },
   { path: 'infirmier', component: ProfileinfirmierComponent },
   { path: 'medecin', component:ProfilmedecinComponent  },
+  { path: 'patient', component:  ProfilePatientComponent},
+ 
   {path:'testt', component: TestComponent }, 
   {path: 'test', component: MenuComponent },
   {path: 'laboratin', component: profillaborantinComponent },
@@ -31,6 +35,8 @@ export const routes: Routes = [
 
   {path:'medecin/patients', component: ProfilmedecinComponent},
   {path:'medecin/consultation', component: NouvelleConsultationComponent},
+  {path:'medecin/dossier', component: DossierComponent },
+  
   {path:'medecin/ordonnance', component: OrdonnanceComponent},
   {path:'medecin/bilans', component: BilansComponent},
   {path:'medecin/resume' , component:ResumeComponent },
