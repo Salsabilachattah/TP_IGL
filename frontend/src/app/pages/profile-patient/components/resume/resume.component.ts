@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component'; 
 import { MenuComponent } from '../../../../components/menu/menu.component';
@@ -8,24 +7,20 @@ import { BouttonretourComponent } from '../../../../components/bouttonretour/bou
 
 @Component({
   selector: 'app-resume',
-  imports: [MenuComponent,BouttonretourComponent,FormsModule,AffichageinfoComponent],
+  imports: [MenuComponent, BouttonretourComponent, FormsModule, AffichageinfoComponent],
   templateUrl: './resume.component.html',
-  styleUrl: './resume.component.css'
+  styleUrls: ['./resume.component.css']
 })
-export class ResumeComponent {
-  constructor (private router : Router ){};
-  resume :string ='';
-  save(){
-    //envoyer au backend
-    if(this.resume !=''){
-      alert("Résumé sauvegardé avec succés !"); 
-      this.resume='';
-      this.router.navigate(['/medecin/patients'])
-    }else{
-      alert("Remplissez d'abord!")
-    }
-  }
+export class ResumepatientComponent {
+  constructor(private router: Router) {}
 
+  resume: string = 'Voici le résumé de la consultation  : ...'; // Texte statique à afficher
+
+  save() {
+    // Envoyer au backend
+    alert("Résumé sauvegardé avec succès !"); 
+    this.router.navigate(['/medecin/patients']);
+  }
 
   rowData = {
     numero: '001',

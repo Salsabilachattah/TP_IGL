@@ -9,18 +9,13 @@
     </div>
     
     <div class="h-full flex flex-col place-content-center w-3/4">
-        <p class="text-lg font-semibold text-gray-800 text-left my-4">Rédaction du résumé</p>
+        <p class="text-lg font-semibold text-gray-800 text-left my-4">Résumé de la consultation</p>
         <div class="bg-[#D9D9D9] w-full p-4">
             <h1>Résumé de la consultation</h1>
+            <p class="text-gray-700">{{ resume }}</p> <!-- Affichage du texte -->
         </div>
         
-        <textarea placeholder="Veuillez saisir votre requête au biologiste" 
-                  class="w-full h-32 text-start border-2 p-4 resize-none" 
-                  [(ngModel)]="resume"></textarea>
-        <div class="w-full flex place-items-end place-content-end">
-            <button (click)="save()" 
-                    class="bg-[#87CAE9] text-white px-8 py-2 my-4 rounded font-semibold place-content-center place-items-center hover:bg-[#356bba]">Enregistrer</button>
-        </div>
+         
     </div>
    
     <div class="absolute bottom-0 left-4">

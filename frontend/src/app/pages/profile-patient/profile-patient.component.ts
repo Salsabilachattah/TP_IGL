@@ -3,9 +3,16 @@ import { RadioGroupComponent } from '../../components/radio-group/radio-group.co
 import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar.component';
 import { CommonModule } from '@angular/common';
 import { AffichageinfoComponent } from '../../components/affichageinfo/affichageinfo.component';
+import { AcceuilComponent } from './components/acceuil/acceuil.component';
+import { BackgroundVideoComponent } from '../../components/background-video/background-video.component'; 
+import { InfoPersoComponent } from './components/info-perso/info-perso.component';
+import { DossierComponent } from './components/dossier/dossier.component';
+
+
+
 @Component({
   selector: 'app-profile-patient',
-   imports: [AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
+   imports: [DossierComponent,InfoPersoComponent,BackgroundVideoComponent,AcceuilComponent,AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
   templateUrl: './profile-patient.component.html',
 })
 export class ProfilePatientComponent {
@@ -19,12 +26,12 @@ export class ProfilePatientComponent {
       {
         icon: 'mdi:account-circle',
         label: 'Mon Profil',
-        component: 'AcceuilMedecinComponent',
+        component: 'AcceuilComponent',
       },
       {
         icon: 'mdi:account-multiple',
-        label: 'Liste des Patients ',
-        component: 'ListePatientComponent',
+        label: 'Mon dossier ',
+        component: 'DossierComponent',
       },
       {
         icon: 'mdi:account-card-details',
@@ -39,13 +46,13 @@ export class ProfilePatientComponent {
   
     displayDynamicComponent(component: string): void {
       // Mappez le nom de la chaîne à la référence du composant
-      if (component === 'AcceuilMedecinComponent') {
-    // this.currentComponent = AcceuilMedecinComponent;
-      } else if (component === 'ListePatientComponent') {
-    //  this.currentComponent = ListePatientComponent;
+      if (component === 'AcceuilComponent') {
+     this.currentComponent = AcceuilComponent;
+      } else if (component === 'DossierComponent') {
+     this.currentComponent = DossierComponent;
       } 
       else if (component === 'InfoPersoComponent') {
-     //   this.currentComponent = InfoPersoComponent;
+      this.currentComponent = InfoPersoComponent;
        }else {
         this.currentComponent = null;
       }

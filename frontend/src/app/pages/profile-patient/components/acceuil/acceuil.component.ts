@@ -8,6 +8,6 @@ import { WelcomeMessageComponent } from '../../../../components/welcome-message/
   templateUrl: './acceuil.component.html',
   styleUrl: './acceuil.component.css'
 })
-export class AcceuilMedecinComponent {
+export class AcceuilComponent {
   userName: string = 'Patient';
 }

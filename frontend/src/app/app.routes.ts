@@ -19,13 +19,17 @@ import { DemanderadioComponent } from './pages/profilmedecin/components/demander
  import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
 import { DossierComponent } from './pages/profilmedecin/components/dossier/dossier.component';
 import { ProfilePatientComponent } from './pages/profile-patient/profile-patient.component';
- export const routes: Routes = [
+import { ResumepatientComponent } from './pages/profile-patient/components/resume/resume.component';
+
+
+export const routes: Routes = [
   //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
-  { path: '', component: ProfilmedecinComponent  },
+  { path: '', component:  ProfilePatientComponent },
   { path: 'infirmier', component: ProfileinfirmierComponent },
   { path: 'medecin', component:ProfilmedecinComponent  },
   { path: 'patient', component:  ProfilePatientComponent},
- 
+  {path:'patient/resume' , component: ResumepatientComponent },
+
   {path:'testt', component: TestComponent }, 
   {path: 'test', component: MenuComponent },
   {path: 'laboratin', component: profillaborantinComponent },
