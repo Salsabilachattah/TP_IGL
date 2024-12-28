@@ -6,7 +6,7 @@ import { TableComponent } from './components/table/table.component'; // Correct 
 import { profillaborantinComponent } from './pages/profillaborantin/profillaborantin.component'; // Correct path for profillaborantinComponent
 import { AppRoutingModule } from './app.routes';  // Importez AppRoutingModule
 import { FormComponent } from './components/form/form.component';
-
+import { ConsultationButtonComponent } from './pages/profilmedecin/components/consultation-button/consultation-button.component';
 
 
 @NgModule({
@@ -20,7 +20,8 @@ import { FormComponent } from './components/form/form.component';
     TableComponent,
     AppRoutingModule,
     profillaborantinComponent, // Add profillaborantinComponent here
-    FormComponent
+    FormComponent,
+    ConsultationButtonComponent
   ],
   providers: [],
   bootstrap: []

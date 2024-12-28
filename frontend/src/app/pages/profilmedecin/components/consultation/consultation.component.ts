@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeComponent } from '../resume/resume.component';
 import { Router } from '@angular/router';
-
+import { ConsultationButtonComponent } from '../consultation-button/consultation-button.component';
 @Component({
   selector: 'app-date-resume-container',
-  imports:[ResumeComponent,CommonModule],
+  imports:[ResumeComponent,ConsultationButtonComponent,CommonModule],
   templateUrl: './consultation.component.html',
   styleUrls: ['./consultation.component.css'],
 })
@@ -21,7 +21,13 @@ export class ConsultationComponent {
   }
   constructor(private router: Router) {}
   // Modifiez cette méthode pour rediriger vers la page "resumer"
-  displayResume(consultation: { date: string; summary: string }): void {
-    this.router.navigate(['/medecin/resume'], { state: { consultation } }); // Redirection vers la page Resumer
+  show: boolean = false;
+
+  displayResume() {
+    this.show = true;
+  }
+
+  hideResume() {
+    this.show = false;
   }
 }

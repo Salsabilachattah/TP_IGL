@@ -18,10 +18,12 @@
           <td class="px-4 py-2">
             <button
               class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-              (click)="displayResume(consultation)"
+              (click)="displayResume()"
             >
               Résumé
             </button>
+            <app-consultation-button *ngIf="show" (closeModal)="hideResume()"></app-consultation-button>
+
           </td>
         </tr>
       </tbody>
