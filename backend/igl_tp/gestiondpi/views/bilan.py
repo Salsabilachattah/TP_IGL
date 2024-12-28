@@ -1,9 +1,10 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio
+from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe
 from ..permissions.auth import IsRadiologue, IsLaboratorien
-from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer
+from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
+    BilanRadioEditSerializer, TestSerializer
 from ..permissions.bilan import BilanPermissions
 from rest_framework.response import Response
 from rest_framework import status,permissions
@@ -44,6 +45,19 @@ class BilanBiologiqueView(APIView):
         # Return a success message instead of the serialized data
         return Response({"message": "BilanBiologique created successfully"},status=status.HTTP_201_CREATED)
 
+    def patch(self ,request, pk):
+        bilan_bio = get_object_or_404(BilanBiologique, pk=pk)
+        if bilan_bio.laborantin.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = BilanBioEditSerializer(bilan_bio, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
@@ -79,6 +93,18 @@ class BilanRadiologiqueView(APIView):
         # Return a success message instead of the serialized data
         return Response({"message": "BilanRadiologique created successfully"},status=status.HTTP_201_CREATED)
 
+    def patch(self ,request, pk):
+        bilan_radio = get_object_or_404(BilanRadiologique, pk=pk)
+        if bilan_radio.radiologue.user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        serializer = BilanRadioEditSerializer(bilan_radio, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsLaboratorien])  # Add the IsAuthenticated permission
@@ -113,12 +139,16 @@ def add_bilanradio_image(request, pk):
     # Get the BilanRadiologique instance for the given consultation (consultation id is pk)
     bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
 
-    # Check if an image is provided in the request
-    if 'image' not in request.FILES:
-        return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
+    if bilan_radiologique.radiologue.user != request.user:
+        return Response(
+            {"detail": "You are not authorized to add a radio to this bilan."},
+            status=status.HTTP_403_FORBIDDEN
+        )
 
-    # Get the image from the request
-    image = request.FILES['image']
+    # Check if an image is provided in the request
+    image = request.FILES.get('image')
+    if not image:
+        return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Create the ImageRadio instance and associate it with the BilanRadiologique instance
     image_instance = ImageRadio.objects.create(
@@ -142,19 +172,17 @@ def add_bilanbio_test(request, pk):
     # Get the BilanBiologique instance for the given consultation (consultation id is pk)
     bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
 
-    # Extract the data for the new test
-    test_type = request.data.get('type')
-    test_valeur = request.data.get('valeur')
+    if bilan_biologique.laborantin.user != request.user:
+        return Response(
+            {"detail": "You are not authorized to add a test to this bilan."},
+            status=status.HTTP_403_FORBIDDEN
+        )
 
-    if test_type is None or test_valeur is None:
-        return Response({'detail': 'Missing required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+    # Create the BilanBioTest instance
+    test = TestSerializer(bilan_biologique=bilan_biologique,data=request.data)
 
-    # Create the BilanBioTest instance directly
-    test = BilanBioTest.objects.create(
-        type=test_type,
-        valeur=test_valeur,
-        bilan_biologique=bilan_biologique
-    )
+
+
 
     # Return the created test as a response
     return Response({
@@ -162,12 +190,12 @@ def add_bilanbio_test(request, pk):
     }, status=status.HTTP_201_CREATED)
 
 
-
+# suntested
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_last_two_bilans(request, patient_id):
+def get_last_two_bilans(request, nss):
     # Get the last two BilanBiologique for the given patient
-    bilans = BilanBiologique.objects.filter(patient__id=patient_id).order_by('-date_debut')[:2]
+    bilans = BilanBiologique.objects.filter(nss=nss).order_by('-date_debut')[:2]
 
     if not bilans:
         return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
@@ -176,3 +204,35 @@ def get_last_two_bilans(request, patient_id):
     serializer = BilanBioSerializer(bilans, many=True)
 
     return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsLaboratorien])  # Only authenticated laboratorien can access this
+def take_bilan_bio(request, pk):
+    # Get the 'Employe' instance for the authenticated user, or return 404 if not found
+    employe = get_object_or_404(Employe, user=request.user)
+
+    # Get the corresponding 'BilanBiologique' instance, or return 404 if not found
+    bilan_bio = get_object_or_404(BilanBiologique, consultation__pk=pk)
+
+    # Set the laboratorien (laborantin) to the 'Employe' instance
+    bilan_bio.laborantin = employe
+    bilan_bio.save()
+
+    return Response({"detail": "Bilan biologique updated successfully."}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated, IsRadiologue])  # Only authenticated laboratorien can access this
+def take_bilan_radio(request, pk):
+    # Get the 'Employe' instance for the authenticated user, or return 404 if not found
+    employe = get_object_or_404(Employe, user=request.user)
+
+    # Get the corresponding 'BilanRadiologique' instance, or return 404 if not found
+    bilan_radio = get_object_or_404(BilanRadiologique, consultation__pk=pk)
+
+    # Set the laboratorien (radiologue) to the 'Employe' instance
+    bilan_radio.radiologue = employe
+    bilan_radio.save()
+
+    return Response({"detail": "Bilan radiologique updated successfully."}, status=status.HTTP_200_OK)

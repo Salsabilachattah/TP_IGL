@@ -1,12 +1,17 @@
 from rest_framework import serializers
+
+from .commun import PatientSerializer, EmployeSerializer
 from ..models import Consultation
 
-class ResumeSerializer(serializers.ModelSerializer):
+class ConsultationEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
-        fields = ['resume']  # Only expose the 'resume' field for editing
+        fields =['id','diagnostique' ,'resume' ]
 
-class DiagnostiqueSerializer(serializers.ModelSerializer):
+
+class ConsultationSerializer(serializers.ModelSerializer):
+    patient = PatientSerializer(read_only=True)
+    medecin = EmployeSerializer(read_only=True)
     class Meta:
         model = Consultation
-        fields = ['diagnostique']  # Only expose the 'diagnostique' field for editing
+        fields =['id','patient' ,'medecin','ordonance' ,'diagnostique' ,'resume', 'created_at','updated_at' ]

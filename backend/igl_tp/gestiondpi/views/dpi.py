@@ -1,18 +1,13 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from io import BytesIO
-from django.http import HttpResponse
 from qrcode import *
 from django.contrib.auth.models import User, Group
 from ..models import Patient
-from ..permissions.auth import IsPatient
 from ..permissions.dpi import PatientViewPermissions
-from ..serializers.patient import PatientSerializer
-from ..permissions import *
+from ..serializers.commun import PatientSerializer
 from django.http import FileResponse
 
 
@@ -67,10 +62,3 @@ class PatientView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#  to directly get patient info when the patient is authenticated
-@api_view(['POST'])
-@permission_classes([IsAuthenticated,IsPatient])  # only if authenticated and is a patient
-def get_patient_info(request):
-    patient = get_object_or_404(Patient, user__id=request.user.id)
-    serializer = PatientSerializer(patient)
-    return Response(serializer.data, status=status.HTTP_200_OK)
