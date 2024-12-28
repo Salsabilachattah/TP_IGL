@@ -4,10 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.contrib.auth.models import Group
 from rest_framework import status
-
 from ..models import Patient, Employe
-from ..serializers.commun import EmployeInfoSerializer
-from ..serializers.patient import PatientSerializer
+from ..serializers.commun import EmployeSerializer,PatientSerializer
 
 
 class CreateRolesGroupsView(APIView):
@@ -78,7 +76,7 @@ def get_user_info(request):
     # Check if the user is an employee (excluding Django admin users)
     elif not request.user.is_staff:  # Ensure the user is not an admin
         employee = get_object_or_404(Employe, user=request.user)
-        serializer = EmployeInfoSerializer(employee)
+        serializer = EmployeSerializer(employee)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     # If the user is neither a patient nor a regular employee, return a 403 Forbidden response

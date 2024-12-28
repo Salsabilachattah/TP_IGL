@@ -10,6 +10,8 @@ from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_tw
 from django.conf import settings
 from django.conf.urls.static import static
 
+from .views.ordonance import creer_ordonance, SGPHView
+
 urlpatterns = [
     # auth
     path('login/', login_view, name='login'),
@@ -31,6 +33,9 @@ urlpatterns = [
     path('consultations/<int:pk>/bilanradio/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
     path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
     path('consultations/<int:pk>/bilanradio/radio', add_bilanradio_image, name='bilan-detail'),
+    # Ordonance ET SGPH
+    path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
+    path('sgph/', SGPHView.as_view(), name='pharmacien'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
