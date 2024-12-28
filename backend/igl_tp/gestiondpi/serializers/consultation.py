@@ -21,9 +21,10 @@ class ConsultationSerializer(serializers.ModelSerializer):
         fields =['id','patient' ,'medecin','ordonance' ,'diagnostique' ,'resume', 'created_at','updated_at' ]
 
 class CreerConsultationSerializer(serializers.ModelSerializer):
-    patient = PatientInfoSerializer(read_only=True)
-    medecin = EmployeInfoSerializer(read_only=True)
+    # Accept only IDs for patient and medecin
+    patient = serializers.PrimaryKeyRelatedField(queryset=PatientInfoSerializer.Meta.model.objects.all())
+    medecin = serializers.PrimaryKeyRelatedField(queryset=EmployeInfoSerializer.Meta.model.objects.all())
 
     class Meta:
         model = Consultation
-        fields = [ 'patient', 'medecin']
+        fields = ['patient', 'medecin']

@@ -2,11 +2,6 @@ from rest_framework import permissions
 
 
 class ConsultationsPermissions(permissions.BasePermission):
-    """
-    Custom permission to allow:
-    - GET requests for users in the 'medecin', 'patient' groups.
-    - POST requests only for users in the 'medecin' group.
-    """
 
     def has_permission(self, request, view):
 

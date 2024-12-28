@@ -114,11 +114,9 @@ def add_bilanradio_image(request, pk):
     bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
 
     # Check if an image is provided in the request
-    if 'image' not in request.FILES:
+    image = request.FILES.get('image')
+    if not image:
         return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    # Get the image from the request
-    image = request.FILES['image']
 
     # Create the ImageRadio instance and associate it with the BilanRadiologique instance
     image_instance = ImageRadio.objects.create(

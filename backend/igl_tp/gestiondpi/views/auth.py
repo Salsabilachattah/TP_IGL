@@ -22,15 +22,19 @@ class CreateRolesGroupsView(APIView):
 
 
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
 
 @api_view(['POST'])
+@permission_classes([])
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
+
+    if request.user and request.user.is_authenticated:
+        return Response({"detail": "Already connected"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Authenticate the user
     user = authenticate(username=username, password=password)
@@ -43,12 +47,14 @@ def login_view(request):
 
 
 @api_view(['POST'])
+@permission_classes([])
 def logout_view(request):
     logout(request)
     return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['POST'])
+@permission_classes([])
 def is_connected(request):
     if request.user.is_authenticated:
         return Response({"is_connected": True, "username": request.user.username}, status=status.HTTP_200_OK)
