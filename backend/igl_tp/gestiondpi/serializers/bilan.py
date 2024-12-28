@@ -28,6 +28,20 @@ class BilanBioSerializer(serializers.ModelSerializer):
             'resultat', 'valide', 'created_at', 'updated_at', 'tests'
         ]
 
+class BilanBioEditSerializer(serializers.ModelSerializer):
+    # Nested serializers for patient and laborantin (staff)
+    patient = PatientInfoSerializer(read_only=True)
+    laborantin = EmployeInfoSerializer(read_only=True)
+
+    # Related tests using the reverse relation `tests`
+    tests = BilanBioTestSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BilanBiologique
+        fields = [
+            'resultat', 'valide'
+        ]
+
 class ImageRadioSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageRadio
@@ -42,3 +56,19 @@ class BilanRadioSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanRadiologique
         fields = ['consultation', 'patient', 'radiologue', 'description', 'compte_rendu', 'images', 'valide', 'created_at', 'updated_at']
+
+class BilanRadioEditSerializer(serializers.ModelSerializer):
+    patient = PatientInfoSerializer(read_only=True)  # Nested serializer for patient information
+    radiologue = EmployeInfoSerializer(read_only=True)  # Nested serializer for radiologue information
+    images = ImageRadioSerializer(many=True, read_only=True)  # Nested serializer for related images
+
+    class Meta:
+        model = BilanRadiologique
+        fields = ['compte_rendu', 'valide']
+
+
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BilanBioTest
+        fields = ['id', 'type', 'valeur']  # Include 'id', 'type', and 'valeur'
+        read_only_fields = ['id']  # Make 'id' read-only (user cannot provide it during creation)

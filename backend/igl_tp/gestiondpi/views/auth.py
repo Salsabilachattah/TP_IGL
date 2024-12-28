@@ -1,8 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.contrib.auth.models import Group
 from rest_framework import status
+
+from ..models import Patient, Employe
+from ..serializers.commun import EmployeInfoSerializer
+from ..serializers.patient import PatientSerializer
 
 
 class CreateRolesGroupsView(APIView):
@@ -59,3 +64,22 @@ def is_connected(request):
     if request.user.is_authenticated:
         return Response({"is_connected": True, "username": request.user.username}, status=status.HTTP_200_OK)
     return Response({"is_connected": False}, status=status.HTTP_200_OK)
+
+
+#  to directly get patient info when the patient is authenticated
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # only if authenticated and is a patient
+def get_user_info(request):
+    if request.user.groups.filter(name='patient').exists():
+        patient = get_object_or_404(Patient, user=request.user)
+        serializer = PatientSerializer(patient)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Check if the user is an employee (excluding Django admin users)
+    elif not request.user.is_staff:  # Ensure the user is not an admin
+        employee = get_object_or_404(Employe, user=request.user)
+        serializer = EmployeInfoSerializer(employee)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # If the user is neither a patient nor a regular employee, return a 403 Forbidden response
+    return Response({"detail": "No info for super user"}, status=status.HTTP_403_FORBIDDEN)
