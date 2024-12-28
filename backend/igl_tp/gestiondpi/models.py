@@ -66,7 +66,8 @@ class Ordonance(models.Model):
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    valide=models.BooleanField(default=False)
+    
 class Consultation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=False, null=True, related_name="consultations")

@@ -5,11 +5,55 @@ from io import BytesIO
 from django.http import HttpResponse
 from qrcode import *
 from django.contrib.auth.models import User
-from ..models import Patient
+from ..models import Patient , Ordonance
 from ..serializers import PatientSerializer , OrdonnanceSerializer
 from ..permissions import *
 from django.http import FileResponse
 from ..permissions import IsAdministratif, IsMedecin
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+class OrdonnanceValidationAPIView(APIView):
+    def post(self, request, ordonnance_id):
+        if IsMedecin(request.user) and request.user.is_authenticated:
+            try:
+                ordonnance = Ordonance.objects.get(id=ordonnance_id)
+            except Ordonance.DoesNotExist:
+                return Response({"error": "Ordonnance not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            # Send email to pharmacien for validation
+            pharmacien_email = "pharmacien@example.com"  
+            send_mail(
+                'Ordonnance Validation Request',
+                f'Please validate the following ordonnance: {ordonnance.id}',
+                settings.DEFAULT_FROM_EMAIL,
+                [pharmacien_email],
+                fail_silently=False,
+            )
+
+            return Response({"message": "Validation request sent to pharmacien"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
+
+class OrdonnanceValidationResponseAPIView(APIView):
+    def post(self, request, ordonnance_id):
+        if request.user.is_authenticated and request.user.groups.filter(name='Pharmacien').exists():
+            try:
+                ordonnance = Ordonance.objects.get(id=ordonnance_id)
+            except Ordonance.DoesNotExist:
+                return Response({"error": "Ordonnance not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            validation_status = request.data.get('validated')
+            if validation_status is not None:
+                ordonnance.validated = validation_status
+                ordonnance.save()
+                return Response({"message": "Ordonnance validation status updated"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Validation status not provided"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
+        
 
 class PatientListCreateAPIView(APIView):
     def get(self, request, nss=None):
