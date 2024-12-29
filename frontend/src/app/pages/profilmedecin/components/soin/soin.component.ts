@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SoinButtonComponent } from '../soin-button/soin-button.component';
 @Component({
   selector: 'app-soin',
-  imports:[CommonModule],
+  imports:[CommonModule ,  SoinButtonComponent],
   templateUrl: './soin.component.html',
   styleUrls: ['./soin.component.css'],
 })
@@ -17,7 +18,13 @@ export class SoinComponent {
     console.log(this.soins); // Vérifiez que les données sont chargées
   }
 
-  displaySoin(soin: { date: string; soin: string ; infermier: string}): void {
-    alert(`Résumé for ${soin.date}: ${soin.soin}`);
+  show: boolean = false;
+
+  displaySoin() {
+    this.show = true;
+  }
+
+  hideSoin() {
+    this.show = false;
   }
 }

@@ -24,30 +24,36 @@
             <td class="px-4 py-2">
               <button
                 class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-                (click)="displayPrescription(consultation)"
+                (click)="displayPrescription()"
               >
                 Prescription
               </button>
+              <app-bilan-button *ngIf="show" (closeModal)="hidePrescription()"></app-bilan-button>
+
             </td>
   
             <!-- Etat Button -->
             <td class="px-4 py-2">
               <button
                 class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-                (click)="displayEtat(consultation)"
+                (click)="displayEtat()"
               >
                 Etat
               </button>
+              <app-bilan-button *ngIf="show2" (closeModal)="hideEtat()"></app-bilan-button>
+
             </td>
   
             <!-- Résultat Button -->
             <td class="px-4 py-2">
               <button
                 class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-                (click)="displayResultat(consultation)"
+                (click)="displayResultat()"
               >
                 Résultat
               </button>
+              <app-bilan-button *ngIf="show3" (closeModal)="hideResultat()"></app-bilan-button>
+
             </td>
           </tr>
         </tbody>

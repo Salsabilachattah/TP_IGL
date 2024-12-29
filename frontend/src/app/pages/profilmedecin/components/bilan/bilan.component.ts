@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BilanButtonComponent } from '../bilan-button/bilan-button.component';
 @Component({
   selector: 'app-bilan',
-  imports:[CommonModule],
+  imports:[CommonModule , BilanButtonComponent],
   templateUrl: './bilan.component.html',
   styleUrls: ['./bilan.component.css']
 })
@@ -16,20 +17,40 @@ export class BilanComponent {
   ];
 
   // Function to handle the display of prescription
-  displayPrescription(consultation: any) {
-    alert(`Prescription: ${consultation.prescription}`);
-    // You can add more logic here for displaying prescription details
+  show: boolean = false;
+  show2: boolean = false;
+
+  show3: boolean = false;
+
+
+  displayPrescription() {
+    this.show = true;
+  }
+
+  hidePrescription() {
+    this.show = false;
   }
 
   // Function to handle the display of etat
-  displayEtat(consultation: any) {
-    alert(`Etat: ${consultation.etat}`);
-    // You can add more logic here for displaying etat details
+  displayEtat() {
+    this.show2 = true;
+
   }
 
+  hideEtat() {
+    this.show2 = false;
+
+  }
+
+
   // Function to handle the display of resultat
-  displayResultat(consultation: any) {
-    alert(`Résultat: ${consultation.resultat}`);
-    // You can add more logic here for displaying resultat details
+  displayResultat() {
+    this.show3 = true;
+
+  }
+
+  hideResultat() {
+    this.show3 = false;
+
   }
 }

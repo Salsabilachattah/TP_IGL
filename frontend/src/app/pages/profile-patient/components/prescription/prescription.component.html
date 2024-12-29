@@ -18,10 +18,12 @@
             <td class="px-4 py-2">
               <button
                 class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-                (click)="displayContenu(prescription)"
+                (click)="displayContenu()"
               >
                 Contenu
               </button>
+              <app-prescription-button *ngIf="show" (closeModal)="hideContenu()"></app-prescription-button>
+
             </td>
           </tr>
         </tbody>

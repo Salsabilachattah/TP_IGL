@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { prescriptionButtonComponent } from '../prescription-button/prescription-button.component';
 @Component({
   selector: 'app-prescription',
-  imports:[CommonModule],
+  imports:[CommonModule , prescriptionButtonComponent],
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.css'],
 })
@@ -17,7 +18,13 @@ export class PrescriptionComponent {
     console.log(this.prescription); // Vérifiez que les données sont chargées
   }
 
-  displayContenu(prescription: { date: string; contenu: string }): void {
-    alert(`Résumé for ${prescription.date}: ${prescription.contenu}`);
+  show: boolean = false;
+
+  displayContenu() {
+    this.show = true;
+  }
+
+  hideContenu() {
+    this.show = false;
   }
 }

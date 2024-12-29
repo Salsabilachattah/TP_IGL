@@ -19,10 +19,12 @@
             <td class="px-4 py-2">
               <button
                 class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-                (click)="displaySoin(soin)"
+                (click)="displaySoin()"
               >
                 Soins
               </button>
+              <app-soin-button *ngIf="show" (closeModal)="hideSoin()"></app-soin-button>
+
             </td>
             <td class="px-4 py-2">{{ soin.infermier }}</td>
           </tr>
