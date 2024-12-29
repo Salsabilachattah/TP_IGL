@@ -13,7 +13,7 @@ from ..permissions.auth import IsMedecin, IsPharmacien
 from django.core.mail import send_mail
 from django.conf import settings
 
-from ..serializers.ordonance import OrdonnanceSerializer
+from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsSerializer
 
 
 class SGPHView(APIView):
@@ -58,6 +58,18 @@ def creer_ordonance(self, request, nss):
     serializer = OrdonnanceSerializer(partial=patient,medecin=medecin,data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            ordonnance = serializer.save()
+
+            medicaments_data = request.data.get('medicaments', [])
+            for medicament_data in medicaments_data:
+                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,data=medicament_data)
+                if medicament_serializer.is_valid():
+                    medicament_serializer.save()
+                else:
+                    return Response(medicament_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -15,6 +15,9 @@ from rest_framework import permissions, authentication
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from .views.recherche import EmployeListView, MedicamentListView
+from .views.soin import *
+
 schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
@@ -57,6 +60,17 @@ urlpatterns = [
     # Ordonance ET SGPH
     path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
     path('sgph/', SGPHView.as_view(), name='pharmacien'),
+    # soin
+    path('soins/<int:soin_id>/', SoinView.as_view(), name='soin-detail'),
+    path('soins/', SoinView.as_view(), name='soin-create'),
+    path('soins/<int:soin_id>/medicaments/', add_soin_medicament, name='add-soin-medicament'),
+    path('soins/<int:soin_id>/infirmiers/', add_soin_infermier, name='add-soin-infirmier'),
+    path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),
+
+    # recherche
+    path('medicaments/', MedicamentListView.as_view(), name='medicament-list'),
+    path('employees/', EmployeListView.as_view(), name='employee-list'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
