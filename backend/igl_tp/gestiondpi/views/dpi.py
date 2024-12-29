@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,20 +14,14 @@ from django.http import FileResponse
 
 
 class PatientView(APIView):
-    permission_classes = [PatientViewPermissions]
+    permission_classes = [IsAuthenticated,PatientViewPermissions]
 
     # refactor by removing try,catch and using 'get_object_or_404'
-    def get(self, request, nss=None):
-        if nss:
-            # Fetch a single patient by NSS
-            patient = get_object_or_404(Patient, nss=nss)
-            serializer = PatientSerializer(patient)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            # Fetch all patients
-            patients = Patient.objects.all()
-            serializer = PatientSerializer(patients, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request):
+        # Fetch all patients
+        patients = Patient.objects.all()
+        serializer = PatientSerializer(patients, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 
     def post(self, request):
@@ -57,3 +53,10 @@ class PatientView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated,PatientViewPermissions])
+def get_patient_par_nss(self, request, nss):
+        # Fetch a single patient by NSS
+        patient = get_object_or_404(Patient, nss=nss)
+        serializer = PatientSerializer(patient)
+        return Response(serializer.data, status=status.HTTP_200_OK)
