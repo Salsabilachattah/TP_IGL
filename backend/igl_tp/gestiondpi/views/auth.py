@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -11,6 +13,9 @@ from ..serializers.commun import EmployeSerializer,PatientSerializer
 class CreateRolesGroupsView(APIView):
     permission_classes = [IsAdminUser]  # Only allow admins to create groups
 
+    @swagger_auto_schema(
+        tags=["admin stuff (do not use)"]
+    )
     def get(self, request):
         roles = ['medecin', 'administratif', 'infirmier', 'pharmacien','radiologue', 'laboratorien', 'patient']
         created_groups = []
@@ -29,7 +34,26 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 
+login_body_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'username': openapi.Schema(type=openapi.TYPE_STRING),
+        'password': openapi.Schema(type=openapi.TYPE_STRING),
+    },
+    required=['username', 'password'],
+)
 
+
+@swagger_auto_schema(
+    method='post',  # Specify the HTTP method explicitly
+    operation_description="Login endpoint for users.",
+    request_body=login_body_schema,
+    responses={
+        200: 'Successfully logged in',
+        400: 'Invalid username or password',
+    },
+    tags=["authentication"]
+)
 @api_view(['POST'])
 @permission_classes([])
 def login_view(request):
@@ -48,14 +72,20 @@ def login_view(request):
 
     return Response({"detail": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
 
-
+@swagger_auto_schema(
+    method='post',
+    tags=["authentication"]
+)
 @api_view(['POST'])
 @permission_classes([])
 def logout_view(request):
     logout(request)
     return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
 
-
+@swagger_auto_schema(
+    method='post',
+    tags=["authentication"]
+)
 @api_view(['POST'])
 @permission_classes([])
 def is_connected(request):
@@ -65,6 +95,10 @@ def is_connected(request):
 
 
 #  to directly get patient info when the patient is authenticated
+@swagger_auto_schema(
+    method='get',
+    tags=["authentication"]
+)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])  # only if authenticated and is a patient
 def get_user_info(request):

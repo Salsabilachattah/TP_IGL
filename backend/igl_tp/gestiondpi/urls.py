@@ -1,7 +1,6 @@
 # urls.py
 from django.urls import path
 
-from .models import BilanRadiologique
 from .views.auth import CreateRolesGroupsView, login_view, logout_view,is_connected,get_user_info
 from .views.dpi import PatientView
 from .views.consultation import edit_consultation, ConsultationView
@@ -11,13 +10,35 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from .views.ordonance import creer_ordonance, SGPHView
+from django.urls import re_path
+from rest_framework import permissions, authentication
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Snippets API",
+      default_version='v1',
+      description="Test description",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="contact@snippets.local"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+    authentication_classes=[],
+)
 
 urlpatterns = [
+    # doc
+    path('docs.json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # auth
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('is_connected/', is_connected, name='is_connected'),
-    path('me/', get_user_info, name='user-detail'),
+    path('me/', get_user_info, name='me'),
     # admin
     path('create-roles-groups/', CreateRolesGroupsView.as_view(), name='create_roles_groups'),
     # patient
@@ -29,7 +50,7 @@ urlpatterns = [
     path('consultations/<int:pk>/', edit_consultation, name='consultation-resume'),
     path('consultations/<int:pk>/bilanbio/', BilanBiologiqueView.as_view(), name='bilan-detail'),
     path('consultations/<int:pk>/bilanbio/take', take_bilan_bio, name='bilan-bio-take'),
-    path('consultations/<int:pk>/bilanbio/test', add_bilanbio_test , name='bilan-detail'),
+    path('consultations/<int:pk>/bilanbio/test', add_bilanbio_test , name='bilan-test'),
     path('consultations/<int:pk>/bilanradio/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
     path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
     path('consultations/<int:pk>/bilanradio/radio', add_bilanradio_image, name='bilan-detail'),
