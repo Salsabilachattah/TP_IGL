@@ -29,21 +29,16 @@ class PatientView(APIView):
     
 
     def post(self, request):
-        # to add a new patient
-        patient_data = request.data
 
         # Create a new User dynamically for the patient
-        password = f"patient_{patient_data.get('nss')}"
-        username = f"{patient_data.get('nom').lower()}_{patient_data.get('prenom').lower()}"
+        password = f"patient_{request.data.get('nss')}"
+        username = f"{request.data.get('nom').lower()}_{request.data.get('prenom').lower()}"
         user = User.objects.create_user(username=username, password=password)
 
         # add the user to 'patient' group for permissions stuff
         user.groups.add(Group.objects.get(name='patient'))
 
-        # Attach the created User to the Patient data
-        patient_data['user'] = user.id
-
-        serializer = PatientSerializer(data=patient_data)
+        serializer = PatientSerializer(user=user,data=request.data)
         if serializer.is_valid():
             patient = serializer.save()
 
