@@ -1,7 +1,8 @@
 # urls.py
 from django.urls import path
 from .views.auth import CreateRolesGroupsView
-from .views.dpiView import  PatientListCreateAPIView, OrdonnanceCreateAPIView 
+from .views.dpiView import  PatientListCreateAPIView
+from .views.creerOrdonnanceView import OrdonnanceCreateAPIView
 from .views.pharmacienView import PharmacienView
 
 urlpatterns = [
