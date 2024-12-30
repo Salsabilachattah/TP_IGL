@@ -9,7 +9,7 @@ from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_tw
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .views.ordonance import creer_ordonance, SGPHView
+from .views.ordonance import creer_ordonance, get_all_non_validated_ordonances, validate_ordonance
 from django.urls import re_path
 from rest_framework import permissions, authentication
 from drf_yasg.views import get_schema_view
@@ -61,7 +61,8 @@ urlpatterns = [
     path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
     path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
-    path('sgph/', SGPHView.as_view(), name='pharmacien'),
+    path('ordonance/not_validated', get_all_non_validated_ordonances, name='pharmacien'),
+    path('ordonance/<int:pk>', validate_ordonance, name='pharmacien'),
     # soin
     path('soins/<int:soin_id>/', SoinView.as_view(), name='soin-detail'),
     path('soins/', create_soin, name='soin-create'),

@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from qrcode import *
 from django.contrib.auth.models import User
@@ -9,33 +10,40 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..models import Ordonance, Patient, Employe
+from ..models import Ordonance, Patient, Employe, Medicament
 from ..permissions.auth import IsMedecin, IsPharmacien
 from django.core.mail import send_mail
 from django.conf import settings
 
 from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsSerializer
 
+@swagger_auto_schema(
+    method="get",
+    tags=["sgbh"],
+    operation_summary="Get all non validated ordonances",
+    responses={
+        status.HTTP_200_OK: OrdonnanceSerializer
+    }
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated,IsPharmacien])
+def get_all_non_validated_ordonances(self, request): # Get all non-validated ordonnances
+    ordonnances = Ordonance.objects.filter(valide=False)
+    serializer = OrdonnanceSerializer(ordonnances, many=True)
+    return Response(serializer.data)
 
-class SGPHView(APIView):
-    permission_classes = [IsAuthenticated,IsPharmacien]
-
-    @swagger_auto_schema(
-        tags=["sgbh"]
-    )
-    def get(self, request): # Get all non-validated ordonnances
-        ordonnances = Ordonance.objects.filter(valide=False)
-        serializer = OrdonnanceSerializer(ordonnances, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(
-        tags=["sgbh"]
-    )
-    def post(self, request, pk): # pk is the id of the ordonnance to validate
-        ordonnance = get_object_or_404(Ordonance, pk=pk)
-        ordonnance.valide = True # Validate it
-        ordonnance.save()
-        return Response({'status': 'ordonnance validated'}, status=status.HTTP_200_OK)
+@swagger_auto_schema(
+    method="post",
+    tags=["sgbh"],
+    operation_summary="Validate ordonance",
+)
+@api_view(["POST"])
+@permission_classes([IsAuthenticated,IsPharmacien])
+def validate_ordonance(self, request, pk): # pk is the id of the ordonnance to validate
+    ordonnance = get_object_or_404(Ordonance, pk=pk)
+    ordonnance.valide = True # Validate it
+    ordonnance.save()
+    return Response({'status': 'ordonnance validated'}, status=status.HTTP_200_OK)
 
 @swagger_auto_schema(
     method="post",
@@ -60,7 +68,36 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
 
 @swagger_auto_schema(
     method="post",
-    tags=["ordonance"]
+    tags=["ordonance"],
+    operation_summary="Create an ordonnance (prescription) for a patient",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'medicaments': openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'medicament': openapi.Schema(type=openapi.TYPE_INTEGER, description='Medicament id'),
+                        'dose': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament dose', example='500mg'),
+                        'quantity': openapi.Schema(type=openapi.TYPE_INTEGER, description='Medicament quantity', example=30),
+                        'duree': openapi.Schema(type=openapi.TYPE_INTEGER, description='Duree in days',example=7)
+                    }
+                ),
+                description='List of medicaments in the ordonnance'
+            )
+        },
+        required=['date', 'medicaments']
+    ),
+    responses={
+        201: openapi.Response(
+            description="Ordonnance created successfully",
+            schema=OrdonnanceSerializer
+        ),
+        400: openapi.Response(
+            description="Invalid data provided",
+        )
+    }
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
@@ -76,7 +113,8 @@ def creer_ordonance(self, request, nss):
 
             medicaments_data = request.data.get('medicaments', [])
             for medicament_data in medicaments_data:
-                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,data=medicament_data)
+                medicament=get_object_or_404(Medicament, pk=medicament_data['id'])
+                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,medicament=medicament,data=medicament_data)
                 if medicament_serializer.is_valid():
                     medicament_serializer.save()
                 else:
