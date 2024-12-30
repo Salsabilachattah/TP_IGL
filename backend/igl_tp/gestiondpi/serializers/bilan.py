@@ -34,19 +34,27 @@ class BilanBioEditSerializer(serializers.ModelSerializer):
             'resultat', 'valide'
         ]
 
+
 class BilanBioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanBiologique
-        fields = [
-            'description', 'consultation'
-        ]
+        fields = ['description', 'consultation']
+
+    def validate_description(self, value):
+        if not value or value.strip() == "":
+            raise serializers.ValidationError("Description cannot be an empty string.")
+        return value
+
 
 class BilanRadioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanRadiologique
-        fields = [
-            'description', 'consultation'
-        ]
+        fields = ['description', 'consultation']
+
+    def validate_description(self, value):
+        if not value or value.strip() == "":
+            raise serializers.ValidationError("Description cannot be an empty string.")
+        return value
 
 class ImageRadioSerializer(serializers.ModelSerializer):
     class Meta:

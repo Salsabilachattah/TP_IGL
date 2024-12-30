@@ -70,8 +70,8 @@ urlpatterns = [
     path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),
 
     # recherche
-    path('medicaments/', MedicamentListView.as_view(), name='medicament-list'),
-    path('employees/', EmployeListView.as_view(), name='employee-list'),
+    path('medicaments/', MedicamentListView.as_view(), name='medicament-recherche--nom'),
+    path('employees/', EmployeListView.as_view(), name='medicament--role-nom'),
 
 ]
 if settings.DEBUG:

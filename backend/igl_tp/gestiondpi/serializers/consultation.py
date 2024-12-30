@@ -6,7 +6,7 @@ from ..models import Consultation
 class ConsultationEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
-        fields =['id','diagnostique' ,'resume' ]
+        fields =['diagnostique' ,'resume' ]
 
 
 class ConsultationSerializer(serializers.ModelSerializer):

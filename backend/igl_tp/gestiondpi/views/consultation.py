@@ -1,3 +1,4 @@
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -16,7 +17,8 @@ from django.shortcuts import get_object_or_404
 class ConsultationDetailView(APIView):
     permission_classes = [IsAuthenticated,ConsultationsPermissions]
     @swagger_auto_schema(
-        tags=["consultation"]
+        tags=["consultation"],
+        operation_summary = "Get consultation by id",
     )
     def get(self, request, pk):
         consultation = get_object_or_404(Consultation, pk=pk)
@@ -26,7 +28,20 @@ class ConsultationDetailView(APIView):
         return Response({"consultation": serializer.data}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        tags=["consultation"]
+        tags=["consultation"],
+        operation_summary = "Modifier diagnostique et resumé",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'diagnostique' : openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+                'resume' : openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+            },
+            required=[],  # Indicate that 'description' is required
+        )
     )
     def patch(self,request, pk):
         consultation = get_object_or_404(Consultation, pk=pk)
@@ -41,7 +56,8 @@ class ConsultationDetailView(APIView):
 
 @swagger_auto_schema(
     method="post",
-    tags=["consultation"]
+    tags=["consultation"],
+    operation_summary = "Create consultation",
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])  # Add the IsAuthenticated permission
