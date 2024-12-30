@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views.auth import CreateRolesGroupsView, login_view, logout_view,is_connected,get_user_info
 from .views.dpi import PatientView, get_patient_par_nss
-from .views.consultation import edit_consultation, ConsultationView
+from .views.consultation import create_consultation, ConsultationDetailView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
     add_bilanbio_test, take_bilan_bio, take_bilan_radio
 from django.conf import settings
@@ -47,22 +47,24 @@ urlpatterns = [
     # patient
     path('patients/', PatientView.as_view(), name='patients'),
     path('patients/<int:nss>/', get_patient_par_nss, name='patient-detail'),
-    # consultation et bilans
-    path('patients/<int:nss>/consultation/', ConsultationView.as_view(), name='consultation'),
-    path('patients/<int:nss>/last2bilans', get_last_two_bilans, name='bilan-detail'),
-    path('consultations/<int:pk>/', edit_consultation, name='consultation-resume'),
+    # consultation
+    path('patients/<int:nss>/consultation/', create_consultation, name='consultation'),
+    path('consultations/<int:pk>/', ConsultationDetailView.as_view(), name='consultation-resume'),
+    # bilan bio
+    path('patients/<int:nss>/bilanbio/lasttwo', get_last_two_bilans, name='bilan-detail'),
     path('consultations/<int:pk>/bilanbio/', BilanBiologiqueView.as_view(), name='bilan-detail'),
     path('consultations/<int:pk>/bilanbio/take', take_bilan_bio, name='bilan-bio-take'),
     path('consultations/<int:pk>/bilanbio/test', add_bilanbio_test , name='bilan-test'),
+    # bilan radio
     path('consultations/<int:pk>/bilanradio/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
-    path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
     path('consultations/<int:pk>/bilanradio/radio', add_bilanradio_image, name='bilan-detail'),
+    path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
     path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
     path('sgph/', SGPHView.as_view(), name='pharmacien'),
     # soin
     path('soins/<int:soin_id>/', SoinView.as_view(), name='soin-detail'),
-    path('soins/', SoinView.as_view(), name='soin-create'),
+    path('soins/', create_soin, name='soin-create'),
     path('soins/<int:soin_id>/medicaments/', add_soin_medicament, name='add-soin-medicament'),
     path('soins/<int:soin_id>/infirmiers/', add_soin_infermier, name='add-soin-infirmier'),
     path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),

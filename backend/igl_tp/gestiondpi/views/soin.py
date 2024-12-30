@@ -18,12 +18,6 @@ class SoinView(APIView):
         serializer = SoinSerializer(soin)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
-        serializer = SoinSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, soin_id):
         soin = get_object_or_404(Soin, pk=soin_id)
@@ -40,7 +34,16 @@ class SoinView(APIView):
 
 
 @api_view(['POST'])
-#@permission_classes([IsInfirmier])
+@permission_classes([IsInfirmier])
+def create_soin(request):
+    serializer = SoinSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinMedicamentSerializer(data=request.data)

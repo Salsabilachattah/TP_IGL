@@ -14,7 +14,7 @@ class SoinPermissions(permissions.BasePermission):
             return request.user.groups.filter(name__in=['infermier','patient']).exists()
 
         # For POST method, allow only 'infermier' group
-        elif request.method in ['POST', 'PUT', 'DELETE']:
+        elif request.method in ['PUT', 'DELETE']:
             return request.user.groups.filter(name='infermier').exists()
 
         # Default: deny any other methods (e.g., PUT, DELETE)
