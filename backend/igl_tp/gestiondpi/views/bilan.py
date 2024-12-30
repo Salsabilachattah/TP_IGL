@@ -133,18 +133,14 @@ class BilanRadiologiqueView(APIView):
     method='post',
     tags=["bilan radio"],
     operation_summary="Add an image to a bilan radiologique",
-    operation_description="Allows a radiologue to upload and associate an image with a specific bilan radiologique.",
-    request_body=openapi.Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'image': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                format=openapi.FORMAT_BINARY,
-                description="Image file to upload (must be a valid image format)."
-            ),
-        },
-        required=['image'],  # Indicate that the 'image' field is required
-    ),
+    manual_parameters=[
+        openapi.Parameter(
+            'image',
+            openapi.IN_FORM,  # Form data
+            type=openapi.TYPE_FILE,  # File upload type
+            description='Image file to upload (must be a valid image format).'
+        ),
+    ],
     responses={
         201: openapi.Response(
             description="Image added successfully",
