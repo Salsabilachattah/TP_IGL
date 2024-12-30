@@ -1,13 +1,13 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
-    BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer
+    BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer, ImageRadioSerializer
 from ..permissions.bilan import BilanPermissions
 from rest_framework.response import Response
 from rest_framework import status,permissions
@@ -162,36 +162,26 @@ class BilanRadiologiqueView(APIView):
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsRadiologue])
+@parser_classes([MultiPartParser, FormParser])
 def add_bilanradio_image(request, pk):
-    # Enable file uploads using MultiPartParser
-    parser_classes = [MultiPartParser, FormParser]
-
-    # Get the BilanRadiologique instance
     bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
 
-    # Check if the radiologue is authorized
     if bilan_radiologique.radiologue.user != request.user:
         return Response(
             {"detail": "You are not authorized to add a radio to this bilan."},
             status=status.HTTP_403_FORBIDDEN
         )
 
-    # Check if an image is provided in the request
-    image = request.FILES.get('image')
-    if not image:
-        return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
+    serializer=ImageRadioSerializer(bilan_radiologique=bilan_radiologique,data=request.data, partial=True)
 
-    # Create and associate the ImageRadio instance
-    image_instance = ImageRadio.objects.create(
-        image=image,
-        bilan_radiologique=bilan_radiologique
-    )
+    if serializer.is_valid():
+        image_instance=serializer.save()
+        return Response({
+            'message': 'Image added successfully',
+            'image_url': image_instance.image.url
+        }, status=status.HTTP_201_CREATED)
 
-    # Return the image URL in the response
-    return Response({
-        'message': 'Image added successfully',
-        'image_url': image_instance.image.url  # Relative URL to the media root
-    }, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

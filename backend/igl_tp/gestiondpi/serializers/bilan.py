@@ -82,3 +82,9 @@ class TestSerializer(serializers.ModelSerializer):
         model = BilanBioTest
         fields = ['id', 'type', 'valeur']  # Include 'id', 'type', and 'valeur'
         read_only_fields = ['id']  # Make 'id' read-only (user cannot provide it during creation)
+
+
+class ImageRadioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageRadio
+        fields = ['id', 'image', 'bilan_radiologique']

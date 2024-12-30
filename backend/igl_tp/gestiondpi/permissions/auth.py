@@ -17,8 +17,6 @@ class IsRadiologue(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.groups.filter(name='radiologue').exists()
 
-
-
 class IsPharmacien(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.groups.filter(name='pharmacien').exists()
