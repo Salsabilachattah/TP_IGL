@@ -1,0 +1,32 @@
+<div class=" mx-auto p-6 bg-[#87CAE9] text-white rounded-lg shadow-lg">
+
+    <!-- Table for Dates and Résumé Buttons -->
+    <div class="overflow-hidden rounded-lg">
+      <table class="w-full text-left">
+        <!-- Table Header -->
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border-b-2">Date de l'ordonnance</th>
+            <th class="px-4 py-2 border-b-2">Contenu</th>
+          </tr>
+        </thead>
+  
+        <!-- Table Body -->
+        <tbody>
+          <tr *ngFor="let prescription of prescription;let i = index" class="border-b border-blue-300">
+            <td class="px-4 py-2">{{ prescription.date }}</td>
+            <td class="px-4 py-2">
+              <button
+                class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
+                (click)="displayContenu(i)"
+              >
+                Contenu
+              </button>
+              <app-prescription-button *ngIf="prescription.show" (closeModal)="hideContenu(i)"></app-prescription-button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

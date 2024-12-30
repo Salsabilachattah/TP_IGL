@@ -1,0 +1,24 @@
+<div class="flex flex-col place-content-center place-items-center">
+    <app-menu></app-menu>
+    
+    <div class="w-full flex justify-center">
+        <app-affichageinfo 
+          [data]="rowData" 
+          [fieldOrder]="fieldOrder" 
+          class="w-full max-w-2xl"></app-affichageinfo>
+    </div>
+    
+    <div class="h-full flex flex-col place-content-center w-3/4">
+        <p class="text-lg font-semibold text-gray-800 text-left my-4">Résumé de la consultation</p>
+        <div class="bg-[#D9D9D9] w-full p-4">
+            <h1>Résumé de la consultation</h1>
+            <p class="text-gray-700">{{ resume }}</p> <!-- Affichage du texte -->
+        </div>
+        
+         
+    </div>
+   
+    <div class="absolute bottom-0 left-4">
+        <app-bouttonretour></app-bouttonretour>
+    </div>
+</div>

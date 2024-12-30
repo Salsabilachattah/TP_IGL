@@ -20,16 +20,19 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+          "assets": [
+  "src/favicon.ico",
+  "src/assets"
+],
+
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/font-awesome/css/font-awesome.min.css"
             ],
-            "scripts": []
+           "scripts": [
+  "node_modules/@iconify/iconify/dist/iconify.min.js"
+]
+
           },
           "configurations": {
             "production": {
@@ -86,11 +89,21 @@
             ],
             "styles": [
               "src/styles.css"
+             
+
+
+
             ],
-            "scripts": []
+            "scripts": [
+  
+]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "b1398e43-647e-4c00-aea6-8c8c3b097325"
   }
 }
+

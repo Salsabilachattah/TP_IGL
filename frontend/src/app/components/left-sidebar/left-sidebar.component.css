@@ -1,0 +1,5 @@
+:host {
+    display: block; /* Assurez-vous que l'élément occupe l'espace */
+    height: 100%; /* Remplit la hauteur de son conteneur */
+    overflow: hidden; /* Cacher le débordement */
+}

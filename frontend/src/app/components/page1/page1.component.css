@@ -1,0 +1,43 @@
+.page {
+    background-color: #ffffff;/*#F7F3ED*/
+    padding-top: 20px;/*a enlever*/
+}
+
+.page1 {
+    
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row; /* Maintient la disposition horizontale */
+    align-items: center; /* Centrer les éléments verticalement */
+    margin: 4%;
+    gap: 40%; /* Ajuste l'espacement entre les éléments */
+    padding: 1%;
+    max-width: 1500px; /* Réduit la largeur maximale */
+    border-radius: 8px; /* Coins arrondis pour un design moderne */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p {
+    font-size: 1.2rem; /* Taille de texte lisible */
+    color: #333;       /* Couleur de texte sombre */
+    font-weight: bold;
+}
+
+.btn {
+    display: flex;
+    flex-direction: row; /* Maintient la disposition horizontale */
+    gap: 15px; /* Espacement entre les boutons */
+    width: 100%; /* S'adapte à la largeur disponible */
+    max-width: 600px; /* Largeur maximale ajustée */
+    justify-content: flex-start; /* Alignement à gauche */
+}
+
+.titre {
+    font-size: xx-large;
+    padding-left: 5%;
+    font-weight: bold;
+    padding-bottom: 3%;
+    margin-left: 5.7%;
+}

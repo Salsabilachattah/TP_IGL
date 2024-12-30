@@ -1,0 +1,12 @@
+<div class="bg-white p-4 h-full overflow-y-auto">
+  <app-menu></app-menu>
+  <div class="w-full space-y-6">
+    <div class="flex flex-col md:flex-row gap-4">
+      <app-searchbar class="w-full md:w-3/4" />
+      <app-stats class="w-full md:w-1/4" />
+    </div>
+    <div>
+      <app-tableau [labels]="fields2" [buttonsArray]="list" />
+    </div>
+  </div>
+</div>
