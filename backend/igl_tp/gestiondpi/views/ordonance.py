@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 from qrcode import *
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -18,19 +19,28 @@ from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsS
 
 class SGPHView(APIView):
     permission_classes = [IsAuthenticated,IsPharmacien]
+
+    @swagger_auto_schema(
+        tags=["sgbh"]
+    )
     def get(self, request): # Get all non-validated ordonnances
         ordonnances = Ordonance.objects.filter(valide=False)
         serializer = OrdonnanceSerializer(ordonnances, many=True)
         return Response(serializer.data)
 
-
+    @swagger_auto_schema(
+        tags=["sgbh"]
+    )
     def post(self, request, pk): # pk is the id of the ordonnance to validate
         ordonnance = get_object_or_404(Ordonance, pk=pk)
         ordonnance.valide = True # Validate it
         ordonnance.save()
         return Response({'status': 'ordonnance validated'}, status=status.HTTP_200_OK)
 
-
+@swagger_auto_schema(
+    method="post",
+    tags=["ordonance"]
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
 def envoyer_ordonance_email(self, request, ordonnance_id):
@@ -48,7 +58,10 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
 
     return Response({"message": "Validation request sent to pharmacien"}, status=status.HTTP_200_OK)
 
-
+@swagger_auto_schema(
+    method="post",
+    tags=["ordonance"]
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
 def creer_ordonance(self, request, nss):

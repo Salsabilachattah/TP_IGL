@@ -1,12 +1,13 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
-    BilanRadioEditSerializer, TestSerializer
+    BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer
 from ..permissions.bilan import BilanPermissions
 from rest_framework.response import Response
 from rest_framework import status,permissions
@@ -18,7 +19,8 @@ class BilanBiologiqueView(APIView):
     permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
-        tags=["bilans"]
+        tags=["bilan bio"],
+        operation_summary = "Get bilan biologique",
     )
     def get(self, request, consultation_id):
         bilan = get_object_or_404(BilanBiologique,pk=consultation_id)
@@ -26,34 +28,33 @@ class BilanBiologiqueView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        tags=["bilans"]
+        tags=["bilan bio"],
+        operation_summary = "Create bilan biologique (par medecin)",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'description': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+            },
+            required=['description'],  # Indicate that 'description' is required
+        )
     )
     def post(self, request, consultation_id):
-        # Extract 'description' from request data
-        description = request.data.get("description")
-
-        # Validate that the description is provided
-        if not description:
-            return Response(
-                {"error": "Description is required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
         # Fetch the Consultation instance using the consultation_id from the URL
         consultation = get_object_or_404(Consultation, pk=consultation_id)
 
-        # Create the BilanBiologique object
-        bilan = BilanBiologique.objects.create(
-            consultation=consultation,
-            patient=consultation.patient,  # Automatically link the patient from the consultation
-            description=description
-        )
+        serializer = BilanBioCreateSerializer(consultation=consultation,patient=consultation.patient, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "BilanBiologique created successfully"},status=status.HTTP_201_CREATED)
 
         # Return a success message instead of the serialized data
-        return Response({"message": "BilanBiologique created successfully"},status=status.HTTP_201_CREATED)
+        Response({"error": "Description is required."},status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=["bilans"]
+        tags=["bilan bio"],
+        operation_summary = "Edit resume et valide"
     )
     def patch(self ,request, pk):
         bilan_bio = get_object_or_404(BilanBiologique, pk=pk)
@@ -75,7 +76,8 @@ class BilanRadiologiqueView(APIView):
     permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
-        tags=["bilans"]
+        tags=["bilan radio"],
+        operation_summary = "Get bilan radiologique",
     )
     def get(self, request, consultation_id):
         bilan = get_object_or_404(BilanBiologique,pk=consultation_id)
@@ -83,40 +85,40 @@ class BilanRadiologiqueView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-tags=["bilans"]
+        tags=["bilan radio"],
+        operation_summary = "Create bilan radiologique (par medecin)",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'description': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                ),
+            },
+            required=['description'],  # Indicate that 'description' is required
+        )
     )
     def post(self, request, consultation_id):
-        # Extract 'description' from request data
-        description = request.data.get("description")
-
-        # Validate that the description is provided
-        if not description:
-            return Response(
-                {"error": "Description is required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
 
         # Fetch the Consultation instance using the consultation_id from the URL
         consultation = get_object_or_404(Consultation, pk=consultation_id)
 
-        # Create the BilanBiologique object
-        bilan = BilanRadiologique.objects.create(
-            consultation=consultation,
-            patient=consultation.patient,  # Automatically link the patient from the consultation
-            description=description
-        )
+        serializer = BilanRadioCreateSerializer(consultation=consultation, patient=consultation.patient, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "BilanRadiologique created successfully"}, status=status.HTTP_201_CREATED)
 
         # Return a success message instead of the serialized data
-        return Response({"message": "BilanRadiologique created successfully"},status=status.HTTP_201_CREATED)
+        Response({"error": "Description is required."}, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=["bilans"]
+        tags=["bilan radio"],
+        operation_summary = "Edit compte-rendu et valide",
+        request_body = BilanRadioEditSerializer
     )
     def patch(self ,request, pk):
         bilan_radio = get_object_or_404(BilanRadiologique, pk=pk)
         if bilan_radio.radiologue.user != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
         serializer = BilanRadioEditSerializer(bilan_radio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -129,14 +131,45 @@ tags=["bilans"]
 
 @swagger_auto_schema(
     method='post',
-    tags=["bilans"]
+    tags=["bilan radio"],
+    operation_summary="Add an image to a bilan radiologique",
+    operation_description="Allows a radiologue to upload and associate an image with a specific bilan radiologique.",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'image': openapi.Schema(
+                type=openapi.TYPE_STRING,
+                format=openapi.FORMAT_BINARY,
+                description="Image file to upload (must be a valid image format)."
+            ),
+        },
+        required=['image'],  # Indicate that the 'image' field is required
+    ),
+    responses={
+        201: openapi.Response(
+            description="Image added successfully",
+            examples={
+                "application/json": {
+                    "message": "Image added successfully",
+                    "image_url": "/media/path/to/image.jpg"
+                }
+            }
+        ),
+        400: openapi.Response(description="No image provided or invalid request."),
+        403: openapi.Response(description="User not authorized."),
+        404: openapi.Response(description="BilanRadiologique not found."),
+    }
 )
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,IsRadiologue])  # Add the IsAuthenticated permission
+@permission_classes([IsAuthenticated, IsRadiologue])
 def add_bilanradio_image(request, pk):
-    # Get the BilanRadiologique instance for the given consultation (consultation id is pk)
+    # Enable file uploads using MultiPartParser
+    parser_classes = [MultiPartParser, FormParser]
+
+    # Get the BilanRadiologique instance
     bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
 
+    # Check if the radiologue is authorized
     if bilan_radiologique.radiologue.user != request.user:
         return Response(
             {"detail": "You are not authorized to add a radio to this bilan."},
@@ -148,26 +181,25 @@ def add_bilanradio_image(request, pk):
     if not image:
         return Response({'detail': 'No image provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Create the ImageRadio instance and associate it with the BilanRadiologique instance
+    # Create and associate the ImageRadio instance
     image_instance = ImageRadio.objects.create(
         image=image,
         bilan_radiologique=bilan_radiologique
     )
 
-    # Get the URL of the uploaded image
-    image_url = image_instance.image.url  # This will give you the relative URL to the media root
-
     # Return the image URL in the response
     return Response({
         'message': 'Image added successfully',
-        'image_url': image_url
+        'image_url': image_instance.image.url  # Relative URL to the media root
     }, status=status.HTTP_201_CREATED)
 
 
 
 @swagger_auto_schema(
     method='post',
-    tags=["bilans"]
+    tags=["bilan bio"],
+    operation_summary = "Add bilan bio test",
+    request_body=TestSerializer
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsLaboratorien])  # Add the IsAuthenticated permission
@@ -193,7 +225,8 @@ def add_bilanbio_test(request, pk):
 
 @swagger_auto_schema(
     method='get',
-    tags=["bilans"]
+    tags=["bilan bio"],
+    operation_summary = "Get last two bilans bio"
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -211,7 +244,8 @@ def get_last_two_bilans(request, nss):
 
 @swagger_auto_schema(
     method='post',
-    tags=["bilans"]
+    tags=["bilan bio"],
+    operation_summary = "Take bilan bio"
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsLaboratorien])  # Only authenticated laboratorien can access this
@@ -230,7 +264,8 @@ def take_bilan_bio(request, pk):
 
 @swagger_auto_schema(
     method='post',
-    tags=["bilans"]
+    tags=["bilan radio"],
+    operation_summary = "Take bilan radio",
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated, IsRadiologue])  # Only authenticated laboratorien can access this

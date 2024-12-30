@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import *
 from rest_framework.decorators import permission_classes
@@ -6,7 +8,33 @@ from ..permissions.auth import *
 from ..models import Employe, Medicament
 from ..serializers.commun import EmployeSerializer,MedicamentSerializer
 
-
+@swagger_auto_schema(
+    operation_summary="Retrieve a list of employe",
+    operation_description="Retrieve a list of employe",
+    manual_parameters=[
+        openapi.Parameter(
+            name='role',
+            in_=openapi.IN_QUERY,
+            description="Role of the Employe.",
+            type=openapi.TYPE_STRING,
+            required=True,
+            example="aspirin"
+        ),
+        openapi.Parameter(
+            name='nom',
+            in_=openapi.IN_QUERY,
+            description="Partial name of the medicament to filter (case insensitive).",
+            type=openapi.TYPE_STRING,
+            required=False,
+            example="aspirin"
+        )
+    ],
+    responses={
+        200: MedicamentSerializer(many=True),
+        400: "Bad Request - Invalid Query Parameter",
+    },
+    tags=['recherche']
+)
 class EmployeListView(ListAPIView):
     serializer_class = EmployeSerializer
 
@@ -22,12 +50,29 @@ class EmployeListView(ListAPIView):
 
         return queryset
 
-
+@swagger_auto_schema(
+    operation_summary="Retrieve a list of medicaments",
+    operation_description="Retrieve a list of medicaments, optionally filtered by a partial match on the name (case insensitive).",
+    manual_parameters=[
+        openapi.Parameter(
+            name='nom',
+            in_=openapi.IN_QUERY,
+            description="Partial name of the medicament to filter (case insensitive).",
+            type=openapi.TYPE_STRING,
+            required=False,
+            example="aspirin"
+        )
+    ],
+    responses={
+        200: MedicamentSerializer(many=True),
+        400: "Bad Request - Invalid Query Parameter",
+    },
+    tags=['recherche']
+)
 class MedicamentListView(ListAPIView):
     # permission_classes = [IsInfirmier,IsMedecin]
 
     serializer_class = MedicamentSerializer
-
     def get_queryset(self):
         queryset = Medicament.objects.all()
 

@@ -28,17 +28,24 @@ class BilanBioSerializer(serializers.ModelSerializer):
         ]
 
 class BilanBioEditSerializer(serializers.ModelSerializer):
-    # Nested serializers for patient and laborantin (staff)
-    patient = PatientSerializer(read_only=True)
-    laborantin = EmployeSerializer(read_only=True)
-
-    # Related tests using the reverse relation `tests`
-    tests = BilanBioTestSerializer(many=True, read_only=True)
-
     class Meta:
         model = BilanBiologique
         fields = [
             'resultat', 'valide'
+        ]
+
+class BilanBioCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BilanBiologique
+        fields = [
+            'description', 'consultation'
+        ]
+
+class BilanRadioCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BilanRadiologique
+        fields = [
+            'description', 'consultation'
         ]
 
 class ImageRadioSerializer(serializers.ModelSerializer):
@@ -57,10 +64,6 @@ class BilanRadioSerializer(serializers.ModelSerializer):
         fields = ['consultation', 'patient', 'radiologue', 'description', 'compte_rendu', 'images', 'valide', 'created_at', 'updated_at']
 
 class BilanRadioEditSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer(read_only=True)  # Nested serializer for patient information
-    radiologue = EmployeSerializer(read_only=True)  # Nested serializer for radiologue information
-    images = ImageRadioSerializer(many=True, read_only=True)  # Nested serializer for related images
-
     class Meta:
         model = BilanRadiologique
         fields = ['compte_rendu', 'valide']

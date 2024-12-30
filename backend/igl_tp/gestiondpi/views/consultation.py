@@ -1,3 +1,4 @@
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -14,7 +15,9 @@ from django.shortcuts import get_object_or_404
 # Class for handling GET requests to retrieve consultations
 class ConsultationDetailView(APIView):
     permission_classes = [IsAuthenticated,ConsultationsPermissions]
-
+    @swagger_auto_schema(
+        tags=["consultation"]
+    )
     def get(self, request, pk):
         consultation = get_object_or_404(Consultation, pk=pk)
         self.check_object_permissions(self.request, consultation)
@@ -22,6 +25,9 @@ class ConsultationDetailView(APIView):
         serializer = ConsultationSerializer(consultation)
         return Response({"consultation": serializer.data}, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        tags=["consultation"]
+    )
     def patch(self,request, pk):
         consultation = get_object_or_404(Consultation, pk=pk)
         self.check_object_permissions(self.request, consultation)
@@ -33,6 +39,10 @@ class ConsultationDetailView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+    method="post",
+    tags=["consultation"]
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])  # Add the IsAuthenticated permission
 def create_consultation(self, request, nss):
