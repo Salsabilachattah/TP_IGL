@@ -50,13 +50,13 @@ class SoinView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@swagger_auto_schema( 
-    tags=["soin"],
-    operation_summary="Delete Soin by ID",
-    responses={204: openapi.Response(
-        description="Soin deleted successfully"
-    )} 
-)
+    @swagger_auto_schema( 
+        tags=["soin"],
+        operation_summary="Delete Soin by ID",
+        responses={204: openapi.Response(
+            description="Soin deleted successfully"
+         )} 
+    )
     
     def delete(self, request, soin_id):
         soin = get_object_or_404(Soin, pk=soin_id)
