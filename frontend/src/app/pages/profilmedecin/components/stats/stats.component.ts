@@ -2,12 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService } from '../../../../services/patient.service';
-import { HttpClientModule } from '@angular/common/http'; // Ajoutez cette ligne
-
-
 @Component({
   selector: 'app-stats',
-  imports: [HttpClientModule,FormsModule,CommonModule],
+  standalone: true,
+  imports: [PatientService,FormsModule,CommonModule],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.css'
 })

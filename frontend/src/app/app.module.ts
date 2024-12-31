@@ -1,31 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common'; // CommonModule is typically used in feature modules
+import { HttpClientModule } from '@angular/common/http'; // Importation de HttpClientModule
 import { AppComponent } from './app.component';
-import { TableComponent } from './components/table/table.component'; // Correct path for TableComponent
-import { profillaborantinComponent } from './pages/profillaborantin/profillaborantin.component'; // Correct path for profillaborantinComponent
-import { AppRoutingModule } from './app.routes';  // Importez AppRoutingModule
-import { FormComponent } from './components/form/form.component';
-import {  HttpClientModule} from '@angular/common/http';
-
+import { StatsComponent } from './pages/profilmedecin/components/stats/stats.component'; // Ajustez le chemin selon votre structure de fichiers
 
 @NgModule({
   declarations: [
-     // Déclaration du composant TableComponent
+    AppComponent,
+    StatsComponent // Assurez-vous que le composant est déclaré ici
   ],
   imports: [
     BrowserModule,
-    CommonModule, 
-    AppComponent,
-    TableComponent,
-    AppRoutingModule,
-    profillaborantinComponent, // Add profillaborantinComponent here
-    FormComponent,
-    HttpClientModule
+    HttpClientModule // Assurez-vous que HttpClientModule est dans les imports
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [AppComponent] // Ne laissez pas vide
 })
 export class AppModule { }
-
-
