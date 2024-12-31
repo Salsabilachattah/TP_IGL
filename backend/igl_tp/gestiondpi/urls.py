@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views.auth import CreateRolesGroupsView, login_view, logout_view,is_connected,get_user_info
-from .views.dpi import PatientView, get_patient_par_nss
+from .views.dpi import PatientView
 from .views.consultation import create_consultation, ConsultationDetailView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
     add_bilanbio_test, take_bilan_bio, take_bilan_radio
@@ -46,7 +46,7 @@ urlpatterns = [
     path('create-roles-groups/', CreateRolesGroupsView.as_view(), name='create_roles_groups'),
     # patient
     path('patients/', PatientView.as_view(), name='patients'),
-    path('patients/<int:nss>/', get_patient_par_nss, name='patient-detail'),
+    path('patients/<int:nss>/', PatientView.as_view(), name='patient-detail'),
     # consultation
     path('patients/<int:nss>/consultation/', create_consultation, name='consultation'),
     path('consultations/<int:pk>/', ConsultationDetailView.as_view(), name='consultation-resume'),

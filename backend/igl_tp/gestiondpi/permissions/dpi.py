@@ -9,7 +9,7 @@ class PatientViewPermissions(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # For GET method, allow access to anyyone with a valid account
+        # For GET method, allow access to anyone with a valid account
         if request.method == 'GET':
             return not request.user.groups.filter(name='patient').exists()
 

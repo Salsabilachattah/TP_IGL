@@ -17,12 +17,22 @@ from django.http import FileResponse
 
 class PatientView(APIView):
     permission_classes = [IsAuthenticated,PatientViewPermissions]
-
+    @swagger_auto_schema(
+      tags=["patients"],
+      operation_summary="Get patient by nss"
+    )
+    def get_patient_by_nss(self, request, nss):
+        # Fetch a single patient by NSS
+        patient = get_object_or_404(Patient, nss=nss)
+        serializer = PatientSerializer(patient)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     @swagger_auto_schema(
         tags=["patients"],
         operation_summary="Get all patients"
     )
-    def get(self, request):
+    def get(self, request, nss=None):
+        if nss :
+            return self.get_patient_by_nss(request, nss)
         # Fetch all patients
         patients = Patient.objects.all()
         serializer = PatientSerializer(patients, many=True)
@@ -90,15 +100,3 @@ class PatientView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@swagger_auto_schema(
-    method="GET",
-    tags=["patients"],
-    operation_summary="Get patient by nss"
-)
-@api_view(['GET'])
-@permission_classes([IsAuthenticated,PatientViewPermissions])
-def get_patient_par_nss(self, request, nss):
-        # Fetch a single patient by NSS
-        patient = get_object_or_404(Patient, nss=nss)
-        serializer = PatientSerializer(patient)
-        return Response(serializer.data, status=status.HTTP_200_OK)
