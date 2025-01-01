@@ -57,7 +57,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',  # Add this line
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:4200',  # Add the frontend URL here
+]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # Add the URL of your Angular frontend
 ]
