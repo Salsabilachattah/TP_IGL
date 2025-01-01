@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 export interface AuthResponse {
   access: string; // Access token
@@ -31,25 +31,17 @@ export class AuthService {
     });
   }
 
-  login(username: string, password: string): Observable<any> {
+  login(username="", password=""): Observable<any> {
     console.log(username + ' ' + password);
-    return this.isConnected().pipe(
-      tap((isValid) => {
-        if (isValid) {
-          // If already connected, refresh the token
-          const refreshToken = localStorage.getItem('refreshToken');
-          if (refreshToken) {
-            this.refreshToken(refreshToken).subscribe();
-          }
-        } else {
-          // If not connected, perform login
-          this.authenticate(username, password);
-        }
+    return this.refreshToken().pipe(
+      catchError(() => {
+        console.log('Refresh token failed, authenticating user...');
+        return this.authenticate(username, password);
       })
     );
   }
-  private authenticate(username: string, password: string): void {
-    this.http
+  private authenticate(username: string, password: string): Observable<any> {
+    return this.http
       .post<AuthResponse>(
         `${this.baseUrl}/auth/jwt/create`,
         { username, password },
@@ -62,9 +54,9 @@ export class AuthService {
           localStorage.setItem('refreshToken', response.refresh); // Store refresh token
         })
       )
-      .subscribe();
   }
-  private refreshToken(refreshToken: string): Observable<any> {
+  private refreshToken(): Observable<any> {
+    const refreshToken = localStorage.getItem('refreshToken');
     return this.http
       .post<AuthResponse>(
         `${this.baseUrl}/auth/jwt/refresh`,
