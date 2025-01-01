@@ -1,7 +1,8 @@
 # urls.py
 from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
 
-from .views.auth import CreateRolesGroupsView, login_view, logout_view,is_connected,get_user_info
+from .views.auth import CreateRolesGroupsView, get_user_info
 from .views.dpi import PatientView, get_patient_par_nss
 from .views.consultation import create_consultation, ConsultationDetailView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
@@ -38,9 +39,6 @@ urlpatterns = [
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     # auth
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
-    path('is_connected/', is_connected, name='is_connected'),
     path('me/', get_user_info, name='me'),
     # admin
     path('create-roles-groups/', CreateRolesGroupsView.as_view(), name='create_roles_groups'),

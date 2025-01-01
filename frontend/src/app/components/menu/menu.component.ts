@@ -33,14 +33,6 @@ export class MenuComponent {
     this.openCall = false;
   }
   logout() {
-    this.authService.logout().subscribe({
-      next: (response) => {
-        // Si la déconnexion est réussie, redirige l'utilisateur vers la page d'accueil ou une autre page
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Erreur de déconnexion', err);
-      },
-    });
+    this.authService.logout();
   }
 }

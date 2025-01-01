@@ -15,3 +15,5 @@ tzdata==2024.2
 urllib3==2.2.3
 drf-yasg==1.21.7
 setuptools==75.6.0
+djoser==2.3.1
+djangorestframework-simplejwt==5.3.1

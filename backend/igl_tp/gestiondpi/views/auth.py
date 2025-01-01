@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -30,7 +32,7 @@ class CreateRolesGroupsView(APIView):
 
 
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -42,55 +44,6 @@ login_body_schema = openapi.Schema(
     },
     required=['username', 'password'],
 )
-
-
-@swagger_auto_schema(
-    method='post',  # Specify the HTTP method explicitly
-    operation_description="Login endpoint for users.",
-    request_body=login_body_schema,
-    responses={
-        200: 'Successfully logged in',
-        400: 'Invalid username or password',
-    },
-    tags=["authentication"]
-)
-@api_view(['POST'])
-@permission_classes([])
-def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-
-    if request.user and request.user.is_authenticated:
-        return Response({"detail": "Already connected"}, status=status.HTTP_400_BAD_REQUEST)
-
-    # Authenticate the user
-    user = authenticate(username=username, password=password)
-
-    if user is not None:
-        login(request, user)  # This will create the session
-        return Response({"detail": "Login successful."}, status=status.HTTP_200_OK)
-
-    return Response({"detail": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
-
-@swagger_auto_schema(
-    method='post',
-    tags=["authentication"]
-)
-@api_view(['POST'])
-@permission_classes([])
-def logout_view(request):
-    logout(request)
-    return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-
-@swagger_auto_schema(
-    method='post',
-    tags=["authentication"]
-)
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def is_connected(request):
-    return Response({"is_connected": True, "username": request.user.username}, status=status.HTTP_200_OK)
-
 
 #  to directly get patient info when the patient is authenticated
 @swagger_auto_schema(
