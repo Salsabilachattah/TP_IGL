@@ -98,7 +98,7 @@ class PatientView(APIView):
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated,PatientViewPermissions])
-def get_patient_par_nss(self, request, nss):
+def get_patient_par_nss(request, nss):
         # Fetch a single patient by NSS
         patient = get_object_or_404(Patient, nss=nss)
         serializer = PatientSerializer(patient)

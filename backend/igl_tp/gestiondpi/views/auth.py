@@ -87,11 +87,9 @@ def logout_view(request):
     tags=["authentication"]
 )
 @api_view(['POST'])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def is_connected(request):
-    if request.user.is_authenticated:
-        return Response({"is_connected": True, "username": request.user.username}, status=status.HTTP_200_OK)
-    return Response({"is_connected": False}, status=status.HTTP_200_OK)
+    return Response({"is_connected": True, "username": request.user.username}, status=status.HTTP_200_OK)
 
 
 #  to directly get patient info when the patient is authenticated
