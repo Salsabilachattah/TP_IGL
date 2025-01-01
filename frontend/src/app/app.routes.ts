@@ -24,7 +24,7 @@ import { ListePatientComponent } from './pages/profilmedecin/components/liste-pa
 
 export const routes: Routes = [
   //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
-  { path: '', component:  ProfilmedecinComponent },
+  { path: '', component:  HomeComponent },
   { path: 'infirmier', component: ProfileinfirmierComponent },
   { path: 'medecin', component:ProfilmedecinComponent  },
   { path: 'patient', component:  ProfilePatientComponent},
