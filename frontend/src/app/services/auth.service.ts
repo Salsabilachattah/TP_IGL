@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8000'; // Django backend URL
+  private baseUrl = 'http://localhost:8000/api'; // Django backend URL
 
   constructor(private http: HttpClient) {}
 
@@ -19,6 +19,6 @@ export class AuthService {
   }
 
   isConnected(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/is_connected/`, { withCredentials: true });
+    return this.http.post(`${this.baseUrl}/is_connected/`, { withCredentials: true });
   }
 }

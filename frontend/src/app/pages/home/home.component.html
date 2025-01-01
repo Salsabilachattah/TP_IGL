@@ -56,11 +56,16 @@
           <!-- Bouton Soumettre -->
           <div class="flex justify-center">
             <button 
-              type="submit" 
-              class="relative inline-block text-[#356bba] text-sm font-bold uppercase overflow-hidden tracking-wide mt-10 px-5 py-3 border border-transparent transition-all hover:bg-[#356bba] hover:text-white rounded">
-              Se connecter
+                type="submit" 
+                class="relative inline-block text-[#356bba] text-sm font-bold uppercase overflow-hidden tracking-wide mt-10 px-5 py-3 border border-transparent transition-all hover:bg-[#356bba] hover:text-white rounded">
+                <span class="absolute top-0 left-[-100%] w-full h-[2px] bg-gradient-to-r from-transparent to-[#356bba] animate-btn1"></span>
+                <span class="absolute top-[-100%] right-0 w-[2px] h-full bg-gradient-to-b from-transparent to-[#356bba] animate-btn2"></span>
+                <span class="absolute bottom-0 right-[-100%] w-full h-[2px] bg-gradient-to-l from-transparent to-[#356bba] animate-btn3"></span>
+                <span class="absolute bottom-[-100%] left-0 w-[2px] h-full bg-gradient-to-t from-transparent to-[#356bba] animate-btn4"></span>
+                Se connecter
             </button>
-          </div>
+        </div>
+        
   
           <!-- Message d'erreur -->
           <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">{{ errorMessage }}</div>

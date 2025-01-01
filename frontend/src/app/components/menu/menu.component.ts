@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-menu',
   imports:[RouterModule , CommonModule],
@@ -12,6 +14,7 @@ export class MenuComponent {
   openProfile: boolean = false;
   user = { name: 'John Doe', ssn: '123-45-6789' };  // Example user data
   usertype = 'admin';  // Example usertype
+  constructor(private authService: AuthService, private router: Router) {}
 
   closeOverlays() {
     this.openCall = false;
@@ -28,5 +31,16 @@ export class MenuComponent {
   toggleProfile() {
     this.openProfile = !this.openProfile;
     this.openCall = false;
+  }
+  logout() {
+    this.authService.logout().subscribe({
+      next: (response) => {
+        // Si la déconnexion est réussie, redirige l'utilisateur vers la page d'accueil ou une autre page
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Erreur de déconnexion', err);
+      },
+    });
   }
 }

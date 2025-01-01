@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -17,36 +17,57 @@ export class HomeComponent {
   username = '';
   password = '';
   errorMessage = '';
-
-  constructor(private http: HttpClient, private router: Router) {}
+  isConnected = false;
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
 
   // Méthode pour afficher le formulaire de connexion
   showForm() {
     this.showLoginForm = true;
   }
 
+  ngOnInit() {
+    this.authService.isConnected().subscribe({
+      next: (response) => {
+        this.isConnected = response.is_connected;
+        console.log('Session valid:', response);
+      },
+      error: () => {
+        this.isConnected = false;
+        console.log('No active session');
+      },
+    });
+  }
   // Méthode pour soumettre le formulaire
   submitForm() {
-    const loginData = { username: this.username, password: this.password };
-    this.http.post('http://localhost:8000/api/login/', loginData).subscribe({
-      next: (response: any) => {
-        
+    this.authService.login(this.username, this.password).subscribe({
+      next: (response) => {
         console.log('Connexion réussie', response);
-          // Vérifiez le username pour déterminer la redirection
-          if (this.username === 'medecin_user') { // Remplacez par le nom d'utilisateur du médecin
-            this.router.navigate(['/medecin']);
-          } else if (this.username === 'infirmierUsername') { // Remplacez par le nom d'utilisateur de l'infirmier
-            this.router.navigate(['/infirmier']);
-          } else {
-            this.router.navigate(['/default']); // Redirection par défaut
-          }
+        // Vérifiez le username pour déterminer la redirection
+        if (this.username === 'medecin_user') {
+          this.router.navigate(['/medecin']);
+        } else if (this.username === 'administratif_user') {
+          this.router.navigate(['/administratif']);
+        }else if (this.username === 'infirmier_user') {
+          this.router.navigate(['/infirmier']);
+        }else if (this.username === 'laboratorien_user') {
+          this.router.navigate(['/laboratin']);
+        }else if (this.username === 'patient_user_1') {
+          this.router.navigate(['/patient']);
+        }else if (this.username === 'patient_user_2') {
+          this.router.navigate(['/patient']);
+        }else if (this.username === 'pharmacien_user') {
+          this.router.navigate(['/']);
+        }else if (this.username === 'radiologue_user') {
+          this.router.navigate(['/radiologue']);
+        } else {
+          this.router.navigate(['/patient']);
+        }
       },
       error: (error) => {
-       
-        console.log('Réponse du serveur :', error);
         console.error('Erreur de connexion', error);
         this.errorMessage = 'Échec de la connexion. Vérifiez vos informations.';
       }
     });
   }
+  
 }
