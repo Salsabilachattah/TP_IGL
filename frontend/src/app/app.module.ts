@@ -1,31 +1,23 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common'; // CommonModule is typically used in feature modules
+import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
-import { TableComponent } from './components/table/table.component'; // Correct path for TableComponent
-import { profillaborantinComponent } from './pages/profillaborantin/profillaborantin.component'; // Correct path for profillaborantinComponent
-import { AppRoutingModule } from './app.routes';  // Importez AppRoutingModule
-import { FormComponent } from './components/form/form.component';
-import {  HttpClientModule} from '@angular/common/http';
-
-
+import { StatsComponent } from './pages/profilmedecin/components/stats/stats.component'; // Ajustez le chemin selon votre structure de fichiersv
+import { provideHttpClient } from '@angular/common/http';
+import { PatientService } from './services/patient.service';
+import { FormsModule } from '@angular/forms'; // Import de FormsModule
+import { AuthService } from './services/auth.service';
 @NgModule({
   declarations: [
-     // Déclaration du composant TableComponent
+    AppComponent,
+    StatsComponent // Assurez-vous que le composant est déclaré ici
   ],
   imports: [
     BrowserModule,
-    CommonModule, 
-    AppComponent,
-    TableComponent,
-    AppRoutingModule,
-    profillaborantinComponent, // Add profillaborantinComponent here
-    FormComponent,
-    HttpClientModule
+    FormsModule,
+     // Assurez-vous que HttpClientModule est dans les imports
   ],
-  providers: [],
-  bootstrap: []
+  providers: [AuthService,CookieService,PatientService,provideHttpClient()],
+  bootstrap: [AppComponent] // Ne laissez pas vide
 })
 export class AppModule { }
-
-

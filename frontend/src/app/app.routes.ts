@@ -24,7 +24,9 @@ import { ListePatientComponent } from './pages/profilmedecin/components/liste-pa
 
 export const routes: Routes = [
   //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
-  { path: '', component:  ProfilmedecinComponent },
+  { path: '', component:  HomeComponent },
+  { path: 'administratif', component: ProfileAdminComponent },
+ 
   { path: 'infirmier', component: ProfileinfirmierComponent },
   { path: 'medecin', component:ProfilmedecinComponent  },
   { path: 'patient', component:  ProfilePatientComponent},
@@ -37,7 +39,6 @@ export const routes: Routes = [
    { path: 'form-radiologue' , component: form_radiologueComponent},
   { path: 'form-laboratin', component: form_laboratinComponent },
 
-  {path:'medecin/patients', component: ProfilmedecinComponent},
   {path:'medecin/consultation', component: NouvelleConsultationComponent},
   {path:'medecin/dossier', component: DossierComponent },
   {path:'medecin/liste', component: ListePatientComponent },
@@ -49,7 +50,6 @@ export const routes: Routes = [
   {path:'medecin/bilans/demanderadio' , component: DemanderadioComponent},
 
 
-  {path:'infirmier/patients' , component:ProfileinfirmierComponent},
   {path:'infirmier/soins' , component: SoinsGComponent},
   {path:'soins' , component: SoinsGComponent},
 
