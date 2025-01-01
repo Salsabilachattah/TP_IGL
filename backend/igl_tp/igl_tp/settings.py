@@ -61,7 +61,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',  # Add the URL of your Angular frontend
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'igl_tp.urls'
 
