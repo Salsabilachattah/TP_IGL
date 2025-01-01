@@ -55,7 +55,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Add this line
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',  # Add the URL of your Angular frontend
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'igl_tp.urls'
 
