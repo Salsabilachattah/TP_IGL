@@ -5,12 +5,12 @@ import { PatientService } from '../../../../services/patient.service';
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [PatientService,FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.css'
 })
 export class StatsComponent {
-  nombre_patient: string = ''; // Initialisez avec une chaîne vide
+  nombre_patient: string = '324'; // Initialisez avec une chaîne vide
 
   constructor(private patientService: PatientService) { }
 

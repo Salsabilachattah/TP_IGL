@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; // Importation de HttpClientModule
+import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
-import { StatsComponent } from './pages/profilmedecin/components/stats/stats.component'; // Ajustez le chemin selon votre structure de fichiers
+import { StatsComponent } from './pages/profilmedecin/components/stats/stats.component'; // Ajustez le chemin selon votre structure de fichiersv
+import { provideHttpClient } from '@angular/common/http';
+import { PatientService } from './services/patient.service';
+import { FormsModule } from '@angular/forms'; // Import de FormsModule
 
 @NgModule({
   declarations: [
@@ -11,9 +14,10 @@ import { StatsComponent } from './pages/profilmedecin/components/stats/stats.com
   ],
   imports: [
     BrowserModule,
-    HttpClientModule // Assurez-vous que HttpClientModule est dans les imports
+    FormsModule,
+     // Assurez-vous que HttpClientModule est dans les imports
   ],
-  providers: [],
+  providers: [CookieService,PatientService,provideHttpClient()],
   bootstrap: [AppComponent] // Ne laissez pas vide
 })
 export class AppModule { }

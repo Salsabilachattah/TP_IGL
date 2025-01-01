@@ -64,6 +64,9 @@ class PatientView(APIView):
     )
     def post(self, request):
 
+        serializer = PatientSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         # Create a new User dynamically for the patient
         password = f"patient_{request.data.get('nss')}"
         username = f"{request.data.get('nom').lower()}_{request.data.get('prenom').lower()}"
@@ -88,7 +91,7 @@ class PatientView(APIView):
             return FileResponse(buffer, as_attachment=True, filename=f"patient_{patient.nss}_qrcode.png")
 
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @swagger_auto_schema(
     method="GET",
