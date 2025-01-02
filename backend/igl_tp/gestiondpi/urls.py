@@ -67,7 +67,7 @@ urlpatterns = [
     path('soins/<int:soin_id>/medicaments/', add_soin_medicament, name='add-soin-medicament'),
     path('soins/<int:soin_id>/infirmiers/', add_soin_infermier, name='add-soin-infirmier'),
     path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),
-
+    path('patients/<int:nss>/soins/', get_soins_par_nss, name='get_soin_par_nss'),
     # recherche
     path('medicaments/', MedicamentListView.as_view(), name='medicament-recherche--nom'),
     path('employees/', EmployeListView.as_view(), name='medicament--role-nom'),

@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -76,8 +77,6 @@ class SoinView(APIView):
         description="Invalid data provided",
     )}
 )
-
-
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def create_soin(request):
@@ -86,6 +85,26 @@ def create_soin(request):
         serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@swagger_auto_schema(
+    method="get",
+    tags=["soin"],
+    operation_summary="Create Soin",
+    request_body=SoinSerializer,
+    responses={201: openapi.Response(
+        description="Soin created successfully",
+        schema=SoinSerializer()
+    ),
+    400: openapi.Response(
+        description="Invalid data provided",
+    )}
+)
+@api_view(['Get'])
+@permission_classes([IsAuthenticated])
+def get_soins_par_nss(request,nss):
+    patient = get_object_or_404(Patient, nss=nss)
+    serializer = SoinSerializer(patient=patient,many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(
