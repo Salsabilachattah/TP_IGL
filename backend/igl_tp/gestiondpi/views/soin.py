@@ -89,15 +89,8 @@ def create_soin(request):
 @swagger_auto_schema(
     method="get",
     tags=["soin"],
-    operation_summary="Create Soin",
-    request_body=SoinSerializer,
-    responses={201: openapi.Response(
-        description="Soin created successfully",
-        schema=SoinSerializer()
-    ),
-    400: openapi.Response(
-        description="Invalid data provided",
-    )}
+    operation_summary="Recherche Soin Par patient",
+    request_body=SoinSerializer
 )
 @api_view(['Get'])
 @permission_classes([IsAuthenticated])
