@@ -18,7 +18,7 @@ export class AuthService {
     return localStorage.getItem('token'); // Get access token from localStorage
   }
 
-  private getHeaders(): HttpHeaders {
+  public getHeaders(): HttpHeaders {
     const token = this.getToken();
 
     if (!token) {
@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     return new HttpHeaders({
-      Authorization: token,
+      Authorization: `JWT ${token}`,
     });
   }
 
