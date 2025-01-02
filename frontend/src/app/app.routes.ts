@@ -16,11 +16,12 @@ import { BilansComponent } from './pages/profilmedecin/components/bilans/bilans.
 import { ResumeComponent } from './pages/profilmedecin/components/resume/resume.component';
 import { DemandebioComponent } from './pages/profilmedecin/components/demandebio/demandebio.component';
 import { DemanderadioComponent } from './pages/profilmedecin/components/demanderadio/demanderadio.component';
- import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
+import { SoinsGComponent } from './pages/profileinfirmier/components/soins-g/soins-g.component';
 import { DossierComponent } from './pages/profilmedecin/components/dossier/dossier.component';
 import { ProfilePatientComponent } from './pages/profile-patient/profile-patient.component';
 import { ResumepatientComponent } from './pages/profile-patient/components/resume/resume.component';
 import { ListePatientComponent } from './pages/profilmedecin/components/liste-patient/liste-patient.component';
+import { RedigerResumeComponent } from './pages/profilmedecin/components/rediger-resume/rediger-resume.component';
 
 export const routes: Routes = [
   //{ path: '', component: HomeComponent }, // Route pour la page d'accueil
@@ -45,7 +46,8 @@ export const routes: Routes = [
   
   {path:'medecin/ordonnance', component: OrdonnanceComponent},
   {path:'medecin/bilans', component: BilansComponent},
-  {path:'medecin/resume' , component:ResumeComponent },
+  {path:'medecin/resumedisplay' , component:ResumeComponent },
+  {path:'medecin/resume' , component:RedigerResumeComponent },
   {path:'medecin/bilans/demandebio' , component: DemandebioComponent},
   {path:'medecin/bilans/demanderadio' , component: DemanderadioComponent},
 

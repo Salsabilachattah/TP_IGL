@@ -5,14 +5,13 @@ import { CommonModule } from '@angular/common';
 import { AffichageinfoComponent } from '../../components/affichageinfo/affichageinfo.component';
 import { AcceuilComponent } from './components/acceuil/acceuil.component';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component'; 
-import { InfoPersoComponent } from './components/info-perso/info-perso.component';
 import { DossierComponent } from './components/dossier/dossier.component';
 
 
 
 @Component({
   selector: 'app-profile-patient',
-   imports: [DossierComponent,InfoPersoComponent,BackgroundVideoComponent,AcceuilComponent,AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
+   imports: [DossierComponent,BackgroundVideoComponent,AcceuilComponent,AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
   templateUrl: './profile-patient.component.html',
 })
 export class ProfilePatientComponent {
@@ -33,11 +32,7 @@ export class ProfilePatientComponent {
         label: 'Mon dossier ',
         component: 'DossierComponent',
       },
-      {
-        icon: 'mdi:account-card-details',
-        label: ' informations personnelles',
-        component: 'InfoPersoComponent',
-      },
+     
     ];
   
     toggleSidebar(collapsed: boolean): void {
@@ -51,9 +46,7 @@ export class ProfilePatientComponent {
       } else if (component === 'DossierComponent') {
      this.currentComponent = DossierComponent;
       } 
-      else if (component === 'InfoPersoComponent') {
-      this.currentComponent = InfoPersoComponent;
-       }else {
+      else {
         this.currentComponent = null;
       }
     }

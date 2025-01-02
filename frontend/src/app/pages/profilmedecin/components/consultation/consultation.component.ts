@@ -22,6 +22,6 @@ export class ConsultationComponent {
   constructor(private router: Router) {}
   // Modifiez cette méthode pour rediriger vers la page "resumer"
   displayResume(consultation: { date: string; summary: string }): void {
-    this.router.navigate(['/medecin/resume'], { state: { consultation } }); // Redirection vers la page Resumer
+    this.router.navigate(['/medecin/resumedisplay'], { state: { consultation } }); // Redirection vers la page Resumer
   }
 }

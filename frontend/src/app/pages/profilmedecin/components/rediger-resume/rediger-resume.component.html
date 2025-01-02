@@ -1,0 +1,37 @@
+<div class="flex flex-col items-center justify-center">
+  <app-menu></app-menu>
+
+  <div class="w-full flex justify-center py-8">
+    <app-affichageinfo 
+      [data]="rowData" 
+      [fieldOrder]="fieldOrder" 
+      class="w-full max-w-2xl"
+    ></app-affichageinfo>
+  </div>
+  
+  <div class="w-3/4 flex flex-col items-center">
+    <p class="text-lg font-semibold text-gray-800 text-left mb-6">Rédaction du résumé de la consultation</p>
+    <div class="bg-[#f0f0f0] w-full p-6 rounded-xl shadow-md">
+      <h1 class="text-xl font-bold text-gray-700 mb-4">Résumé de la consultation</h1>
+      <input 
+        type="text" 
+        placeholder="Veuillez saisir ici le résumé de cette consultation" 
+        class="w-full h-24 text-start border-2 p-4 mb-6 rounded-md focus:outline-none focus:ring-2 focus:ring-[#87CAE9]" 
+        [(ngModel)]="resume" 
+      />
+
+      <div class="w-full flex justify-end">
+        <button 
+          (click)="save()" 
+          class="bg-[#87CAE9] text-white px-8 py-2 rounded-md font-semibold hover:bg-[#356bba] transition duration-300"
+        >
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="absolute bottom-0 left-4 mb-4">
+    <app-bouttonretour></app-bouttonretour>
+  </div>
+</div>
