@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe
+from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe, Patient
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
     BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer, ImageRadioSerializer
@@ -236,13 +236,13 @@ def get_last_two_bilans(request, nss):
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def recherche_bilan_bio(request, nss):
-    # Get the last two BilanBiologique for the given patient
-    bilans = BilanBiologique.objects.filter(nss=nss)
+def recherche_bilan_bio(request):
+    bilans = BilanBiologique.objects.all()
 
     nss = request.query_params.get('nss', None)
     if nss is not None:
-        bilans=bilans.filter(nss=nss)
+        patient = get_object_or_404(Patient, nss=nss)
+        bilans=bilans.filter(patient=patient)
 
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:
@@ -266,11 +266,11 @@ def recherche_bilan_bio(request, nss):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def recherche_bilan_radio(request):
-    # Get the last two BilanBiologique for the given patient
     bilans = BilanRadiologique.objects.all()
     nss = request.query_params.get('nss', None)
     if nss is not None:
-        bilans=bilans.filter(nss=nss)
+        patient = get_object_or_404(Patient, nss=nss)
+        bilans=bilans.filter(patient=patient)
 
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:
