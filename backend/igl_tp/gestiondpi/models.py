@@ -78,8 +78,8 @@ class BilanRadiologique(models.Model):
     description = models.TextField(blank=True, null=True)
     compte_rendu = models.TextField(blank=True, null=True)
     valide=models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    date_debut = models.DateTimeField(auto_now_add=True)
+    date_fin = models.DateTimeField(auto_now=True)
 
 class Outil(models.Model):
     nom = models.CharField(max_length=45)

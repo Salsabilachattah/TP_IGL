@@ -24,7 +24,7 @@ class BilanBioSerializer(serializers.ModelSerializer):
         model = BilanBiologique
         fields = [
             'consultation', 'patient', 'laborantin', 'description',
-            'resultat', 'valide', 'created_at', 'updated_at', 'tests'
+            'resultat', 'valide', 'date_debut', 'date_fin', 'tests'
         ]
 
 class BilanBioEditSerializer(serializers.ModelSerializer):
@@ -69,7 +69,7 @@ class BilanRadioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BilanRadiologique
-        fields = ['consultation', 'patient', 'radiologue', 'description', 'compte_rendu', 'images', 'valide', 'created_at', 'updated_at']
+        fields = ['consultation', 'patient', 'radiologue', 'description', 'compte_rendu', 'images', 'valide', 'date_debut', 'date_fin']
 
 class BilanRadioEditSerializer(serializers.ModelSerializer):
     class Meta:
