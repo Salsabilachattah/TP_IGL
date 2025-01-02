@@ -228,6 +228,43 @@ def get_last_two_bilans(request, nss):
 
     return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
 
+
+@swagger_auto_schema(
+    method='get',
+    tags=["bilan bio"],
+    operation_summary = "Get all bilans for patient"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_bilan_bio_par_nss(request, nss):
+    # Get the last two BilanBiologique for the given patient
+    bilans = BilanBiologique.objects.filter(nss=nss)
+
+    if not bilans:
+        return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = BilanBioSerializer(bilans, many=True)
+
+    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method='get',
+    tags=["bilan radio"],
+    operation_summary = "Get all bilans for patient"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_bilan_radio_par_nss(request, nss):
+    # Get the last two BilanBiologique for the given patient
+    bilans = BilanRadiologique.objects.filter(nss=nss)
+
+    if not bilans:
+        return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = BilanRadioSerializer(bilans, many=True)
+
+    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
 @swagger_auto_schema(
     method='post',
     tags=["bilan bio"],
