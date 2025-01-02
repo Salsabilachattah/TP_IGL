@@ -4,9 +4,8 @@ import { Subject, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserMultiFormatReader } from '@zxing/library';
-
 import { InfirmierService } from '../../../../services/infirmier.service';
-
+import { MedecinService } from '../../../../services/medecin.service';
 @Component({
   selector: 'app-searchbar',
   imports: [WebcamModule, CommonModule, FormsModule],
@@ -21,7 +20,7 @@ export class SearchbarComponent {
 
   private codeReader: BrowserMultiFormatReader; // Initialiser le lecteur de codes QR
 
-  constructor() {
+  constructor(private medecinService: MedecinService) {
     this.codeReader = new BrowserMultiFormatReader();
   };
 
@@ -78,6 +77,18 @@ export class SearchbarComponent {
   }
 
   rechercher() {
+    if (this.nss) {
+      this.medecinService.getPatientDetails(this.nss).subscribe({
+      next: (data) => {
+        console.log("Données reçues:", data);
+      },
+      error: (err) => {
+        console.error("Erreur lors de la recherche:", err);
+      }
+      });
+    } else {
+      console.error("NSS non disponible pour la recherche.");
+    }
     // Envoie du NSS ou de l'image au backend
     console.log("NSS recherché:", this.nss);
    

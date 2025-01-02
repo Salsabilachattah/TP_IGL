@@ -51,7 +51,7 @@ login_body_schema = openapi.Schema(
     tags=["authentication"]
 )
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])  # only if authenticated and is a patient
+@permission_classes([])  # only if authenticated and is a patient
 def get_user_info(request):
     if request.user.groups.filter(name='patient').exists():
         patient = get_object_or_404(Patient, user=request.user)

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TableauComponent } from './components/tableau/tableau.component';
 import { SearchbarComponent } from './components/searchbar/searchbar.component';
@@ -13,14 +13,24 @@ import { InfoPersoComponent } from './components/info-perso/info-perso.component
 import { FormsModule } from '@angular/forms';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component';
 import { ListePatientComponent } from './components/liste-patient/liste-patient.component';
+import { MedecinService } from '../../services/medecin.service';
 @Component({
   selector: 'app-profilmedecin',
   imports: [ListePatientComponent,FormsModule,InfoPersoComponent,BackgroundVideoComponent,LeftSidebarComponent,RouterModule,TableauComponent,SearchbarComponent,StatsComponent,Tableau2Component,CommonModule,MenuComponent,AcceuilMedecinComponent,NouvelleConsultationComponent],
   templateUrl: './profilmedecin.component.html',
   styleUrl: './profilmedecin.component.css'
 })
-export class ProfilmedecinComponent {
- 
+export class ProfilmedecinComponent implements OnInit {
+  patients: any[] = [];
+
+  constructor(private medecinService: MedecinService) { }
+
+  ngOnInit(): void {
+    this.medecinService.getListePatients().subscribe((data: any[]) => {
+      this.patients = data;
+      console.log('Patients data:', this.patients); // Debugging line to check data
+    });
+  }
   isSidebarCollapsed: boolean = true;
   currentComponent: any = null;
   

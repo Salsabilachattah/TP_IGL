@@ -13,15 +13,17 @@ from ..models import Patient
 from ..permissions.dpi import PatientViewPermissions
 from ..serializers.commun import PatientSerializer
 from django.http import FileResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 class PatientView(APIView):
-    permission_classes = [IsAuthenticated,PatientViewPermissions]
+    permission_classes = [PatientViewPermissions]
 
     @swagger_auto_schema(
         tags=["patients"],
         operation_summary="Get all patients"
     )
+    @csrf_exempt
     def get(self, request):
         # Fetch all patients
         patients = Patient.objects.all()
@@ -62,6 +64,7 @@ class PatientView(APIView):
             )
         }
     )
+    @csrf_exempt
     def post(self, request):
         if request.data.get('nss') is None or request.data.get('nom') is None or request.data.get('prenom') is None:
             return Response({"error": "Missing data"}, status=status.HTTP_400_BAD_REQUEST)
@@ -97,7 +100,8 @@ class PatientView(APIView):
     operation_summary="Get patient by nss"
 )
 @api_view(['GET'])
-@permission_classes([IsAuthenticated,PatientViewPermissions])
+@csrf_exempt
+@permission_classes([PatientViewPermissions])
 def get_patient_par_nss(request, nss):
         # Fetch a single patient by NSS
         patient = get_object_or_404(Patient, nss=nss)
