@@ -18,10 +18,6 @@ class SoinView(APIView):
     @swagger_auto_schema(
         tags=["soin"],
         operation_summary="Retrieve Soin by ID",
-        responses={200: openapi.Response
-                   ( description="Soin retrieved successfully",
-                    schema=SoinSerializer()
-        )}
     )
 
     def get(self, request, soin_id):
@@ -32,17 +28,7 @@ class SoinView(APIView):
     @swagger_auto_schema( 
         tags=["soin"],
         operation_summary="Update Soin by ID",
-        request_body=SoinSerializer,
-        responses={200: openapi.Response( 
-            description="Soin updated successfully",
-            schema=SoinSerializer()
-        ),
-        400: openapi.Response( 
-            description="Invalid data provided",
-        )}
-    ) 
-
-
+    )
     def put(self, request, soin_id):
         soin = get_object_or_404(Soin, pk=soin_id)
         serializer = SoinSerializer(soin, data=request.data, partial=True)
@@ -51,31 +37,11 @@ class SoinView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema( 
-        tags=["soin"],
-        operation_summary="Delete Soin by ID",
-        responses={204: openapi.Response(
-            description="Soin deleted successfully"
-         )} 
-    )
-    
-    def delete(self, request, soin_id):
-        soin = get_object_or_404(Soin, pk=soin_id)
-        soin.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @swagger_auto_schema( 
     method="post", 
     tags=["soin"], 
-    operation_summary="Create Soin", 
-    request_body=SoinSerializer, 
-    responses={201: openapi.Response( 
-        description="Soin created successfully", 
-        schema=SoinSerializer()
-    ),
-    400: openapi.Response( 
-        description="Invalid data provided",
-    )}
+    operation_summary="Create Soin"
 )
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
@@ -89,10 +55,9 @@ def create_soin(request):
 @swagger_auto_schema(
     method="get",
     tags=["soin"],
-    operation_summary="Recherche Soin Par patient",
-    request_body=SoinSerializer
+    operation_summary="Recherche Soin Par patient"
 )
-@api_view(['Get'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_soins_par_nss(request,nss):
     patient = get_object_or_404(Patient, nss=nss)
@@ -104,7 +69,7 @@ def get_soins_par_nss(request,nss):
     method="post",
     tags=["soin"],
     operation_summary="Add Medicament to Soin",
-    request_body=openapi.Schema( 
+    request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
             'medicaments': openapi.Schema(
@@ -121,14 +86,7 @@ def get_soins_par_nss(request,nss):
             )
         },
         required=['medicaments']
-    ),
-    responses={201: openapi.Response(
-        description="Medicament added to Soin successfully",
-        schema=SoinMedicamentSerializer()
-    ),
-    400: openapi.Response(
-        description="Invalid data provided",
-    )}
+    )
 )
 
 @api_view(['POST'])
