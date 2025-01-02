@@ -145,13 +145,15 @@ export class AuthService {
   // Fetch user data from the /api/me endpoint
   getUserInfo(): Observable<User | null> {
     return this.http
-      .get<User>(`${this.baseUrl}/api/me`, {
+      .get<User>(`${this.baseUrl}/api/me/`, {
         headers: this.getHeaders(),
         withCredentials: true,
       })
       .pipe(
         tap((response) => {
+          console.log(response);
           this.user = response; // Set the user data
+          localStorage.setItem('user', JSON.stringify(response)); // Store new access token
         }),
         catchError((error) => {
           console.error('Error fetching user info', error);
