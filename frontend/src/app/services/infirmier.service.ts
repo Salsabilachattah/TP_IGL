@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { map } from 'rxjs';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,19 +12,12 @@ export class InfirmierService {
 
   liste : Array<any> =[]; 
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient, private cookieService: CookieService,private authService :AuthService) {}
 
   // Méthode pour récupérer le nombre de patients
   getListePatients(): Observable<any> {
-    // Lire le cookie 'csrftoken'
-    const csrfToken = this.cookieService.get('csrftoken');
-
-    // Ajouter le jeton CSRF dans les en-têtes
-    const headers = new HttpHeaders({
-      'X-CSRFToken': this.cookieService.get('csrftoken')
-    });
     
-    return this.http.get<any[]>(this.apiUrl, { headers, withCredentials: true }).pipe(
+    return this.http.get<any[]>(this.apiUrl, { headers:this.authService.getHeaders(), withCredentials: true }).pipe(
       map(
         (patients)=> {
             this.liste = patients;

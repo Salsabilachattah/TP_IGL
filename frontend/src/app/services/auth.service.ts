@@ -10,7 +10,7 @@ interface Hopital {
 
 // Employe interface
 interface Employe {
-  id:number;
+  id: number;
   hopital: Hopital | null; // Assuming Hopital is another interface
   nom: string | null;
   prenom: string | null;
@@ -51,7 +51,7 @@ type User = (Employe | Patient) & {
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8000/';
+  private baseUrl = 'http://localhost:8000';
   public user: User | null = null;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
   // 1. Retrieve the access token from localStorage
@@ -75,7 +75,7 @@ export class AuthService {
   login(username = '', password = ''): Observable<any> {
     console.log(username + ' ' + password);
     return this.refreshToken().pipe(
-      tap(()=>this.getUserInfo()),
+      tap(() => this.getUserInfo()),
       catchError(() => {
         console.log('Refresh token failed, authenticating user...');
         this.authenticate(username, password).subscribe();
