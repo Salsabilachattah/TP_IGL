@@ -72,8 +72,9 @@ class PatientView(APIView):
 
         # add the user to 'patient' group for permissions stuff
         user.groups.add(Group.objects.get(name='patient'))
-
-        serializer = PatientSerializer(user=user,data=request.data)
+        data = request.data.copy()
+        data['user'] = user.id
+        serializer = PatientSerializer(data=data)
         if serializer.is_valid():
             patient = serializer.save()
 

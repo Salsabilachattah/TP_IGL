@@ -18,6 +18,14 @@ export class PatientService {
       map(patients => patients.length)
     );
   }
- 
+ // Méthode pour créer un DPI
+ createDPI(patientData: any): Observable<any> {
+  console.log('Données envoyées à l\'API:', patientData); // Log avant la requête
+  
+  return this.http.post(this.apiUrl, patientData, {
+    headers: this.authService.getHeaders(),
+    withCredentials: true,
+  });
+}
 }
 

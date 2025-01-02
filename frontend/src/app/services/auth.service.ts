@@ -145,7 +145,7 @@ export class AuthService {
   // Fetch user data from the /api/me endpoint
   getUserInfo(): Observable<User | null> {
     return this.http
-      .get<User>(`${this.baseUrl}/api/me`, {
+      .get<User>(`${this.baseUrl}/api/me/`, {
         headers: this.getHeaders(),
         withCredentials: true,
       })
