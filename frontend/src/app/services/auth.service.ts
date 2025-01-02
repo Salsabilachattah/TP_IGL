@@ -2,6 +2,36 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+// Hopital interface (Assuming this is your custom Hopital model)
+interface Hopital {
+  id: number;
+  name: string;
+}
+
+// Employe interface
+interface Employe {
+  id:number;
+  hopital: Hopital | null; // Assuming Hopital is another interface
+  nom: string | null;
+  prenom: string | null;
+  telephone: string | null;
+  created_at: string; // ISO string format
+  updated_at: string; // ISO string format
+}
+
+// Patient interface
+interface Patient {
+  nss: number; // BigInteger is represented as number
+  nom: string;
+  prenom: string;
+  date_de_naissance: string; // ISO string format (date)
+  adresse: string | null;
+  telephone: string | null;
+  mutuelle: string | null;
+  created_at: string; // ISO string format
+  updated_at: string; // ISO string format
+}
+
 export interface AuthResponse {
   access: string; // Access token
   refresh: string; // Refresh token
