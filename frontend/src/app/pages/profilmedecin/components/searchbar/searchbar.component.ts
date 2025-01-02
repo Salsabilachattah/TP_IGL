@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserMultiFormatReader } from '@zxing/library';
 
+import { InfirmierService } from '../../../../services/infirmier.service';
+
 @Component({
   selector: 'app-searchbar',
   imports: [WebcamModule, CommonModule, FormsModule],
@@ -21,7 +23,9 @@ export class SearchbarComponent {
 
   constructor() {
     this.codeReader = new BrowserMultiFormatReader();
-  }
+  };
+
+  //constructor(private infirmierService: InfirmierService) { }
 
   scanQR() {
     this.isCamOpened = true;
@@ -79,3 +83,19 @@ export class SearchbarComponent {
    
   }
 }
+
+/*
+export class StatsComponent {
+
+
+  ngOnInit(): void {
+    this.patientService.getNombrePatients().subscribe({
+      next: (data) => {
+        this.nombre_patient = data.toString(); // Convertir en chaîne de caractères
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des données :', err);
+      }
+    });
+  }
+}*/

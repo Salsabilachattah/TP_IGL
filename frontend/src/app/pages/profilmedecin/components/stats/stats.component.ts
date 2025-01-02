@@ -10,7 +10,7 @@ import { PatientService } from '../../../../services/patient.service';
   styleUrl: './stats.component.css'
 })
 export class StatsComponent {
-  nombre_patient: string = '324'; // Initialisez avec une chaîne vide
+  nombre_patient: string = '0'; // Initialisez avec une chaîne vide
 
   constructor(private patientService: PatientService) { }
 

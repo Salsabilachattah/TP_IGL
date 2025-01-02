@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { InfirmierService } from '../../../../services/infirmier.service';
 
 @Component({
   selector: 'app-form',
@@ -19,34 +21,26 @@ Médecin
 traitant
 Personne à contacter
 Code QR */
-itemss: Array<string> = ["Numéro de sécurité sociale",
-  "Nom",
-"  Prénom",
- " Date de naissance",
- " Adresse",
- " Téléphone",
-  "Mutuelle",
- " Médecin traitant",
- " Personne à contacter",
-  "Code QR "];
+  constructor(private infirmierservice: InfirmierService) {}
 
-//from the backend
-items  : Array<{ [key: string]: any }> =[
-  {
-Numéro_de_sécurité_sociale: "1",
-Nom : "2",
-Prénom: "3",
-date_de_naissance: "4",
-Adresse : "5",
-Téléphone: "6",
-Mutuelle: "7",
-Médecin_traitant: "8",
-Personne_à_contacter: "9",
-Code_QR: "10",
+@Input() nss : string ='';
 
-  }
-]
-dataKeys :string[] = Object.keys(this.items[0]);
+dataKeys :string[] =[];
+items  : Array<{ [key: string]: any }> =[];
+
+ngOnInit(): void {
+  this.infirmierservice.getInfoPatient(this.nss).subscribe({
+    next: (data) => {
+      this.items = data;
+      const excludedKeys = ['created_at', 'updated_at', 'user'];
+      this.dataKeys = this.items.length > 0  ? Object.keys(this.items[0]).filter(key => !excludedKeys.includes(key)) : [];
+    },
+    error: (err) => {
+      console.error('Erreur lors de la récupération des données :', err);
+    }
+  });
+}
+
 
 show:boolean=true;
 
