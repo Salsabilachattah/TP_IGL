@@ -25,6 +25,18 @@ export class PatientService {
       map(patients => patients.length)
     );
   }
- 
+  createDPI(patientData: any): Observable<any> {
+    // Lire le cookie 'csrftoken'
+    const csrfToken = this.cookieService.get('csrftoken');
+
+    // Ajouter le jeton CSRF dans les en-têtes
+    const headers = new HttpHeaders({
+      'X-CSRFToken': this.cookieService.get('csrftoken')
+    });
+    return this.http.post(this.apiUrl, patientData, {headers,
+  withCredentials: true 
+      
+    });
+  }
 }
 

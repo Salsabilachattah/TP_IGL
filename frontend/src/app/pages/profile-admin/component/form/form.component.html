@@ -1,0 +1,24 @@
+<div class="flex justify-center m-auto mt-10 p-4 w-full max-w-4xl">
+  <form class="w-full sm:w-2/3 lg:w-1/2" (ngSubmit)="onSubmit()">
+    <div *ngFor="let label of labels" class="mb-4 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+      <label class="text-lg font-light w-full sm:w-1/3 mb-2 sm:mb-0">{{ label }}</label>
+      <input
+        type="text"
+        [(ngModel)]="formData[label]"
+        name="{{ label }}"
+        required
+        placeholder="Enter {{ label }}"
+        class="w-full border rounded-md p-2"
+        [ngClass]="{ 'border-red-500': isFieldInvalid(label) }"
+      />
+    </div>
+    <div class="flex justify-center mt-6">
+      <button
+        class="shadow-xl bg-[#87CAE9] text-white rounded-md w-full sm:w-1/2 h-10 transition-colors duration-300 hover:bg-[#356bba]"
+        type="submit"
+      >
+        Confirmer
+      </button>
+    </div>
+  </form>
+</div>
