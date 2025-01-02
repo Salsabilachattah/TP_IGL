@@ -30,22 +30,19 @@ export class InfirmierService {
   Info : Array<any> =[]; 
 
   getInfoPatient(ident: string): Observable<any> {
-    // Lire le cookie 'csrftoken'
-    const csrfToken = this.cookieService.get('csrftoken');
-
-    // Ajouter le jeton CSRF dans les en-têtes
-    const headers = new HttpHeaders({
-      'X-CSRFToken': this.cookieService.get('csrftoken')
-    });
-    
-    return this.http.get<any[]>(this.apiUrl, { headers, withCredentials: true }).pipe(
-      map(
-        (patients)=> {
-            const matchingPatients = patients.filter(patient => patient.nss?.toString() === ident.toString());
-            return matchingPatients;       
-        }
-      )
-    ); 
+    return this.http
+      .get<any[]>(this.apiUrl, {
+        headers: this.authService.getHeaders(),
+        withCredentials: true,
+      })
+      .pipe(
+        map((patients) => {
+          const matchingPatients = patients.filter(
+            (patient) => patient.nss?.toString() === ident.toString()
+          );
+          return matchingPatients;
+        })
+      ); 
   }
 
 }
