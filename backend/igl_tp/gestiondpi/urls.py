@@ -6,7 +6,7 @@ from .views.auth import CreateRolesGroupsView, get_user_info
 from .views.dpi import PatientView, get_patient_par_nss
 from .views.consultation import create_consultation, ConsultationDetailView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
-    add_bilanbio_test, take_bilan_bio, take_bilan_radio, get_bilan_bio_par_nss,get_bilan_radio_par_nss
+    add_bilanbio_test, take_bilan_bio, take_bilan_radio, recherche_bilan_bio,recherche_bilan_radio
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -50,12 +50,12 @@ urlpatterns = [
     path('consultations/<int:pk>/', ConsultationDetailView.as_view(), name='consultation-resume'),
     # bilan bio
     path('patients/<int:nss>/bilanbio/lasttwo', get_last_two_bilans, name='bilan-detail'),
-    path('patients/<int:nss>/bilanbio/', get_bilan_bio_par_nss, name='bilan-bio-detail'),
+    path('patients/<int:nss>/bilanbio/', recherche_bilan_bio, name='bilan-bio-detail'),
     path('consultations/<int:pk>/bilanbio/', BilanBiologiqueView.as_view(), name='bilan-detail'),
     path('consultations/<int:pk>/bilanbio/take', take_bilan_bio, name='bilan-bio-take'),
     path('consultations/<int:pk>/bilanbio/test', add_bilanbio_test , name='bilan-test'),
     # bilan radio
-    path('patients/<int:nss>/bilanradio/',get_bilan_radio_par_nss, name = 'bilan-radio-detail'),
+    path('patients/<int:nss>/bilanradio/',recherche_bilan_radio, name = 'bilan-radio-detail'),
     path('consultations/<int:pk>/bilanradio/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
     path('consultations/<int:pk>/bilanradio/radio', add_bilanradio_image, name='bilan-detail'),
     path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),

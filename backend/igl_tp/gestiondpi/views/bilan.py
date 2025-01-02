@@ -232,16 +232,27 @@ def get_last_two_bilans(request, nss):
 @swagger_auto_schema(
     method='get',
     tags=["bilan bio"],
-    operation_summary = "Get all bilans for patient"
+    operation_summary = "Get all bilans for patient, can search by nss and valide"
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_bilan_bio_par_nss(request, nss):
+def recherche_bilan_bio(request, nss):
     # Get the last two BilanBiologique for the given patient
     bilans = BilanBiologique.objects.filter(nss=nss)
 
-    if not bilans:
-        return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
+    nss = request.query_params.get('nss', None)
+    if nss is not None:
+        bilans=bilans.filter(nss=nss)
+
+    valide_param = request.query_params.get('valide', None)
+    if valide_param is not None:
+        if valide_param.lower() in ['true', 'false']:
+            valide = valide_param.lower() == 'true'
+            bilans = bilans.filter(valide=valide)
+        else:
+            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
     serializer = BilanBioSerializer(bilans, many=True)
 
     return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
@@ -250,19 +261,31 @@ def get_bilan_bio_par_nss(request, nss):
 @swagger_auto_schema(
     method='get',
     tags=["bilan radio"],
-    operation_summary = "Get all bilans for patient"
+    operation_summary = "Get all bilans for patient, can search by nss and valide"
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_bilan_radio_par_nss(request, nss):
+def recherche_bilan_radio(request):
     # Get the last two BilanBiologique for the given patient
-    bilans = BilanRadiologique.objects.filter(nss=nss)
+    bilans = BilanRadiologique.objects.all()
+    nss = request.query_params.get('nss', None)
+    if nss is not None:
+        bilans=bilans.filter(nss=nss)
 
-    if not bilans:
-        return Response({'detail': 'No BilanBiologique found for this patient.'}, status=status.HTTP_404_NOT_FOUND)
+    valide_param = request.query_params.get('valide', None)
+    if valide_param is not None:
+        if valide_param.lower() in ['true', 'false']:
+            valide = valide_param.lower() == 'true'
+            bilans = bilans.filter(valide=valide)
+        else:
+            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
     serializer = BilanRadioSerializer(bilans, many=True)
 
     return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
 
 
 @swagger_auto_schema(
