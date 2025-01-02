@@ -1,17 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 export interface AuthResponse {
   access: string; // Access token
   refresh: string; // Refresh token
 }
+type User = (Employe | Patient) & {
+  role:
+    | 'medecin'
+    | 'administratif'
+    | 'infirmier'
+    | 'radiologue'
+    | 'pharmacien'
+    | 'laboratorien'
+    | 'patient';
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8000/'; // Django backend URL
-
+  private baseUrl = 'http://localhost:8000/';
+  public user: User | null = null;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
   // 1. Retrieve the access token from localStorage
   private getToken(): string | null {
@@ -31,12 +42,14 @@ export class AuthService {
     });
   }
 
-  login(username="", password=""): Observable<any> {
+  login(username = '', password = ''): Observable<any> {
     console.log(username + ' ' + password);
     return this.refreshToken().pipe(
+      tap(()=>this.getUserInfo()),
       catchError(() => {
         console.log('Refresh token failed, authenticating user...');
-        return this.authenticate(username, password);
+        this.authenticate(username, password).subscribe();
+        return this.getUserInfo();
       })
     );
   }
@@ -53,7 +66,7 @@ export class AuthService {
           localStorage.setItem('token', response.access); // Store access token
           localStorage.setItem('refreshToken', response.refresh); // Store refresh token
         })
-      )
+      );
   }
   private refreshToken(): Observable<any> {
     const refreshToken = localStorage.getItem('refreshToken');
@@ -74,15 +87,46 @@ export class AuthService {
     localStorage.removeItem('token'); // Remove the access token from localStorage
     localStorage.removeItem('refreshToken'); // Remove the refresh token from localStorage
   }
+  isConnected(): Observable<{}> {
+    if (this.user) return of(true); // If already connected, return true directly
 
-  isConnected(): Observable<any> {
-    return this.http.post(
-      `${this.baseUrl}/auth/jwt/verify`,
-      { token: this.getToken() },
-      {
-        withCredentials: true,
+    return this.http
+      .post<{}>( // Adjust the response type if needed
+        `${this.baseUrl}/auth/jwt/verify`,
+        { token: this.getToken() },
+        {
+          withCredentials: true,
+          headers: this.getHeaders(),
+        }
+      )
+      .pipe(
+        tap(() => {
+          // If connected, fetch user data
+          this.getUserInfo().subscribe();
+          return of(true);
+        }),
+        catchError((error) => {
+          console.error('Connection check failed:', error);
+          return of(false); // Return false if the connection check fails
+        })
+      );
+  }
+
+  // Fetch user data from the /api/me endpoint
+  getUserInfo(): Observable<User | null> {
+    return this.http
+      .get<User>(`${this.baseUrl}/api/me`, {
         headers: this.getHeaders(),
-      }
-    );
+        withCredentials: true,
+      })
+      .pipe(
+        tap((response) => {
+          this.user = response; // Set the user data
+        }),
+        catchError((error) => {
+          console.error('Error fetching user info', error);
+          return of(null); // Return null if there's an error fetching user info
+        })
+      );
   }
 }
