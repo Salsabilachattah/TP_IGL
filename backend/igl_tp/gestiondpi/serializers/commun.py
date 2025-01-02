@@ -9,11 +9,16 @@ class HopitalSerializer(serializers.ModelSerializer):
 
 # Serializer for Patient
 class PatientSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
     class Meta:
         model = Patient
         fields = '__all__'  # Include ID (nss), name (nom), and surname (prenom)
-# Serializer for Laborantin (Employe)
 
+    def get_role(self, obj):
+        return "patient"
+
+
+# Serializer for Laborantin (Employe)
 class EmployeSerializer(serializers.ModelSerializer):
     hopital=HopitalSerializer(read_only=True)
     class Meta:
