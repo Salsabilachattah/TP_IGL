@@ -53,15 +53,7 @@ export class SoinsGComponent {
     this.selectedOption = value;
   }
 
-  /*
-  data = {
-    name: 'John Doe',
-    age: 30,
-    email: 'john.doe@example.com',
-  };
 
-  fieldOrder = ['name', 'email', 'age'];*/
-//from the backend get nom prenom nss
 fieldOrder = ['nom', 'prenom', 'nss'];
 
 

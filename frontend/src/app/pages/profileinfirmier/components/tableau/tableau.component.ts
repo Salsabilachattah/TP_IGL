@@ -70,8 +70,9 @@ export class TableauComponent {
           alert("Une erreur s'est produite lors de la création de soins.");
         }
       });*/
-      this.infirmierservice.createSoin('10000000000', '3', 'newSoin').subscribe({
+      this.infirmierservice.createSoin(patient.nss , '3', 'newSoin').subscribe({
         next: (response) => {
+          console.log("patient.nss", patient.nss)
           const createdSoinId = response.id; 
           localStorage.setItem('IdsoinCree',createdSoinId);
         },
