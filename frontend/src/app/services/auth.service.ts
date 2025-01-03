@@ -20,7 +20,7 @@ interface Employe {
 }
 
 // Patient interface
-interface Patient {
+export interface Patient {
   nss: number; // BigInteger is represented as number
   nom: string;
   prenom: string;
@@ -30,6 +30,7 @@ interface Patient {
   mutuelle: string | null;
   created_at: string; // ISO string format
   updated_at: string; // ISO string format
+  [key: string]: any; //
 }
 
 export interface AuthResponse {
@@ -162,4 +163,12 @@ export class AuthService {
         })
       );
   }
+
+
+
+ 
+public getNss(): number | null {
+  return this.user && 'nss' in this.user ? this.user.nss : null; // Assurez-vous que l'utilisateur a un NSS
+}
+
 }

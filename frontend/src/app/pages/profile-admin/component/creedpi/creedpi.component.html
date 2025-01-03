@@ -5,5 +5,9 @@
   </h1>
   <div class="p-4">
     <app-form [labels]="fields" (formSubmitted)="onFormSubmit($event)"></app-form>
-  </div>
+  
+    <div *ngIf="generatedImageUrl" class="flex justify-center items-center mt-6">
+      <app-qr-display [imageUrl]="generatedImageUrl"></app-qr-display>
+    </div>
+    </div>
 </div>

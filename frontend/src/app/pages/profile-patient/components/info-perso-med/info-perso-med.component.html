@@ -1,16 +1,23 @@
-<div class=" justify-center  items-center " >
-    <div class="flex flex-col pt-5 bg-[#87CAE9] p-4 rounded-lg">
-     
-      <div *ngFor="let item of items" class="place-items-center place-content-center">
-        <tr *ngFor="let key of dataKeys" class="font-light text-white text-left">
-          <th class="w-1/2 border-b border-white p-1 pr-8">
-            {{key}}
-          </th>
-          <td class="w-1/2 border-b border-white">
-            {{item[key]}}
-          </td>
-        </tr>
-      </div>
+<div class="justify-center items-center">
+  <div class="flex flex-col pt-5 bg-[#87CAE9] p-4 rounded-lg">
+    <div *ngIf="patient" class="place-items-center place-content-center">
+      <table class="table-auto w-full">
+        <tbody>
+          <tr *ngFor="let key of dataKeys" class="font-light text-white text-left">
+            <th class="w-1/2 border-b border-white p-1 pr-8 capitalize">
+              {{ formatKey(key) }}
+            </th>
+            <td class="w-1/2 border-b border-white">
+              {{ patient[key] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
-  
+    <div *ngIf="!patient" class="text-center text-white">
+      <p>Aucune donnée de patient disponible.</p>
+    </div>
+
+ 
+</div>
+</div>

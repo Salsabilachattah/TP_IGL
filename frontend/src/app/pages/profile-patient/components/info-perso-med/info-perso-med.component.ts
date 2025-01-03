@@ -1,57 +1,38 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { AuthService, Patient } from '../../../../services/auth.service';
 @Component({
   selector: 'app-perso-med',
   imports: [CommonModule],
   templateUrl: './info-perso-med.component.html',
-  styleUrl: './info-perso-med.component.css'
+  styleUrls: ['./info-perso-med.component.css'] // Correction de "styleUrl" en "styleUrls"
 })
 export class InfoPersoMedComponent {
-/**Numéro de sécurité sociale
-Nom
-Prénom
-Date de naissance
-Adresse
-Téléphone
-Mutuelle
-Médecin
-traitant
-Personne à contacter
-Code QR */
-itemss: Array<string> = ["Numéro de sécurité sociale",
-  "Nom",
-"  Prénom",
- " Date de naissance",
- " Adresse",
- " Téléphone",
-  "Mutuelle",
- " Médecin traitant",
- " Personne à contacter",
-  "Code QR "];
+  dataKeys: string[] = [];
+  patient: Patient | null = null; // Pour stocker les informations du patient
+  show: boolean = true;
 
-//from the backend
-items  : Array<{ [key: string]: any }> =[
-  {
-Numéro_de_sécurité_sociale: "12365821 21",
-Nom : "badaoui ",
-Prénom: "3",
-date_de_naissance: "16/07/2004",
-Adresse : "Dellys Boumerdes",
-Téléphone: "0781064433",
-Mutuelle: "7",
-Médecin_traitant: "Dr Marmouze",
-Personne_à_contacter: "bedjghit Djinane",
-Code_QR: "102548712014",
+  constructor(private authService: AuthService) {}
 
+  ngOnInit(): void {
+    // Récupérer les informations du patient connecté
+    this.authService.getUserInfo().subscribe((user) => {
+      if (user && user.role === 'patient') {
+        this.patient = user as Patient; // Caster `user` en `Patient`
+        this.dataKeys = Object.keys(this.patient).filter(
+          (key) => key !== 'created_at' && key !== 'updated_at' && key !== 'role' && key !== 'user' // Exclure les clés non désirées
+        );
+      } else {
+        console.error('L’utilisateur connecté n’est pas un patient.');
+      }
+    });
   }
-]
-dataKeys :string[] = Object.keys(this.items[0]);
 
-show:boolean=true;
+  formatKey(key: string): string {
+    return key.replace(/_/g, ' ');
+  }
 
-delete(){
-  this.show=false;
-}
-
+  delete(): void {
+    this.show = false;
+  }
 }

@@ -7,12 +7,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { PatientService } from './services/patient.service';
 import { FormsModule } from '@angular/forms'; // Import de FormsModule
 import { AuthService } from './services/auth.service';
+import { QrDisplayComponent } from './pages/profile-admin/component/qr-display/qr-display.component';
+import { QrcodeComponent } from 'ngx-qrcode2';
 @NgModule({
-  declarations: [
+  declarations: [QrDisplayComponent,
     AppComponent,
     StatsComponent // Assurez-vous que le composant est déclaré ici
   ],
-  imports: [
+  imports: [QrcodeComponent,
     BrowserModule,
     FormsModule,
      // Assurez-vous que HttpClientModule est dans les imports

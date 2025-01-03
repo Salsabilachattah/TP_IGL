@@ -6,12 +6,12 @@ import { AffichageinfoComponent } from '../../components/affichageinfo/affichage
 import { AcceuilComponent } from './components/acceuil/acceuil.component';
 import { BackgroundVideoComponent } from '../../components/background-video/background-video.component'; 
 import { DossierComponent } from './components/dossier/dossier.component';
-
+import { QrDisplayComponent } from './components/qr-display/qr-display.component';
 
 
 @Component({
   selector: 'app-profile-patient',
-   imports: [DossierComponent,BackgroundVideoComponent,AcceuilComponent,AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
+   imports: [QrDisplayComponent,DossierComponent,BackgroundVideoComponent,AcceuilComponent,AffichageinfoComponent,CommonModule,LeftSidebarComponent,RadioGroupComponent],
   templateUrl: './profile-patient.component.html',
 })
 export class ProfilePatientComponent {
@@ -32,9 +32,15 @@ export class ProfilePatientComponent {
         label: 'Mon dossier ',
         component: 'DossierComponent',
       },
+      {
+        icon: 'mdi:qrcode-scan'
+,
+        label: 'Mon code QR ',
+        component: 'QrDisplayComponent',
+      },
      
     ];
-  
+    
     toggleSidebar(collapsed: boolean): void {
       this.isSidebarCollapsed = collapsed;
     }
@@ -45,7 +51,9 @@ export class ProfilePatientComponent {
      this.currentComponent = AcceuilComponent;
       } else if (component === 'DossierComponent') {
      this.currentComponent = DossierComponent;
-      } 
+      } else if (component === 'QrDisplayComponent') {
+        this.currentComponent = QrDisplayComponent;
+         } 
       else {
         this.currentComponent = null;
       }
