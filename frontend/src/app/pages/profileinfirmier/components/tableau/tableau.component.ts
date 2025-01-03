@@ -59,7 +59,7 @@ export class TableauComponent {
     } else if (button === "Commencer") {
       this.consultation = !this.consultation;
       this.info = false;
-
+/*
       this.infirmierservice.createSoin('10000000000', '3','blabla').subscribe({
         next: (response) => {
           console.log('Soin created:', response);
@@ -69,7 +69,19 @@ export class TableauComponent {
           console.error('Error while creating soin:', err);
           alert("Une erreur s'est produite lors de la création de soins.");
         }
+      });*/
+      this.infirmierservice.createSoin('10000000000', '3', 'newSoin').subscribe({
+        next: (response) => {
+          const createdSoinId = response.id; 
+          localStorage.setItem('IdsoinCree',createdSoinId);
+        },
+        error: (err) => {
+          console.error('Error while creating soin:', err);
+          alert("Une erreur s'est produite lors de la création de soins.");
+        }
       });
+      
+      
 
      // this.router.navigate(['/infirmier/soins',patient.nss]);
      this.router.navigate(['/infirmier/soins',patient.nss]);

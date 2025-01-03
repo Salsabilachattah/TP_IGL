@@ -50,8 +50,9 @@ class SoinView(APIView):
 def create_soin(request):
     serializer = SoinSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        soin = serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
+        response_data = SoinSerializer(soin).data
+        return Response(response_data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -95,15 +96,12 @@ def get_soins_par_nss(request,nss):
 @api_view(['POST']) #changed (a lot changed in this file)
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
-    print("Incoming payload:", request.data)  # Log received data
-    print("Incoming soin_id:", soin_id)  # Log received data
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinMedicamentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        print("Serializer errors:", serializer.errors)  # Log serializer errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @swagger_auto_schema(
@@ -132,15 +130,12 @@ def add_soin_medicament(request, soin_id):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
-    print("Incoming payload:", request.data)  # Log received data
-    print("Incoming soin_id:", soin_id)  # Log received data
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = ObservationEtatSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        print("Serializer errors:", serializer.errors)  # Log serializer errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -167,12 +162,10 @@ def add_observation_etat(request, soin_id):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_soin_infermier(request, soin_id):
-    print("Incoming payload:", request.data)  # Log received data
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinInfirmierSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        print("Serializer errors:", serializer.errors)  # Log serializer errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

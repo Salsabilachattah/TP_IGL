@@ -27,6 +27,7 @@ export class InfirmierService {
     ); 
   }
  
+  // Méthode pour récupérer les informations du patient
   Info : Array<any> =[]; 
 
   getInfoPatient(ident: string): Observable<any> {
@@ -45,17 +46,9 @@ export class InfirmierService {
       ); 
   }
 
-
-/*
-  private baseUrl = 'http://127.0.0.1:8000/api/soins'; // Changez en fonction de votre configuration
-
-  
-  addMedicamentsToSoin(soinId: number, data: any): Observable<any> {
-    const url = `${this.baseUrl}/${soinId}/medicaments/`;
-    return this.http.post(url, data);
-  }*/
-
-    private baseUrl = 'http://127.0.0.1:8000/api/soins/1/medicaments/'; 
+    SoinId = localStorage.getItem('IdsoinCree');
+    // Méthode pour envoyer les medicaments 
+    private baseUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/medicaments/`; 
 
     sendData(soinMedicamentData: any): Observable<any> {
       const headers = new HttpHeaders({
@@ -68,7 +61,8 @@ export class InfirmierService {
       });
     }
     
-    private SoinInfUrl = 'http://127.0.0.1:8000/api/soins/1/infirmiers/'; 
+    // Méthode pour envoyer les soins
+    private SoinInfUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/infirmiers/`; 
     sendSoin(soinInfData: any): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json'
@@ -80,7 +74,8 @@ export class InfirmierService {
       });
     }
 
-    private SendEtatUrl = 'http://127.0.0.1:8000/api/soins/1/observations/'; 
+    // Méthode pour envoyer l etat
+    private SendEtatUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/observations/`; 
     sendEtat(soinInfData: any): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json'
@@ -91,21 +86,26 @@ export class InfirmierService {
         headers: this.authService.getHeaders(),
       });
     }
-    
-  private createsoinURL = 'http://127.0.0.1:8000/api/soins/'; 
-  createSoin(patientId: string, infirmierId: string, observation: string) {
+   
+    // Méthode pour creer un soin
+
+  private createsoinURL = 'http://127.0.0.1:8000/api/soins/';
+  createSoin(patientId: string, infirmierId: string, observation: string): Observable<any> {
     const payload = {
       patient: patientId,
       infirmier: infirmierId,
-      observation: observation, // Include the required observation field
+      observation: observation, 
     };
-  
-    console.log('Payload being sent:', payload); // Log for debugging
-    return this.http.post<any>(this.createsoinURL, payload, {
-      withCredentials: true,
-      headers: this.authService.getHeaders(),
-    });
-  }
+
+  return this.http.post<any>(this.createsoinURL, payload, {
+    withCredentials: true,
+    headers: this.authService.getHeaders(),
+  });
+}
+
+
+
+
   
 
 

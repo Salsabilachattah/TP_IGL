@@ -49,7 +49,7 @@ class ObservationEtatSerializer(serializers.ModelSerializer):
     class Meta:
         model = ObservationEtat
         fields = ['infirmier', 'observation', 'date_time']
-        
+
 # Main serializer for the Soin model
 class SoinSerializer(serializers.ModelSerializer):
     patient = PatientInfoSerializer(read_only=True)
@@ -59,4 +59,4 @@ class SoinSerializer(serializers.ModelSerializer):
     observation_etat = ObservationEtatSerializer(many=True, read_only=True, source='observationetat_set')
     class Meta:
         model = Soin
-        fields = [ 'patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament', 'soin_infirmier', 'observation_etat']
+        fields = [ 'id','patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament', 'soin_infirmier', 'observation_etat']
