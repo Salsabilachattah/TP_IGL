@@ -78,11 +78,13 @@ export class AuthService {
       tap(() => this.getUserInfo()),
       catchError(() => {
         console.log('Refresh token failed, authenticating user...');
-        this.authenticate(username, password).subscribe();
-        return this.getUserInfo();
+        return this.authenticate(username, password).pipe(
+          tap(() => this.getUserInfo()) // Appel à getUserInfo après une authentification réussie
+        );
       })
     );
   }
+  
   private authenticate(username: string, password: string): Observable<any> {
     return this.http
       .post<AuthResponse>(
@@ -114,6 +116,7 @@ export class AuthService {
   }
 
   logout() {
+    this.user=null;
     localStorage.removeItem('token'); // Remove the access token from localStorage
     localStorage.removeItem('refreshToken'); // Remove the refresh token from localStorage
   }

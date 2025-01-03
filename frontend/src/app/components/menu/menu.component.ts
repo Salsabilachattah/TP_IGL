@@ -33,6 +33,9 @@ export class MenuComponent {
     this.openCall = false;
   }
   logout() {
+    console.log('Déconnexion en cours...');
     this.authService.logout();
+    this.router.navigate(['/']); // Redirection après déconnexion
   }
+  
 }
