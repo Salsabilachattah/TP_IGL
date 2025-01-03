@@ -11,7 +11,7 @@ import { MenuComponent } from '../../../../components/menu/menu.component';
 })
 export class ListePatientComponent {
   fields : Array<string> = ["nom", "prenom","nss","age"];
-  fields2 :Array<string> = ["Nom", "Prénom","Plus d'informations","Dossier du patient","Consultation"];
-  list :Array<string> = ["Afficher","Visualiser","Commencer"];
+  fields2 :Array<string> = ["NSS","Nom", "Prénom","Dossier du patient","Consultation"];
+  list :Array<string> = ["Visualiser","Commencer"];
 
 }
