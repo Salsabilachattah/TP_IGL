@@ -68,8 +68,18 @@ export class InfirmierService {
       });
     }
     
-
-  
+    private SoinInfUrl = 'http://127.0.0.1:8000/api/soins/1/infirmiers/'; 
+    sendSoin(soinInfData: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    
+      return this.http.post<any>(this.SoinInfUrl, soinInfData, {
+        withCredentials: true,
+        headers: this.authService.getHeaders(),
+      });
+    }
+    
   private createsoinURL = 'http://127.0.0.1:8000/api/soins/'; 
   createSoin(patientId: string, infirmierId: string, observation: string) {
     const payload = {

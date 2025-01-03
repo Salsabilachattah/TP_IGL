@@ -20,7 +20,7 @@ class MedicamentInfoSerializer(serializers.ModelSerializer):
         model = Medicament
         fields = ['nom'] 
         
-# Serializer for SoinMedicament
+# Serializer for SoinMedicament //changed
 class SoinMedicamentSerializer(serializers.ModelSerializer):
     medicament = MedicamentInfoSerializer()
     class Meta: 
@@ -33,13 +33,16 @@ class SoinMedicamentSerializer(serializers.ModelSerializer):
         soin_medicament = SoinMedicament.objects.create(medicament=medicament, **validated_data)
         return soin_medicament
 
-# Serializer for SoinInfirmier
+# Serializer for SoinInfirmier //changed
 class SoinInfirmierSerializer(serializers.ModelSerializer):
-    infirmier = EmployeInfoSerializer(read_only=True)
+    infirmier = serializers.PrimaryKeyRelatedField(queryset=Employe.objects.all())
+
     class Meta:
         model = SoinInfirmier
         fields = ['infirmier', 'description', 'date_time']
-        # Serializer for ObservationEtat
+
+
+# Serializer for ObservationEtat
 
 class ObservationEtatSerializer(serializers.ModelSerializer):
     infirmier = EmployeInfoSerializer(read_only=True)

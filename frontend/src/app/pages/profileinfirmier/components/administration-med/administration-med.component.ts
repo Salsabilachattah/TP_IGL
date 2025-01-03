@@ -6,15 +6,14 @@ import { FormComponent } from '../../../profilmedecin/components/form/form.compo
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable } from 'rxjs';
 import { InfirmierService } from '../../../../services/infirmier.service';
+
 interface Medicament {
   [key: string]: string | number | Date;
   nom: string;
   dose: number;
   date: string;
   heure: string;
-
 }
 
 
@@ -39,7 +38,7 @@ export class AdministrationMedComponent {
 
 
   allData: Medicament[] = [
-    { nom: "exemple(suivez le format)", dose: 500, date: '2023-11-25', heure: "10:00" ,},
+    { nom: "exemple(suivez le format)", dose: 500, date: 'AAAA-MM-JJ', heure: "HH:MM" ,},
   ];
   dataKeys: string[] = Object.keys(this.allData[0]);
 
@@ -83,12 +82,10 @@ export class AdministrationMedComponent {
     
       this.infirmierService.sendData(dataToSend).subscribe({
         next: (response) => {
-          console.log('Data successfully saved:', response);
-          alert("Les données ont été sauvegardées !");
+          this.med = '' ; this.dose = '' ; this.date = '' ; this.hour = '';
         },
         error: (err) => {
-          console.error('Error during saving data:', err);
-          alert("Une erreur s'est produite lors de la sauvegarde.");
+          alert("Une erreur s'est produite lors de la sauvegarde ( verifiez le format des données saisies ).");
         }
       });
       const currentLength = this.displayedData.length;
@@ -102,7 +99,7 @@ export class AdministrationMedComponent {
   }
 
 sauvegarder() {
-  alert("operation terminee avec succes")
+  alert("Opération terminée avec succès !")
 }
 
 
