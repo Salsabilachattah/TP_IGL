@@ -162,13 +162,18 @@ export class AuthService {
           return of(null); // Return null if there's an error fetching user info
         })
       );
+      
   }
 
 
 
- 
-public getNss(): number | null {
-  return this.user && 'nss' in this.user ? this.user.nss : null; // Assurez-vous que l'utilisateur a un NSS
-}
+  public getNss(): number | null {
+    if (this.user && this.user.role === 'patient' && 'nss' in this.user) {
+      return this.user.nss;
+    }
+    console.error('L’utilisateur connecté n’est pas un patient ou n’a pas de NSS.');
+    return null;
+  }
+  
 
 }

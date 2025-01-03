@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component'; 
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 import { AuthService } from '../../../../services/auth.service';
+import { ResumeService } from '../../../../services/resume.service';
+interface NavigationState {
+  resume?: string;
+}
+
 @Component({
   selector: 'app-resume',
   imports: [MenuComponent, BouttonretourComponent, FormsModule, AffichageinfoComponent],
@@ -12,8 +17,9 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrls: ['./resume.component.css']
 })
 export class ResumepatientComponent {
+  resume: string = '';
+
  
-  resume: string = 'Voici le résumé de la consultation  : ...'; // Texte statique à afficher
 
 
   rowData = {
@@ -24,11 +30,17 @@ export class ResumepatientComponent {
 
   fieldOrder = ['numero', 'nom', 'prenom'];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private resumeService: ResumeService,private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loadPatientInfo();
+    this.resume = this.resumeService.getResume();
+    if (!this.resume) {
+      this.resume = 'Résumé non disponible.';
+    }
   }
+
+ 
 
   private loadPatientInfo(): void {
     if (this.authService.user) {

@@ -67,7 +67,7 @@ class ConsultationAllView(APIView):
     )
     def get(self, request, nss):
         patient = get_object_or_404(Patient, nss=nss)
-        consultations = Consultation.objects.filter(Consultation, patient=patient)
+        consultations = Consultation.objects.filter(patient=patient)############
 
         serializer = ConsultationSerializer(consultations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

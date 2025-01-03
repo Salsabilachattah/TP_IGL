@@ -33,9 +33,9 @@ export class DossierComponent {
     this.selectedOption = value;
   }
   data = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
+    numero: '',
+    nom: '',
+    prenom: ''
   };
 
   fieldOrder = ['numero', 'nom', 'prenom'];

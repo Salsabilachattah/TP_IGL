@@ -1,20 +1,25 @@
-<div class=" mx-auto p-6 bg-[#87CAE9] text-white rounded-lg shadow-lg">
+<div class="mx-auto p-6 bg-[#87CAE9] text-white rounded-lg shadow-lg">
 
-  <!-- Table for Dates and Résumé Buttons -->
-  <div class="overflow-hidden rounded-lg">
+  <!-- Gestion des erreurs -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Table pour les consultations -->
+  <div *ngIf="consultations.length > 0; else noData" class="overflow-hidden rounded-lg">
     <table class="w-full text-left">
-      <!-- Table Header -->
+      <!-- En-tête de la table -->
       <thead>
         <tr>
           <th class="px-4 py-2 border-b-2">Date de Consultation</th>
-          <th class="px-4 py-2 border-b-2">Résume</th>
+          <th class="px-4 py-2 border-b-2">Résumé</th>
         </tr>
       </thead>
 
-      <!-- Table Body -->
+      <!-- Corps de la table -->
       <tbody>
         <tr *ngFor="let consultation of consultations" class="border-b border-blue-300">
-          <td class="px-4 py-2">{{ consultation.date }}</td>
+          <td class="px-4 py-2">{{ consultation.date | date:'short' }}</td>
           <td class="px-4 py-2">
             <button
               class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
@@ -27,4 +32,12 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Modèle pour aucune donnée -->
+  <ng-template #noData>
+    <p class="text-center text-white font-semibold">
+      Aucune consultation trouvée pour ce patient.
+    </p>
+  </ng-template>
+
 </div>
