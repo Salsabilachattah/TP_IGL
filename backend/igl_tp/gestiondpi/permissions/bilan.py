@@ -16,7 +16,7 @@ class BilanPermissions(permissions.BasePermission):
 
         # For POST method, allow only 'medecin' group
         elif request.method == 'POST':
-            return request.user.groups.filter(name=['medecin', 'laboratorien']).exists()
+            return request.user.groups.filter(name='medecin').exists()
 
         elif request.method == 'PATCH':
             return request.user.groups.filter(name= 'laboratorien').exists()
