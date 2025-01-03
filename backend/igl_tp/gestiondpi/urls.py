@@ -4,7 +4,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from .views.auth import CreateRolesGroupsView, get_user_info
 from .views.dpi import PatientView, get_patient_par_nss
-from .views.consultation import create_consultation, ConsultationDetailView
+from .views.consultation import ConsultationDetailView, ConsultationAllView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
     add_bilanbio_test, take_bilan_bio, take_bilan_radio, recherche_bilan_bio,recherche_bilan_radio
 from django.conf import settings
@@ -46,7 +46,7 @@ urlpatterns = [
     path('patients/', PatientView.as_view(), name='patients'),
     path('patients/<int:nss>/', get_patient_par_nss, name='patient-detail'),
     # consultation
-    path('patients/<int:nss>/consultation/', create_consultation, name='consultation'),
+    path('patients/<int:nss>/consultation/', ConsultationAllView.as_view(), name='consultation'),
     path('consultations/<int:pk>/', ConsultationDetailView.as_view(), name='consultation-resume'),
     # bilan bio
     path('patients/<int:nss>/bilanbio/lasttwo/', get_last_two_bilans, name='bilan-detail'),

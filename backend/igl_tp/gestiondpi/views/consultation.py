@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from ..models import Consultation, Patient, Employe
 from ..permissions.auth import IsMedecin
-from ..permissions.consultation import ConsultationsPermissions
+from ..permissions.consultation import ConsultationsPermissions, ConsultationsAllPermissions
 from ..serializers.consultation import ConsultationSerializer, \
     ConsultationEditSerializer
 from django.shortcuts import get_object_or_404
@@ -54,29 +54,42 @@ class ConsultationDetailView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@swagger_auto_schema(
-    method="post",
-    tags=["consultation"],
-    operation_summary = "Create consultation",
-)
-@api_view(['POST'])
-@permission_classes([IsAuthenticated,IsMedecin])  # Add the IsAuthenticated permission
-def create_consultation(self, request, nss):
-    # Fetch the patient based on the NSS
-    patient = get_object_or_404(Patient, nss=nss)
-
-    # Get the logged-in user and their associated employee record (medecin)
-    medecin = get_object_or_404(Employe, user=request.user)
-
-    # Create the consultation object
-    consultation = Consultation(patient=patient, medecin=medecin)
-    serializer = ConsultationSerializer(instance=consultation, data=request.data)
-
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
+
+# Class for handling GET requests to retrieve consultations
+class ConsultationAllView(APIView):
+    permission_classes = [IsAuthenticated,ConsultationsAllPermissions]
+    @swagger_auto_schema(
+        tags=["consultation"],
+        operation_summary = "Get all consultations for a patient",
+    )
+    def get(self, request, nss):
+        patient = get_object_or_404(Patient, nss=nss)
+        consultations = Consultation.objects.filter(Consultation, patient=patient)
+
+        serializer = ConsultationSerializer(consultations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    @swagger_auto_schema(
+        tags=["consultation"],
+        operation_summary="Create consultation",
+    )
+    def post(self, request, nss):
+        # Fetch the patient based on the NSS
+        patient = get_object_or_404(Patient, nss=nss)
+
+        # Get the logged-in user and their associated employee record (medecin)
+        medecin = get_object_or_404(Employe, user=request.user)
+
+        # Create the consultation object
+        consultation = Consultation.objects.create(patient=patient, medecin=medecin)
+        serializer = ConsultationSerializer(instance=consultation, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

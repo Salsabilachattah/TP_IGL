@@ -13,3 +13,11 @@ class ConsultationsPermissions(permissions.BasePermission):
             return obj.medecin.user == request.user
         return False
 
+
+class ConsultationsAllPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'GET':
+            return True
+        elif request.method == 'POST':
+            return request.user.groups.filter(name='medecin').exists()
+        return False
