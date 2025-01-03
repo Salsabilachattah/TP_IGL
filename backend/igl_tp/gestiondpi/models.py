@@ -128,6 +128,7 @@ class ImageRadio(models.Model):
 
 class Soin(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     observation = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

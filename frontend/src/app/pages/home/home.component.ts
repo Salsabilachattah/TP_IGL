@@ -28,7 +28,7 @@ export class HomeComponent {
   ngOnInit() {
     this.authService.isConnected().subscribe({
       next: (response) => {
-        this.isConnected = response.is_connected;
+        this.isConnected = true;
         console.log('Session valid:', response);
       },
       error: () => {

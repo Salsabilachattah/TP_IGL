@@ -6,7 +6,7 @@ from .views.auth import CreateRolesGroupsView, get_user_info
 from .views.dpi import PatientView, get_patient_par_nss
 from .views.consultation import create_consultation, ConsultationDetailView
 from .views.bilan import BilanBiologiqueView, BilanRadiologiqueView, get_last_two_bilans, add_bilanradio_image, \
-    add_bilanbio_test, take_bilan_bio, take_bilan_radio
+    add_bilanbio_test, take_bilan_bio, take_bilan_radio, recherche_bilan_bio,recherche_bilan_radio
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -49,18 +49,20 @@ urlpatterns = [
     path('patients/<int:nss>/consultation/', create_consultation, name='consultation'),
     path('consultations/<int:pk>/', ConsultationDetailView.as_view(), name='consultation-resume'),
     # bilan bio
-    path('patients/<int:nss>/bilanbio/lasttwo', get_last_two_bilans, name='bilan-detail'),
-    path('consultations/<int:pk>/bilanbio/', BilanBiologiqueView.as_view(), name='bilan-detail'),
-    path('consultations/<int:pk>/bilanbio/take', take_bilan_bio, name='bilan-bio-take'),
-    path('consultations/<int:pk>/bilanbio/test', add_bilanbio_test , name='bilan-test'),
+    path('patients/<int:nss>/bilanbio/lasttwo/', get_last_two_bilans, name='bilan-detail'),
+    path('bilanbio/', recherche_bilan_bio, name='bilan-bio-detail'),
+    path('bilanbio/<int:pk>/', BilanBiologiqueView.as_view(), name='bilan-detail'),
+    path('bilanbio/<int:pk>/take/', take_bilan_bio, name='bilan-bio-take'),
+    path('bilanbio/<int:pk>/add_test/', add_bilanbio_test , name='bilan-test'),
     # bilan radio
-    path('consultations/<int:pk>/bilanradio/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
-    path('consultations/<int:pk>/bilanradio/radio', add_bilanradio_image, name='bilan-detail'),
-    path('consultations/<int:pk>/bilanradio/take', take_bilan_radio, name='bilan-radio-take'),
+    path('bilanradio/',recherche_bilan_radio, name = 'bilan-radio-detail'),
+    path('bilanradio/<int:pk>/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
+    path('bilanradio/<int:pk>/add_image/', add_bilanradio_image, name='bilan-detail'),
+    path('bilanradio/<int:pk>/take/', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
     path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
-    path('ordonance/not_validated', get_all_non_validated_ordonances, name='pharmacien'),
-    path('ordonance/<int:pk>', validate_ordonance, name='pharmacien'),
+    path('ordonance/not_validated/', get_all_non_validated_ordonances, name='pharmacien'),
+    path('ordonance/<int:pk>/', validate_ordonance, name='pharmacien'),
     # soin
     path('soins/<int:soin_id>/', SoinView.as_view(), name='soin-detail'),
     path('soins/', create_soin, name='soin-create'),

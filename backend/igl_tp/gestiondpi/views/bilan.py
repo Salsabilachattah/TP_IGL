@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe
+from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe, Patient
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
     BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer, ImageRadioSerializer
@@ -227,6 +227,66 @@ def get_last_two_bilans(request, nss):
     serializer = BilanBioSerializer(bilans, many=True)
 
     return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method='get',
+    tags=["bilan bio"],
+    operation_summary = "Get all bilans for patient, can search by nss and valide"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recherche_bilan_bio(request):
+    bilans = BilanBiologique.objects.all()
+
+    nss = request.query_params.get('nss', None)
+    if nss is not None:
+        patient = get_object_or_404(Patient, nss=nss)
+        bilans=bilans.filter(patient=patient)
+
+    valide_param = request.query_params.get('valide', None)
+    if valide_param is not None:
+        if valide_param.lower() in ['true', 'false']:
+            valide = valide_param.lower() == 'true'
+            bilans = bilans.filter(valide=valide)
+        else:
+            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = BilanBioSerializer(bilans, many=True)
+
+    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method='get',
+    tags=["bilan radio"],
+    operation_summary = "Get all bilans for patient, can search by nss and valide"
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recherche_bilan_radio(request):
+    bilans = BilanRadiologique.objects.all()
+    nss = request.query_params.get('nss', None)
+    if nss is not None:
+        patient = get_object_or_404(Patient, nss=nss)
+        bilans=bilans.filter(patient=patient)
+
+    valide_param = request.query_params.get('valide', None)
+    if valide_param is not None:
+        if valide_param.lower() in ['true', 'false']:
+            valide = valide_param.lower() == 'true'
+            bilans = bilans.filter(valide=valide)
+        else:
+            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = BilanRadioSerializer(bilans, many=True)
+
+    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+
+
+
 
 @swagger_auto_schema(
     method='post',

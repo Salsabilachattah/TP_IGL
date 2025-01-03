@@ -43,6 +43,8 @@ class SoinView(APIView):
     tags=["soin"], 
     operation_summary="Create Soin"
 )
+
+
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def create_soin(request):
@@ -51,6 +53,7 @@ def create_soin(request):
         serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @swagger_auto_schema(
     method="get",
@@ -92,12 +95,16 @@ def get_soins_par_nss(request,nss):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
+    print("Incoming payload:", request.data)  # Log received data
+    print("Incoming soin_id:", soin_id)  # Log received data
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = SoinMedicamentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print("Serializer errors:", serializer.errors)  # Log serializer errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @swagger_auto_schema(
     method="post",
@@ -119,6 +126,9 @@ def add_soin_medicament(request, soin_id):
 )
 
 
+
+
+
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
@@ -128,7 +138,6 @@ def add_observation_etat(request, soin_id):
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @swagger_auto_schema(
     method="post",

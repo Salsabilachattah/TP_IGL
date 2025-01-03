@@ -59,7 +59,20 @@ export class TableauComponent {
     } else if (button === "Commencer") {
       this.consultation = !this.consultation;
       this.info = false;
-      this.router.navigate(['/infirmier/soins']);
+
+      this.infirmierservice.createSoin('10000000000', '3','blabla').subscribe({
+        next: (response) => {
+          console.log('Soin created:', response);
+          alert("Soin created!");
+        },
+        error: (err) => {
+          console.error('Error while creating soin:', err);
+          alert("Une erreur s'est produite lors de la création de soins.");
+        }
+      });
+
+     // this.router.navigate(['/infirmier/soins',patient.nss]);
+     this.router.navigate(['/infirmier/soins',patient.nss]);
     }
   }
 
