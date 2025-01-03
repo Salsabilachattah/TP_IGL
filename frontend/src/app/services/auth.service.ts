@@ -56,7 +56,7 @@ export class AuthService {
   public user: User | null = null;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
   // 1. Retrieve the access token from localStorage
-  private getToken(): string | null {
+  public getToken(): string | null {
     return localStorage.getItem('token'); // Get access token from localStorage
   }
 

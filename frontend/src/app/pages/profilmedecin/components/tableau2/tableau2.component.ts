@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input , OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlusbuttonComponent } from '../../../../components/plusbutton/plusbutton.component';
 import { FormComponent } from '../form/form.component';
 import { Router } from '@angular/router';
+import { MedecinService } from '../../../../services/medecin.service';
 
 @Component({
   selector: 'app-tableau2',
@@ -10,49 +11,82 @@ import { Router } from '@angular/router';
   templateUrl: './tableau2.component.html',
   styleUrls: ['./tableau2.component.css']
 })
-export class Tableau2Component {
+export class Tableau2Component implements OnInit {
   info: boolean = false;
   dossier: boolean = false;
   consultation: boolean = false;
 
   @Input() labels: Array<string> = [];
-  allData: Array<{ [key: string]: any }> = [
-    { nom: 'Marmouze', prenom: 'Nor' },
-    { nom: 'Bedjghit', prenom: 'Djinane' },
-    { nom: 'Badaoui', prenom: 'Ikram' },
-    { nom: 'Chattah', prenom: 'Salsabila' },
-    { nom: 'Boukabous', prenom: 'Malak' },
-    { nom: 'Hassam', prenom: 'Amar' }
-  ];
+  @Input() allData: Array<{ [key: string]: any }> = [];
+
+  patients: any[] = [];
+  dataKeys: string[] = [];
+  itemsPerPage = 10000;
+  displayedData: any[] = [];
+  selectedPatientId: number | null = null;
+
+  constructor(private router: Router, private medecinService: MedecinService) {
+    this.updatePatientDetails = this.updatePatientDetails.bind(this);
+  }
 
   
 
+  ngOnInit(): void {
+    this.medecinService.getListePatients().subscribe((data: any[]) => {
+      this.allData = data;
+      this.patients = data.map(patient => {
+        const keys = Object.keys(patient);
+        return {
+          [keys[1]]: patient[keys[0]],
+          [keys[2]]: patient[keys[2]],
+          [keys[3]]: patient[keys[3]]
+        };
+      });
+      console.log('Patients data:', this.patients); // Debugging line to check data
+      if (this.patients.length > 0) {
+        this.dataKeys = Object.keys(this.patients[0]);
+        this.displayedData = this.patients.slice(0, this.itemsPerPage);
+      }
+    });
+  }
+
+  updatePatientDetails(patient: any): void {
+    this.selectedPatientId = patient.id || null;
+  
+    this.patients = this.patients.map((p: any) => {
+      if (p.id === patient.id) {
+        return patient;
+      }
+      return p;
+    });
+    console.log('Patients data:', this.patients); // Debugging line to check data
+  }
+
   @Input() buttonsArray: Array<string> = [];
 
-  dataKeys: string[] = Object.keys(this.allData[0]);
+// dataKeys: string[] = Object.keys(this.allData[0]);
 
-  itemsPerPage = 4;
-  displayedData: any[] = [];
 
-  constructor(private router : Router) {
-    this.displayedData = this.allData.slice(0, this.itemsPerPage);
-  }
 
-  loadMore() {
-    const currentLength = this.displayedData.length;
-    const nextData = this.allData.slice(currentLength, currentLength + this.itemsPerPage);
-    this.displayedData = [...this.displayedData, ...nextData];
-  }
+
+loadMore() {
+  const currentLength = this.displayedData.length;
+  const nextData = this.patients.slice(currentLength, currentLength + this.itemsPerPage);
+  this.displayedData = this.displayedData.concat(nextData);
+}
 
   display(button: string) {
-    if (button === "Afficher") {
-      this.info = !this.info;
-      this.dossier = false;
-      this.consultation = false;
-    } else if (button === "Visualiser") {
+  if (button === "Visualiser") {
+      this.selectedPatientId = this.selectedPatientId || this.patients[0]?.id;
       this.dossier = !this.dossier;
       this.info = false;
       this.consultation = false;
+      const selectedPatient = this.patients.find(patient => patient.id === this.selectedPatientId);
+      if (selectedPatient) {
+        this.medecinService.getPatientDetails(selectedPatient.role).subscribe( );
+        console.log("Patient sélectionné:", selectedPatient);
+      }
+      
       this.router.navigate(['/medecin/dossier'])
     
     } else if (button === "Commencer") {
