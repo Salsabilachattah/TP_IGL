@@ -29,7 +29,9 @@ export class InfoPersoMedComponent {
   }
 
   formatKey(key: string): string {
-    return key.replace(/_/g, ' ');
+    return key
+    .replace(/_/g, ' ') // Remplace les underscores par des espaces
+    .replace(/\bnss\b/i, 'Numéro de sécurité sociale'); // Remplace 'nss' par 'Numéro de sécurité sociale' (insensible à la casse)
   }
 
   delete(): void {

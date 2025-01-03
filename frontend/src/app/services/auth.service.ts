@@ -166,9 +166,6 @@ export class AuthService {
 
 
 
- 
-public getNss(): number | null {
-  return this.user && 'nss' in this.user ? this.user.nss : null; // Assurez-vous que l'utilisateur a un NSS
-}
+
 
 }

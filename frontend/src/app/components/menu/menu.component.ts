@@ -12,9 +12,17 @@ import { Router } from '@angular/router';
 export class MenuComponent {
   openCall: boolean = false;
   openProfile: boolean = false;
-  user = { name: 'John Doe', ssn: '123-45-6789' };  // Example user data
-  usertype = 'admin';  // Example usertype
+  user: { nom: string; prenom: string } | null = null;
+
   constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    this.authService.getUserInfo().subscribe((userInfo) => {
+      if (userInfo) {
+        this.user = { nom: userInfo.nom || '', prenom: userInfo.prenom || '' };
+      }
+    });
+  }
 
   closeOverlays() {
     this.openCall = false;
