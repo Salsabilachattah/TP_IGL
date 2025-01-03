@@ -4,13 +4,13 @@ import { PlusbuttonComponent } from '../../../../components/plusbutton/plusbutto
 import { Router } from '@angular/router';
 import { FormComponent } from '../../../profilmedecin/components/form/form.component';
 import { FormsModule } from '@angular/forms';
+import { InfirmierService } from '../../../../services/infirmier.service';
 
 interface nomicament {
   nom: string;
   dose: number;
   date: Date;
   heure: string; 
-  infirmier: string;
 }
 
 @Component({
@@ -22,14 +22,11 @@ interface nomicament {
 
 export class ObservationsComponent {
   added:boolean=false;
-  labels: string[]=["Observations sur l'état", "Date","Heure","Infirmier"];
-  nom: string = '' ;  date: string = '';  hour:string = '' ; infirm:string = '';
+  labels: string[]=["Observations sur l'état", "Date","Heure"];
+  observation: string = '' ;  date: string = '';  hour:string = '' ;
   //backend
   allData: any[] = [
-    { nom: 'bien' , date: '2023, 11, 25', heure: "10:00", infirmier: "Dupont" },
-    { nom: "fievre", date: '2023, 11, 25', heure: "15:30", infirmier: "Martin" },
-    { nom: "fatigué", date: '2023, 11, 25', heure: "15:30", infirmier: "Martin" },
-    { nom: "grave", date:'2023, 11, 25', heure: "15:30", infirmier: "Martin" }
+    { observation: 'exemple (Suivez ce format)' , date: 'AAAA-MM-JJ', heure: "HH:MM"},
   ];
 
   info: boolean = false;
@@ -41,15 +38,11 @@ export class ObservationsComponent {
   itemsPerPage = 8;
   displayedData: any[] = [];
 
-  constructor(private router : Router) {
+  constructor(private router : Router , private infirmierService : InfirmierService) {
     this.displayedData = this.allData.slice(0, this.itemsPerPage);
   }
 
-  loadMore() {
-    const currentLength = this.displayedData.length;
-    const nextData = this.allData.slice(currentLength, currentLength + this.itemsPerPage);
-    this.displayedData = [...this.displayedData, ...nextData];
-  }
+
 
   display(button: string) {
     if (button === "Afficher") {
@@ -62,23 +55,37 @@ export class ObservationsComponent {
     }
   }
   
-  confirmer(nom: string, date: string , hour:string , infirm:string) {
-    if (this.nom !== '' && this.date !== '' && this.hour !== ''&& this.infirm !== '') {
-      this.allData.push({ nom: nom,  date: date , heure: hour , infirmier: infirm});
-  
-
+  confirmer(observation: string, date: string , hour:string ) {
+    if (this.observation !== '' && this.date !== '' && this.hour !== '') {
+      this.allData.push({ observation: observation,  date: date , heure: hour });
+      const dateTime = `${date}T${hour}:00Z`;
+      const dataToSend = {
+        'observation': observation, 
+        'infirmier': 3, 
+        'date_time': dateTime 
+      };
+    
+      this.infirmierService.sendEtat(dataToSend).subscribe({
+        next: (response) => {
+          this.observation = '' ; ; this.date = '' ; this.hour = '';
+        },
+        error: (err) => {
+          alert("Une erreur s'est produite lors de la sauvegarde ( verifiez le format des données saisies ).");
+        }
+      });
+      const currentLength = this.displayedData.length;
+      const nextData = this.allData.slice(currentLength, currentLength + this.itemsPerPage);
+      this.displayedData = [...this.displayedData, ...nextData];
     }
-  }
+  } 
 
   add() {
     this.added = !this.added;
-    console.log('this.added', this.added);
   }
 
 
 sauvegarder(){
-  alert("confirnom");
-  //envoyer au back
+  alert("Les données ont été sauvegardées avec succès !");
 }
 }
 

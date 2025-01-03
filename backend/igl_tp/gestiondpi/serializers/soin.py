@@ -49,6 +49,7 @@ class ObservationEtatSerializer(serializers.ModelSerializer):
     class Meta:
         model = ObservationEtat
         fields = ['infirmier', 'observation', 'date_time']
+        
 # Main serializer for the Soin model
 class SoinSerializer(serializers.ModelSerializer):
     patient = PatientInfoSerializer(read_only=True)

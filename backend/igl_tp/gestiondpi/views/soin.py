@@ -92,7 +92,7 @@ def get_soins_par_nss(request,nss):
     )
 )
 
-@api_view(['POST'])
+@api_view(['POST']) #changed (a lot changed in this file)
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
     print("Incoming payload:", request.data)  # Log received data
@@ -132,12 +132,17 @@ def add_soin_medicament(request, soin_id):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
+    print("Incoming payload:", request.data)  # Log received data
+    print("Incoming soin_id:", soin_id)  # Log received data
     soin = get_object_or_404(Soin, pk=soin_id)
     serializer = ObservationEtatSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        print("Serializer errors:", serializer.errors)  # Log serializer errors
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @swagger_auto_schema(
     method="post",
