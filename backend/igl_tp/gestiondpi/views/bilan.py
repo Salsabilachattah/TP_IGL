@@ -4,6 +4,8 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from setuptools.tests.test_bdist_egg import Test
+
 from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe, Patient
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
@@ -24,7 +26,8 @@ class BilanBiologiqueView(APIView):
     )
     def get(self, request, pk):
         bilan = get_object_or_404(BilanBiologique,pk=pk)
-        serializer = BilanBioSerializer(bilan)
+        tests = BilanBioTest.objects.filter(bilan_biologique=bilan)
+        serializer = BilanBioSerializer(bilan,tests=tests)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -58,9 +61,6 @@ class BilanBiologiqueView(APIView):
     )
     def patch(self ,request, pk):
         bilan_bio = get_object_or_404(BilanBiologique, pk=pk)
-        if bilan_bio.laborantin.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         serializer = BilanBioEditSerializer(bilan_bio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -80,8 +80,9 @@ class BilanRadiologiqueView(APIView):
         operation_summary = "Get bilan radiologique",
     )
     def get(self, request, pk):
-        bilan = get_object_or_404(BilanBiologique,pk=pk)
-        serializer = BilanRadioSerializer(bilan)
+        bilan_radiologique = get_object_or_404(BilanBiologique,pk=pk)
+        images= ImageRadio.objects.filter(bilan_radiologique=bilan_radiologique)
+        serializer = BilanRadioSerializer(bilan_radiologique,images=images)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -117,8 +118,6 @@ class BilanRadiologiqueView(APIView):
     )
     def patch(self ,request, pk):
         bilan_radio = get_object_or_404(BilanRadiologique, pk=pk)
-        if bilan_radio.radiologue.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = BilanRadioEditSerializer(bilan_radio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -160,15 +159,9 @@ class BilanRadiologiqueView(APIView):
 @permission_classes([IsAuthenticated, IsRadiologue])
 @parser_classes([MultiPartParser, FormParser])
 def add_bilanradio_image(request, pk):
-    bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
-
-    if bilan_radiologique.radiologue.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a radio to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
-
-    serializer=ImageRadioSerializer(bilan_radiologique=bilan_radiologique,data=request.data, partial=True)
+    data=request.data
+    data["bilan_radiologique"]=pk
+    serializer=ImageRadioSerializer(data=data, partial=True)
 
     if serializer.is_valid():
         image_instance=serializer.save()
@@ -192,12 +185,6 @@ def add_bilanradio_image(request, pk):
 def add_bilanbio_test(request, pk):
     # Get the BilanBiologique instance for the given consultation (consultation id is pk)
     bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
-
-    if bilan_biologique.laborantin.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a test to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
 
     # Add 'bilan_biologique' to request.data
     data = request.data.copy()
@@ -274,10 +261,11 @@ def recherche_bilan_bio(request):
 @permission_classes([IsAuthenticated])
 def recherche_bilan_radio(request):
     bilans = BilanRadiologique.objects.all()
+
     nss = request.query_params.get('nss', None)
     if nss is not None:
         patient = get_object_or_404(Patient, nss=nss)
-        bilans=bilans.filter(patient=patient)
+        bilans = bilans.filter(patient=patient)
 
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:
