@@ -75,7 +75,14 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
         properties={
             'medicaments': openapi.Schema(
                 type=openapi.TYPE_ARRAY,
-                items=openapi.Schema(type=openapi.TYPE_STRING, description='Medicament nom', example='500mg'),
+                items=openapi.Items(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'medicament': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament nom'),
+                        'dose': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament dose', example='500mg'),
+                        'duree': openapi.Schema(type=openapi.TYPE_INTEGER, description='Duree in days',example=7)
+                    }
+                ),
                 description='List of medicaments in the ordonnance'
             )
         },
@@ -105,7 +112,7 @@ def creer_ordonance(self, request, nss):
 
             medicaments_data = request.data.get('medicaments', [])
             for medicament in medicaments_data:
-                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,medicament=medicament)
+                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,data=medicament)
                 if medicament_serializer.is_valid():
                     medicament_serializer.save()
                 else:
