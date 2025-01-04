@@ -4,6 +4,8 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from setuptools.tests.test_bdist_egg import Test
+
 from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe, Patient
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
@@ -24,7 +26,8 @@ class BilanBiologiqueView(APIView):
     )
     def get(self, request, pk):
         bilan = get_object_or_404(BilanBiologique,pk=pk)
-        serializer = BilanBioSerializer(bilan)
+        tests = BilanBioTest.objects.filter(bilan_biologique=bilan)
+        serializer = BilanBioSerializer(bilan,tests=tests)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -80,8 +83,9 @@ class BilanRadiologiqueView(APIView):
         operation_summary = "Get bilan radiologique",
     )
     def get(self, request, pk):
-        bilan = get_object_or_404(BilanBiologique,pk=pk)
-        serializer = BilanRadioSerializer(bilan)
+        bilan_radiologique = get_object_or_404(BilanBiologique,pk=pk)
+        images= ImageRadio.objects.filter(bilan_radiologique=bilan_radiologique)
+        serializer = BilanRadioSerializer(bilan_radiologique,images=images)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
