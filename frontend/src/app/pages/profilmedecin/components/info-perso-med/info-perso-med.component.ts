@@ -1,57 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MedecinService } from '../../../../services/medecin.service';
 
 @Component({
-  selector: 'app-perso-med',
+  selector: 'app-info-perso-med',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './info-perso-med.component.html',
-  styleUrl: './info-perso-med.component.css'
+  styleUrls: ['./info-perso-med.component.css']
 })
-export class InfoPersoMedComponent {
-/**Numéro de sécurité sociale
-Nom
-Prénom
-Date de naissance
-Adresse
-Téléphone
-Mutuelle
-Médecin
-traitant
-Personne à contacter
-Code QR */
-itemss: Array<string> = ["Numéro de sécurité sociale",
-  "Nom",
-"  Prénom",
- " Date de naissance",
- " Adresse",
- " Téléphone",
-  "Mutuelle",
- " Médecin traitant",
- " Personne à contacter",
-  "Code QR "];
+export class InfoPersoMedComponent implements OnInit {
+  @Input() nss: string = ''; // Reçoit le NSS sous forme de chaîne
+  patientData: any; // Pour stocker les données du patient
 
-//from the backend
-items  : Array<{ [key: string]: any }> =[
-  {
-Numéro_de_sécurité_sociale: "12365821 21",
-Nom : "badaoui ",
-Prénom: "3",
-date_de_naissance: "16/07/2004",
-Adresse : "Dellys Boumerdes",
-Téléphone: "0781064433",
-Mutuelle: "7",
-Médecin_traitant: "Dr Marmouze",
-Personne_à_contacter: "bedjghit Djinane",
-Code_QR: "102548712014",
+  itemss: Array<string> = [
+    "Numéro de sécurité sociale",
+    "Nom",
+    "Prénom",
+    "Date de naissance",
+    "Adresse",
+    "Téléphone",
+    "Mutuelle",
+    "Médecin traitant",
+    "Personne à contacter",
+  ];
 
+  items: Array<{ [key: string]: any }> = [];
+  dataKeys: string[] = [];
+  show: boolean = true;
+
+  constructor(private medecinService: MedecinService) {}
+
+  ngOnInit(): void {
+    this.fetchPatientData(); // Appel à la méthode pour récupérer les données
   }
-]
-dataKeys :string[] = Object.keys(this.items[0]);
 
-show:boolean=true;
+  fetchPatientData(): void {
+    const nssNumber = Number(this.nss); // Convertir nss en entier
+    if (!isNaN(nssNumber)) {
+      this.medecinService.getPatientByNss(nssNumber).subscribe(
+        (data) => {
+          // Exclure les champs non désirés
+          const { role, user, updated_at,nss, created_at, ...filteredData } = data;
+          this.patientData = filteredData; // Assigner les données filtrées à patientData
+          
+          // Ajouter le patientData à items
+          this.items.push({ "Numéro de sécurité sociale": nssNumber, ...this.patientData });
+          this.dataKeys = Object.keys(this.items[0]); // Mettre à jour les clés de données
+          console.log("Données du patient:", this.patientData);
+        },
+        (error) => {
+          console.error("Erreur lors de la récupération des données:", error);
+        }
+      );
+    } else {
+      console.error("NSS invalide:", this.nss);
+    }
+  }
 
-delete(){
-  this.show=false;
-}
-
+  delete() {
+    this.show = false;
+  }
 }

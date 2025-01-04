@@ -60,7 +60,7 @@ urlpatterns = [
     path('bilanradio/<int:pk>/add_image/', add_bilanradio_image, name='bilan-detail'),
     path('bilanradio/<int:pk>/take/', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
-    path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
+    path('consultation/<int:pk>/ordonnance/', creer_ordonance, name='ordonnance'),
     path('ordonance/not_validated/', get_all_non_validated_ordonances, name='pharmacien'),
     path('ordonance/<int:pk>/', validate_ordonance, name='pharmacien'),
     # soin

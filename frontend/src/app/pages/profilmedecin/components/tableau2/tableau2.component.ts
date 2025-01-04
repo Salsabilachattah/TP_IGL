@@ -69,27 +69,35 @@ export class Tableau2Component implements OnInit {
 
 
 
+
 loadMore() {
   const currentLength = this.displayedData.length;
   const nextData = this.patients.slice(currentLength, currentLength + this.itemsPerPage);
   this.displayedData = this.displayedData.concat(nextData);
 }
+private selectedPatient: any;
+
+setSelectedPatient(patient: any): void {
+  this.selectedPatient = patient;
+}
+
+getSelectedPatient(): any {
+  return this.selectedPatient;
+}
 
   display(button: string,patient: any) {
-  if (button === "Visualiser") {
-      this.selectedPatientId = this.selectedPatientId || this.patients[0]?.id;
+    if (button === "Visualiser") {
+      this.selectedPatientId = patient.id; // Assurez-vous d'utiliser l'ID du patient sélectionné
       this.dossier = !this.dossier;
       this.info = false;
       this.consultation = false;
-      const selectedPatient = this.patients.find(patient => patient.id === this.selectedPatientId);
-      if (selectedPatient) {
-        this.medecinService.getPatientDetails(selectedPatient.role).subscribe( );
-        console.log("Patient sélectionné:", selectedPatient);
-      }
-      
-      this.router.navigate(['/medecin/dossier'])
-    
-    } else if (button === "Commencer") {
+  
+      // Mettez à jour le patient sélectionné avant de naviguer
+      this.medecinService.setSelectedPatient(patient);
+      console.log("Patient sélectionné dans Tableau2Component:", patient);
+  
+      this.router.navigate(['/medecin/dossier']); // Naviguer après avoir mis à jour le patient
+    }else if (button === "Commencer") {
       this.consultation = !this.consultation;
       this.info = false;
       this.dossier = false;
