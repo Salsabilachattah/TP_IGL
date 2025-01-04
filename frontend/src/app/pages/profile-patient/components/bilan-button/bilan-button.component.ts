@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,12 +8,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './bilan-button.component.css'
 })
 export class BilanButtonComponent {
- // Donnée à afficher dans le paragraphe
- paragraphContent: string = "Ceci est un bilan rapide du patient : Nom - Prénom - Médecin traitant.";
- show: boolean = true;
+  @Input() paragraphContent: string = ""; // Reçoit la prescription
+  
+  deletebilan() {
+    this.show = false;
+  } show: boolean = true;
 
 
-deletebilan(){
-this.show=false;
-}
 }

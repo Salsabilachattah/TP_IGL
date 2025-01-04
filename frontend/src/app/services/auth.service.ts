@@ -155,6 +155,8 @@ export class AuthService {
       })
       .pipe(
         tap((response) => {
+          console.log('Données utilisateur récupérées :', response);
+     
           this.user = response; // Set the user data
         }),
         catchError((error) => {
