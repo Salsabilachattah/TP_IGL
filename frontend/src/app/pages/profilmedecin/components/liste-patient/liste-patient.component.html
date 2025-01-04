@@ -3,10 +3,13 @@
    <app-menu></app-menu>
     <div class="w-full space-y-6">
       <div class="flex flex-col md:flex-row gap-4">
-        <app-searchbar class="w-full md:w-3/4" />
+        <app-searchbar  class="w-full md:w-3/4" />
         <app-stats class="w-full md:w-1/4" />
       </div>
-      <div>
+      <div >
+      </div>
+      <div class="my-14">
+        <h1 class="font-bold text-center text-2xl mt-20 mb-4">Liste de tous les patients</h1>
         <app-tableau2 [labels]="fields2" [buttonsArray]="list" />
       </div>
     </div>

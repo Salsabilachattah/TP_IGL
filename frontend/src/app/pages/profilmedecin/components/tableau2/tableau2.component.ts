@@ -63,6 +63,7 @@ export class Tableau2Component implements OnInit {
   }
 
   @Input() buttonsArray: Array<string> = [];
+  
 
 // dataKeys: string[] = Object.keys(this.allData[0]);
 

@@ -59,3 +59,30 @@
         </button>
     </div>
 </div>
+<div *ngIf="affich">
+    <table class="w-full text-black">
+
+        <thead class="bg-gray-200">
+          <tr class="h-10">
+            <th
+              *ngFor="let label of labels"
+              class="text-left font-semibold text-xs uppercase relative"
+            >
+              <div class="border-x-[0.05rem] h-1/2 w-full absolute top-1/4"></div>
+              <span class="relative px-2"> {{label}} </span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="bg-gray-100">
+          <tr *ngFor="let data of displayedData" class="border-b-[0.1rem] h-10 border-white">
+            <td *ngFor="let key of dataKeys" class="font-light">{{ data[key] }}</td>
+            <td *ngFor="let button of buttonsArray">
+              <button class="font-semibold" (click)="display(button,data)">
+                {{ button }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>

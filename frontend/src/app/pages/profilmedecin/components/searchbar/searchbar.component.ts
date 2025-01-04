@@ -1,17 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { WebcamImage, WebcamModule } from 'ngx-webcam';
 import { Subject, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserMultiFormatReader } from '@zxing/library';
 import { Router } from '@angular/router';
-
-import { InfirmierService } from '../../../../services/infirmier.service';
-import { MedecinService } from '../../../../services/medecin.service';
 import { Tableau2Component } from '../tableau2/tableau2.component';
+import { MedecinService } from '../../../../services/medecin.service';
 @Component({
   selector: 'app-searchbar',
-  imports: [WebcamModule, CommonModule, FormsModule],
+  imports: [WebcamModule, CommonModule, FormsModule,Tableau2Component],
   templateUrl: './searchbar.component.html',
   styleUrls: ['./searchbar.component.css'],
 })
@@ -27,7 +25,6 @@ export class SearchbarComponent {
     this.codeReader = new BrowserMultiFormatReader();
   };
 
-  //constructor(private infirmierService: InfirmierService) { }
 
   scanQR() {
     this.isCamOpened = true;
@@ -79,36 +76,65 @@ export class SearchbarComponent {
     return new Blob([uintArray], { type: 'image/jpeg' });
   }
 
-  rechercher() {
-
-    this.MedecinService.getPatientDetails(this.nss).subscribe({
-      next: (patient) => {
-        const tableau2Component = this.router.routerState.root.children[0].component as unknown as Tableau2Component;
-        tableau2Component.updatePatientDetails(patient);
-        console.log("Patient trouvé:", patient);
-      },
-      error: (err) => {
-        console.error("Erreur lors de la recherche du patient:", err);
-      }
-    });
-    // Envoie du NSS ou de l'image au backend
-    console.log("NSS recherché:", this.nss);
-   
-  }
+  affich : boolean = false;
+fields: Array<string> = ['nom', 'prenom', 'nss', 'age'];
+  labels: Array<string> = [
+    'NSS',
+    'Nom',
+    'Prénom',
+    'Dossier du patient',
+    'Consultation',
+  ];
+  buttonsArray: Array<string> = ['Visualiser', 'Commencer'];
+  dataKeys: Array<string> = ['nss', 'nom' ,'prenom'];
+rechercher() {
+this.MedecinService.getPatientDetails(this.nss).subscribe({ 
+  next: (patient) => { 
+    this.affich=!this.affich;
+    this.handlePatientSearchResult(patient); 
+  }, 
+  error: (err) => { 
+    console.error('Erreur lors de la recherche du patient:', err);
+   }, }); } 
+   displayedData: any[] = [];
+   patients : any[] = [];
+   selectedPatientId: string='';
+handlePatientSearchResult(patient: any): void { 
+this.patients = [patient];  
+this.displayedData = [patient]; 
+this.selectedPatientId = patient.id ;
 }
 
-/*
-export class StatsComponent {
+dossier: boolean = false;
+consultation: boolean = false;
+display(button: string,patient: any) {
+  
+  if (button === "Visualiser") {// this isnt working ig nor s part only vers un dossier
+     this.selectedPatientId = this.selectedPatientId || this.patients[0]?.id;
+      this.dossier = !this.dossier;
 
-
-  ngOnInit(): void {
-    this.patientService.getNombrePatients().subscribe({
-      next: (data) => {
-        this.nombre_patient = data.toString(); // Convertir en chaîne de caractères
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des données :', err);
+      this.consultation = false;
+      const selectedPatient = this.patients.find(patient => patient.id === this.selectedPatientId);
+      if (selectedPatient) {
+        this.MedecinService.getPatientDetails(selectedPatient.role).subscribe( );
       }
-    });
+      
+      this.router.navigate(['/medecin/dossier'])
+    
+    } else if (button === "Commencer") {
+      this.consultation = !this.consultation;
+    
+      this.dossier = false;
+
+      this.MedecinService
+        .createConsultation(patient.role)// this isnt working ig nor s part
+        .subscribe((consultation) => {
+          console.log(consultation); 
+          console.log(this.MedecinService.createdConsultation); 
+          this.router.navigate(['/medecin/consultation']);
+        });
+    }
   }
-}*/
+
+
+}
