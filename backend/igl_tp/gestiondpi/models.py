@@ -126,7 +126,6 @@ class Soin(models.Model):
 
 class SoinMedicament(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
-    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True) #added this one
     medicament = models.CharField(max_length=100)
     dose = models.FloatField()
     date_time = models.DateTimeField()
