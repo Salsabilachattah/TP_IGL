@@ -75,7 +75,7 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
         properties={
             'medicaments': openapi.Schema(
                 type=openapi.TYPE_ARRAY,
-                items=openapi.Schema(type=openapi.TYPE_STRING, description='Medicament nom', example='500mg'),,
+                items=openapi.Schema(type=openapi.TYPE_STRING, description='Medicament nom', example='500mg'),
                 description='List of medicaments in the ordonnance'
             )
         },
