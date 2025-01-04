@@ -20,7 +20,7 @@ interface Employe {
 }
 
 // Patient interface
-interface Patient {
+export interface Patient {
   nss: number; // BigInteger is represented as number
   nom: string;
   prenom: string;
@@ -30,6 +30,7 @@ interface Patient {
   mutuelle: string | null;
   created_at: string; // ISO string format
   updated_at: string; // ISO string format
+  [key: string]: any; //
 }
 
 export interface AuthResponse {
@@ -55,7 +56,7 @@ export class AuthService {
   public user: User | null = null;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
   // 1. Retrieve the access token from localStorage
-  private getToken(): string | null {
+  public getToken(): string | null {
     return localStorage.getItem('token'); // Get access token from localStorage
   }
 
@@ -78,11 +79,13 @@ export class AuthService {
       tap(() => this.getUserInfo()),
       catchError(() => {
         console.log('Refresh token failed, authenticating user...');
-        this.authenticate(username, password).subscribe();
-        return this.getUserInfo();
+        return this.authenticate(username, password).pipe(
+          tap(() => this.getUserInfo()) // Appel à getUserInfo après une authentification réussie
+        );
       })
     );
   }
+  
   private authenticate(username: string, password: string): Observable<any> {
     return this.http
       .post<AuthResponse>(
@@ -114,6 +117,7 @@ export class AuthService {
   }
 
   logout() {
+    this.user=null;
     localStorage.removeItem('token'); // Remove the access token from localStorage
     localStorage.removeItem('refreshToken'); // Remove the refresh token from localStorage
   }
@@ -151,14 +155,25 @@ export class AuthService {
       })
       .pipe(
         tap((response) => {
-          console.log(response);
           this.user = response; // Set the user data
-          localStorage.setItem('user', JSON.stringify(response)); // Store new access token
         }),
         catchError((error) => {
           console.error('Error fetching user info', error);
           return of(null); // Return null if there's an error fetching user info
         })
       );
+      
   }
+
+
+
+  public getNss(): number | null {
+    if (this.user && this.user.role === 'patient' && 'nss' in this.user) {
+      return this.user.nss;
+    }
+    console.error('L’utilisateur connecté n’est pas un patient ou n’a pas de NSS.');
+    return null;
+  }
+  
+
 }

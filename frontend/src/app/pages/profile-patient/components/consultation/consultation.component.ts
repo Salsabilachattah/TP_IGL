@@ -1,27 +1,47 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ResumepatientComponent } from '../resume/resume.component'; 
+import { ResumeComponent } from '../../../profilmedecin/components/resume/resume.component'; 
 import { Router } from '@angular/router';
-
+import { PatientService } from '../../../../services/patient.service';
+import { ResumeService } from '../../../../services/resume.service';
 @Component({
   selector: 'app-date-resume-container',
-  imports:[ResumepatientComponent,CommonModule],
+  imports:[ResumeComponent,CommonModule],
   templateUrl: './consultation.component.html',
   styleUrls: ['./consultation.component.css'],
 })
 export class ConsultationComponent {
-  consultations = [
-    { date: '2024-12-25', summary: 'Consultation for general health evaluation' },
-    { date: '2024-12-18', summary: 'Follow-up for previous treatment' },
-    { date: '2024-12-10', summary: 'Routine check-up' },
-  ];
+  consultations: { date: string; summary: string }[] = [];
+  errorMessage: string | null = null;
 
-  ngOnInit() {
-    console.log(this.consultations); // Vérifiez que les données sont chargées
+  constructor(private patientService: PatientService,private resumeService: ResumeService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadConsultations();
   }
-  constructor(private router: Router) {}
-  // Modifiez cette méthode pour rediriger vers la page "resumer"
+
+  loadConsultations(): void {
+    this.patientService.getConsultations().subscribe({
+      next: (data: any[]) => {
+        console.log('Données des consultations:', data);
+        this.consultations = data.map(consultation => ({
+          date: consultation.created_at,
+          summary: consultation.resume || "Aucun résumé disponible",
+        }));
+        if (this.consultations.length === 0) {
+          this.errorMessage = "Aucune consultation trouvée pour ce patient.";
+        }
+      },
+      error: (error) => {
+        this.errorMessage = "Erreur lors de la récupération des consultations.";
+        console.error(error);
+      },
+    });
+  }
+
   displayResume(consultation: { date: string; summary: string }): void {
-    this.router.navigate(['/patient/resume'], { state: { consultation } }); // Redirection vers la page Resumer
+    this.resumeService.setResume(consultation.summary);
+    this.router.navigate(['/patient/resume']);
   }
+  
 }

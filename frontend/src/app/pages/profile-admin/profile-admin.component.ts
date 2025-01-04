@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccueilAdminComponent } from './component/accueil-admin/accueil-admin.component';
-import { FormComponent } from '../../components/form/form.component';
+import { FormComponent } from './component/form/form.component'; 
 import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar.component';
 import { CreedpiComponent } from './component/creedpi/creedpi.component';
 import { InfoPersoComponent } from './component/info-perso/info-perso.component'; 

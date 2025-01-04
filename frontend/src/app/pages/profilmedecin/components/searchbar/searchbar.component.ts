@@ -4,9 +4,11 @@ import { Subject, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserMultiFormatReader } from '@zxing/library';
+import { Router } from '@angular/router';
 
 import { InfirmierService } from '../../../../services/infirmier.service';
-
+import { MedecinService } from '../../../../services/medecin.service';
+import { Tableau2Component } from '../tableau2/tableau2.component';
 @Component({
   selector: 'app-searchbar',
   imports: [WebcamModule, CommonModule, FormsModule],
@@ -21,7 +23,7 @@ export class SearchbarComponent {
 
   private codeReader: BrowserMultiFormatReader; // Initialiser le lecteur de codes QR
 
-  constructor() {
+  constructor(private router: Router, private MedecinService: MedecinService) {
     this.codeReader = new BrowserMultiFormatReader();
   };
 
@@ -78,6 +80,17 @@ export class SearchbarComponent {
   }
 
   rechercher() {
+
+    this.MedecinService.getPatientDetails(this.nss).subscribe({
+      next: (patient) => {
+        const tableau2Component = this.router.routerState.root.children[0].component as unknown as Tableau2Component;
+        tableau2Component.updatePatientDetails(patient);
+        console.log("Patient trouvé:", patient);
+      },
+      error: (err) => {
+        console.error("Erreur lors de la recherche du patient:", err);
+      }
+    });
     // Envoie du NSS ou de l'image au backend
     console.log("NSS recherché:", this.nss);
    

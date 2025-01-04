@@ -5,13 +5,23 @@ import { StatsComponent } from '../stats/stats.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
 @Component({
   selector: 'app-liste-patient',
-  imports: [MenuComponent,Tableau2Component,SearchbarComponent,StatsComponent],
+  imports: [
+    MenuComponent,
+    Tableau2Component,
+    SearchbarComponent,
+    StatsComponent,
+  ],
   templateUrl: './liste-patient.component.html',
-  styleUrl: './liste-patient.component.css'
+  styleUrl: './liste-patient.component.css',
 })
 export class ListePatientComponent {
-  fields : Array<string> = ["nom", "prenom","nss","age"];
-  fields2 :Array<string> = ["Nom", "Prénom","Plus d'informations","Dossier du patient","Consultation"];
-  list :Array<string> = ["Afficher","Visualiser","Commencer"];
-
+  fields: Array<string> = ['nom', 'prenom', 'nss', 'age'];
+  fields2: Array<string> = [
+    'NSS',
+    'Nom',
+    'Prénom',
+    'Dossier du patient',
+    'Consultation',
+  ];
+  list: Array<string> = ['Visualiser', 'Commencer'];
 }

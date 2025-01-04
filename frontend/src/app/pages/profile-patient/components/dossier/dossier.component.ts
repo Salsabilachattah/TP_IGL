@@ -9,6 +9,7 @@ import { InfoPersoMedComponent } from '../info-perso-med/info-perso-med.componen
 import { PrescriptionComponent } from '../prescription/prescription.component';
 import { SoinComponent } from '../soin/soin.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../services/auth.service';
 @Component({
   selector: 'app-dossier',
   imports: [CommonModule,SoinComponent,PrescriptionComponent,InfoPersoMedComponent,BilanComponent,ConsultationComponent,AffichageinfoComponent,BouttonretourComponent,MenuComponent,RadioGroupComponent],
@@ -32,10 +33,37 @@ export class DossierComponent {
     this.selectedOption = value;
   }
   data = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
+    numero: '',
+    nom: '',
+    prenom: ''
   };
 
   fieldOrder = ['numero', 'nom', 'prenom'];
-}
+
+
+    constructor( private authService: AuthService) {}
+  
+    ngOnInit(): void {
+      this.loadPatientInfo();
+    }
+  
+    private loadPatientInfo(): void {
+      if (this.authService.user) {
+        // Si les informations de l'utilisateur sont déjà chargées
+        this.setPatientInfo(this.authService.user);
+      } else {
+        // Sinon, les récupérer via le service
+        this.authService.getUserInfo().subscribe((user) => {
+          if (user) {
+            this.setPatientInfo(user);
+          }
+        });
+      }
+    }
+  
+    private setPatientInfo(user: any): void {
+      this.data.numero = user.nss || 'Non spécifié'; // Numéro de sécurité sociale
+      this.data.nom = user.nom || 'Non spécifié';
+      this.data.prenom = user.prenom || 'Non spécifié';
+    }
+  }

@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { map } from 'rxjs';
 import { AuthService } from './auth.service';
+import { of } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +20,35 @@ export class PatientService {
       map(patients => patients.length)
     );
   }
+
+ // Méthode pour créer un DPI et récupérer un fichier image
+createDPI(patientData: any): Observable<Blob> {
+  console.log('Données envoyées à l\'API:', patientData); // Log avant la requête
+  
+  return this.http.post(this.apiUrl, patientData, {
+    headers: this.authService.getHeaders(),
+    withCredentials: true,
+    responseType: 'blob', // Important : spécifier que la réponse est un blob
+  });
+}
+
+
+
+getConsultations(): Observable<any[]> {
+  const nss = this.authService.getNss();
+  
+  if (!nss) {
+    console.error("NSS introuvable pour le patient connecté.");
+    return of([]); // Retournez un Observable vide si le NSS est absent
+  }
+
+  const url = `${this.apiUrl}${nss}/consultation/`;
  
+  return this.http.get<any[]>(url, {
+   headers: this.authService.getHeaders(),
+   withCredentials: true,
+  });
+}
+
 }
 

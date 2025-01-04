@@ -23,10 +23,8 @@
     <!-- Overlay de profil -->
     <div *ngIf="openProfile" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[9999]" (click)="closeOverlays()">
         <div class="w-64 absolute top-24 right-5 bg-[#edf1f4] rounded-xl h-fit flex flex-col" (click)="$event.stopPropagation()">
-            <h2 class="w-full p-2 border-b border-gray-300">Hi, {{user.name}} 👋</h2>
-            <a [routerLink]="['/']" class="w-full p-2 border-b border-gray-300 flex gap-2 items-center">
-                Profile
-            </a>
+            <h2 class="w-full p-2 border-b border-gray-300"> Hi, {{ user?.prenom }} {{ user?.nom }} 👋</h2>
+           
             <a (click)="logout()" class="w-full p-2 flex gap-2 items-center">
                 <span class="iconify" data-icon="ic:outline-logout" data-inline="false"></span>
                 Log out
