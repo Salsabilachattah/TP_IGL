@@ -56,7 +56,6 @@ class Consultation(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL,null=True ,related_name="consultations")
     ordonance = models.ForeignKey(Ordonance, on_delete=models.SET_NULL, blank=True, null=True)
-    diagnostique = models.TextField(blank=True, null=True)
     resume = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -105,10 +104,9 @@ class BilanBioTest(models.Model):
 
 
 
-
 class OrdonanceMedicament(models.Model):
     ordonance = models.ForeignKey(Ordonance, on_delete=models.CASCADE)
-    medicament = models.CharField(max_length=45)
+    medicament =  models.CharField(max_length=100)
     dose = models.FloatField()
     duree = models.IntegerField(help_text="Duration in days")
 
@@ -128,7 +126,7 @@ class Soin(models.Model):
 class SoinMedicament(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    medicament = models.CharField(max_length=45)
+    medicament = models.CharField(max_length=100)
     dose = models.FloatField()
     date_time = models.DateTimeField()
 
