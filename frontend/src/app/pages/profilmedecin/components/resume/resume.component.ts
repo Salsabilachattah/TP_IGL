@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component'; 
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
-
+import { MedecinService } from '../../../../services/medecin.service';  
 @Component({
   selector: 'app-resume',
   imports: [MenuComponent,BouttonretourComponent,FormsModule,AffichageinfoComponent],
@@ -13,15 +13,21 @@ import { BouttonretourComponent } from '../../../../components/bouttonretour/bou
   styleUrl: './resume.component.css'
 })
 export class ResumeComponent {
-  constructor (private router : Router ){};
+  constructor (private router : Router  , private medecinService : MedecinService){};
   resume :string = 'Voici le résumé de la consultation  : ...'; 
   
-
+  ngOnInit() {
+    this.rowData = {
+      nss: this.medecinService.createdConsultation.patient.nss,
+      nom: this.medecinService.createdConsultation.patient.nom,
+      prenom: this.medecinService.createdConsultation.patient.prenom
+    };
+  }
   rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
+    nss: '',
+    nom: '',
+    prenom: '',
   };
 
-  fieldOrder = ['numero', 'nom', 'prenom'];
+  fieldOrder = ['nss', 'nom', 'prenom'];
 }
