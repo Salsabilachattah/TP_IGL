@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..models import Ordonance, Patient, Employe
+from ..models import Ordonance, Patient, Employe, Consultation
 from ..permissions.auth import IsMedecin, IsPharmacien
 from django.core.mail import send_mail
 from django.conf import settings
@@ -101,13 +101,15 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
-def creer_ordonance(request, nss):
+def creer_ordonance(request, pk):
     medecin = get_object_or_404(Employe, user=request.user)
-    data = {"medecin": medecin.id, "patient": nss}
+    consultation=get_object_or_404(Consultation, pk=pk)
+    data = {"medecin": medecin.id, "patient": consultation.patient.nss}
     serializer = OrdonnanceCreateSerializer(data=data)
     if serializer.is_valid():
         ordonnance = serializer.save()
-
+        consultation.ordonance=ordonnance
+        consultation.save()
         medicaments_data = request.data
         for medicament in medicaments_data:
             medicament["ordonance"] = ordonnance.id
