@@ -14,15 +14,11 @@ class EmployeInfoSerializer(serializers.ModelSerializer):
         model = Employe
         fields = ['id', 'nom', 'prenom', 'role']  # Include ID, name, surname, and role
 
-# Serializer for Medicament
-class MedicamentInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Medicament
-        fields = ['nom'] # Include name
+
+
 # Serializer for SoinMedicament
 class SoinMedicamentSerializer(serializers.ModelSerializer):
     infirmier = EmployeInfoSerializer(read_only=True)
-    medicament = MedicamentInfoSerializer(read_only=False)
     class Meta: model = SoinMedicament
     fields = ['infirmier', 'medicament', 'dose', 'date_time']
 # Serializer for SoinInfirmier

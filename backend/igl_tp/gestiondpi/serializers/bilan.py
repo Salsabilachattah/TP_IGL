@@ -80,7 +80,7 @@ class BilanRadioEditSerializer(serializers.ModelSerializer):
 class TestSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanBioTest
-        fields = ['id', 'type', 'valeur']  # Include 'id', 'type', and 'valeur'
+        fields = ['bilan_biologique', 'type', 'valeur']  # Include 'id', 'type', and 'valeur'
         read_only_fields = ['id']  # Make 'id' read-only (user cannot provide it during creation)
 
 

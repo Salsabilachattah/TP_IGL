@@ -1,15 +1,12 @@
 from rest_framework import serializers
-from ..models import Ordonance, OrdonanceMedicament, Medicament
+from ..models import Ordonance, OrdonanceMedicament
 
 
 class OrdonnanceMedicamentsSerializer(serializers.ModelSerializer):
-    medicament_id = serializers.PrimaryKeyRelatedField(source='medicament', queryset=Medicament.objects.all())
-    dose = serializers.FloatField()
-    duree = serializers.IntegerField()
 
     class Meta:
         model = OrdonanceMedicament
-        fields = ['medicament_id', 'dose', 'duree']
+        fields = ['medicament', 'dose', 'duree']
 
 
 class OrdonnanceSerializer(serializers.ModelSerializer):
