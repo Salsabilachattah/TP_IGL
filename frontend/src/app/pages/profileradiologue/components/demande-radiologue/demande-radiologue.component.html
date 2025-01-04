@@ -1,65 +1,68 @@
 <div class="container mx-auto p-6">
-   <app-menu></app-menu> <!-- Tabs Section -->
-    <div class="tabs flex justify-center border-b">
-      <button
-        class="px-6 py-2 border-b-2 font-medium text-sm mx-2"
-        [ngClass]="{ 'border-blue-600 text-blue-600': activeTab === 'nonTreated', 'text-gray-600': activeTab !== 'nonTreated' }"
-        (click)="setActiveTab('nonTreated')"
-      >
-        Demandes non traitées
-      </button>
-      <button
-        class="px-6 py-2 border-b-2 font-medium text-sm mx-2"
-        [ngClass]="{ 'border-blue-600 text-blue-600': activeTab === 'treated', 'text-gray-600': activeTab !== 'treated' }"
-        (click)="setActiveTab('treated')"
-      >
-        Demandes traitées
-      </button>
-    </div>
-  
-    <!-- Content Section -->
-    <div class="content mt-4">
-      <!-- Non-Treated Demandes -->
-      <div *ngIf="activeTab === 'nonTreated'" class="grid grid-cols-3 gap-4">
-        <div *ngFor="let demande of nonTreatedDemandes" class="p-4 border rounded-lg shadow-sm">
-          <div class="flex justify-between">
-            <h3 class="font-semibold">{{ demande.name }}</h3>
-            <button 
-            class="text-blue-600 text-sm" 
-            [routerLink]="['/form-radiologue']" 
-            [queryParams]="{ id: demande.id }">
-            traiter
+  <app-menu></app-menu> <!-- Tabs Section -->
+  <div class="tabs flex justify-center border-b">
+    <!-- Non-Treated Tab Button -->
+    <button
+      class="px-6 py-2 border-b-2 font-medium text-sm mx-2"
+      [ngClass]="{ 'border-blue-600 text-blue-600': activeTab === 'nonTreated', 'text-gray-600': activeTab !== 'nonTreated' }"
+      (click)="setActiveTab('nonTreated')"
+    >
+      Demandes non traitées
+    </button>
+    <!-- Treated Tab Button -->
+    <button
+      class="px-6 py-2 border-b-2 font-medium text-sm mx-2"
+      [ngClass]="{ 'border-blue-600 text-blue-600': activeTab === 'treated', 'text-gray-600': activeTab !== 'treated' }"
+      (click)="setActiveTab('treated')"
+    >
+      Demandes traitées
+    </button>
+  </div>
+
+  <!-- Content Section -->
+  <div class="content mt-4">
+    <!-- Non-Treated Demandes -->
+    <div *ngIf="activeTab === 'nonTreated'" class="grid grid-cols-3 gap-4">
+      <div *ngFor="let demande of nonTreatedDemandes" class="p-4 border rounded-lg shadow-sm">
+        <div class="flex justify-between">
+          <h3 class="font-semibold">Nom: {{ demande.patient?.nom || 'N/A' }}</h3>
+          <button
+            class="text-blue-600 text-sm"
+            [routerLink]="['/form-radiologue']"
+            [queryParams]="{ id: demande.patient?.nss, valide: false }"
+          >
+            Traiter
           </button>
-          </div>
-          <p class="text-gray-500 text-sm mt-1">Date: {{ demande.date }}</p>
-          <p class="text-gray-500 text-sm">Description:</p>
-          <p class="text-gray-700 text-sm break-words">
-            {{ demande.description }}
-          </p>
         </div>
+        <p class="text-gray-500 text-sm mt-1">Date: {{ demande.date_debut | date }}</p>
+        <p class="text-gray-500 text-sm">Description:</p>
+        <p class="text-gray-700 text-sm break-words">
+          {{ demande.description || 'Aucune description fournie' }}
+        </p>
       </div>
-  
-      <!-- Treated Demandes -->
-      <div *ngIf="activeTab === 'treated'" class="grid grid-cols-3 gap-4">
-        <div *ngFor="let demande of treatedDemandes" class="p-4 border rounded-lg shadow-sm">
-          <div class="flex justify-between">
-            <h3 class="font-semibold">{{ demande.name }}</h3>
-            <button 
-            class="text-blue-600 text-sm" 
-            [routerLink]="['/form-radiologue']" 
-            [queryParams]="{ id: demande.id }">
+    </div>
+
+    <!-- Treated Demandes -->
+    <div *ngIf="activeTab === 'treated'" class="grid grid-cols-3 gap-4">
+      <div *ngFor="let demande of treatedDemandes" class="p-4 border rounded-lg shadow-sm">
+        <div class="flex justify-between">
+          <h3 class="font-semibold">Nom: {{ demande.patient?.nom || 'N/A' }} {{ demande.patient?.prenom || 'N/A' }}</h3>
+          <button
+            class="text-blue-600 text-sm"
+            [routerLink]="['/form-radiologue']"
+            [queryParams]="{ id: demande.patient?.nss, valide: true }"
+          >
             Modifier
           </button>
-          </div>
-          <img [src]="demande.image" alt="X-ray" class="mt-2 h-32 object-cover" />
-          <p class="text-gray-500 text-sm mt-2">Fait le: {{ demande.date }}</p>
-          <p class="text-gray-500 text-sm">Par: {{ demande.by }}</p>
-          <p class="text-gray-500 text-sm">Demandé Par: {{ demande.medcin }}</p>
-          <p class="text-gray-500 text-sm">Description: {{ demande.description }}</p>
-          <p class="text-black-500 text-sm">Compte rendu: {{ demande.compteRendu }}</p>
-
         </div>
+        <p class="text-gray-500 text-sm mt-2">Fait le: {{ demande.date_fin | date }}</p>
+        <p class="text-gray-500 text-sm">Validé par: {{ demande.radiologue?.nom || 'N/A' }} {{ demande.radiologue?.prenom || 'N/A' }}</p>
+        <p class="text-gray-500 text-sm">Description:</p>
+        <p class="text-gray-700 text-sm">{{ demande.description || 'Aucune description fournie' }}</p>
+        <p class="text-black-500 text-sm mt-2">Compte rendu:</p>
+        <p class="text-gray-800 text-sm">{{ demande.compte_rendu || 'Pas de compte rendu' }}</p>
+
       </div>
     </div>
   </div>
-  
+</div>

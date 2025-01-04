@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = 'http://127.0.0.1:8000/api/patients/'; // URL de l'API Django
+  private apiUrl = 'http://127.0.0.1:8080/api/patients/'; // URL de l'API Django
 
   constructor(private http: HttpClient, private cookieService: CookieService,private authService :AuthService) {}
 

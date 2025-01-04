@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { form_laboratinComponent } from '../../../profillaborantin/components/form_laboratin/form_laboratin.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
+import { BilanService } from '../../../../services/bilan.service';
 @Component({
   selector: 'app-demande-radiologue',
   imports: [MenuComponent,CommonModule,  RouterModule , form_laboratinComponent],
@@ -11,21 +12,41 @@ import { MenuComponent } from '../../../../components/menu/menu.component';
 })
 export class DemandeRadiologueComponent {
   activeTab: string = 'nonTreated'; // Default tab
-
-  // Sample data for demonstration
-  nonTreatedDemandes = [
-    { id:'1',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum.' },
-    {id:'2', name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum.Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    { id:'3',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum.Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    ];
-
-  treatedDemandes = [
-    { id:'4',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum',compteRendu: 'Lorem ipsum lorem ipsum lorem', medcin:'Dr. ikram',by: 'Dr. John Doe', image: 'path_to_image_1.jpg' },
-    { id:'5',name: 'Bediat Djiane', date: '30-10-2024',description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum', compteRendu: 'Lorem ipsum lorem ipsum lorem',medcin:'Dr. noor', by: 'Dr. Jane Smith', image: 'path_to_image_2.jpg' },
-    { id:'6',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum',compteRendu: 'Lorem ipsum lorem ipsum lorem', medcin:'Dr. salso',by: 'Dr. Emily Brown', image: 'path_to_image_3.jpg' },
-     ];
-
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
-  }
+    nonTreatedDemandes: any[] = [];
+    treatedDemandes: any[] = [];
+  
+    constructor(private bilanService: BilanService) {}
+  
+    ngOnInit(): void {
+      this.fetchNonTreatedBilans();
+      this.fetchTreatedBilans();
+    }
+  
+    // Fetch non-treated bilans
+    fetchNonTreatedBilans(): void {
+      this.bilanService.getNonTreatedBilansradio().subscribe({
+        next: (response) => {
+          this.nonTreatedDemandes = response.bilans;
+        },
+        error: (err) => {
+          console.error('Error fetching non-treated bilans:', err);
+        }
+      });
+    }
+  
+    // Fetch treated bilans
+    fetchTreatedBilans(): void {
+      this.bilanService.getTreatedBilansradio().subscribe({
+        next: (response) => {
+          this.treatedDemandes = response.bilans;
+        },
+        error: (err) => {
+          console.error('Error fetching treated bilans:', err);
+        }
+      });
+    }
+  
+    setActiveTab(tab: string): void {
+      this.activeTab = tab;
+    }
 }
