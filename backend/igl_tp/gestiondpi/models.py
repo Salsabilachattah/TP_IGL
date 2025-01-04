@@ -104,19 +104,11 @@ class BilanBioTest(models.Model):
 
 
 
-class Medicament(models.Model):
-    nom = models.CharField(max_length=45)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.nom
-
 
 
 class OrdonanceMedicament(models.Model):
     ordonance = models.ForeignKey(Ordonance, on_delete=models.CASCADE)
-    medicament = models.ForeignKey(Medicament, on_delete=models.CASCADE)
+    medicament = models.CharField(max_length=45)
     dose = models.FloatField()
     duree = models.IntegerField(help_text="Duration in days")
 
@@ -136,7 +128,7 @@ class Soin(models.Model):
 class SoinMedicament(models.Model):
     soin = models.ForeignKey(Soin, on_delete=models.CASCADE)
     infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
-    medicament = models.ForeignKey(Medicament, on_delete=models.CASCADE)
+    medicament = models.CharField(max_length=45)
     dose = models.FloatField()
     date_time = models.DateTimeField()
 
