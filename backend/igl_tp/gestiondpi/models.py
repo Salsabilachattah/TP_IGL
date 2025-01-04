@@ -106,8 +106,8 @@ class BilanBioTest(models.Model):
 class OrdonanceMedicament(models.Model):
     ordonance = models.ForeignKey(Ordonance, on_delete=models.CASCADE)
     medicament =  models.CharField(max_length=100)
-    dose = models.FloatField()
-    duree = models.IntegerField(help_text="Duration in days")
+    dose = models.CharField(max_length=100)
+    duree = models.CharField(max_length=100)
 
 
 class ImageRadio(models.Model):
