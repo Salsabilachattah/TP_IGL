@@ -15,7 +15,8 @@ from ..permissions.auth import IsMedecin, IsPharmacien
 from django.core.mail import send_mail
 from django.conf import settings
 
-from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsSerializer
+from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsSerializer, OrdonnanceCreateSerializer
+
 
 @swagger_auto_schema(
     method="get",
@@ -100,25 +101,29 @@ def envoyer_ordonance_email(self, request, ordonnance_id):
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
-def creer_ordonance(self, request, nss):
-    patient = get_object_or_404(Patient, nss=nss)
+def creer_ordonance(request, nss):
     medecin = get_object_or_404(Employe, user=request.user)
-
-    serializer = OrdonnanceSerializer(partial=patient,medecin=medecin,data=request.data)
+    data = {"medecin": medecin.id, "patient": nss}
+    serializer = OrdonnanceCreateSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
-        if serializer.is_valid():
-            ordonnance = serializer.save()
+        ordonnance = serializer.save()
 
-            medicaments_data = request.data.get('medicaments', [])
-            for medicament in medicaments_data:
-                medicament_serializer = OrdonnanceMedicamentsSerializer(ordonnance=ordonnance,data=medicament)
-                if medicament_serializer.is_valid():
-                    medicament_serializer.save()
-                else:
-                    return Response(medicament_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        medicaments_data = request.data
+        for medicament in medicaments_data:
+            medicament["ordonance"] = ordonnance.id
+            medicament["dose"] = medicament["doses"]
+            medicament["doses"] = None
+            print(medicament)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            #return Response({'status': serializer.data}, status=status.HTTP_201_CREATED)
+            medicament_serializer = OrdonnanceMedicamentsSerializer(data=medicament)
+            if medicament_serializer.is_valid():
+                medicament_serializer.save()
+
+            else:
+                return Response(medicament_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
