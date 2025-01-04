@@ -108,7 +108,7 @@ export class MedecinService {
   }
   saveOrdonnance(id: string, ordonnance: any): Observable<any> {
     const headers = this.authService.getHeaders(); // Get the headers
-    const url = `${this.apiUrl}${id}/ordonnance/`; // Construct the URL with the ID
+    const url = `${this.baseUrl}consultation/${id}/ordonnance/`; // Construct the URL with the ID
   // ordonnance.medecin = this.authService.getUserInfo; // Store the doctor information
     return this.http
       .post<any>(url, ordonnance, { headers, withCredentials: true })

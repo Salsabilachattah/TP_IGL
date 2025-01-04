@@ -61,9 +61,6 @@ class BilanBiologiqueView(APIView):
     )
     def patch(self ,request, pk):
         bilan_bio = get_object_or_404(BilanBiologique, pk=pk)
-        if bilan_bio.laborantin.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         serializer = BilanBioEditSerializer(bilan_bio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -121,8 +118,6 @@ class BilanRadiologiqueView(APIView):
     )
     def patch(self ,request, pk):
         bilan_radio = get_object_or_404(BilanRadiologique, pk=pk)
-        if bilan_radio.radiologue.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
         serializer = BilanRadioEditSerializer(bilan_radio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -164,15 +159,9 @@ class BilanRadiologiqueView(APIView):
 @permission_classes([IsAuthenticated, IsRadiologue])
 @parser_classes([MultiPartParser, FormParser])
 def add_bilanradio_image(request, pk):
-    bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
-
-    if bilan_radiologique.radiologue.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a radio to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
-
-    serializer=ImageRadioSerializer(bilan_radiologique=bilan_radiologique,data=request.data, partial=True)
+    data=request.data
+    data["bilan_radiologique"]=pk
+    serializer=ImageRadioSerializer(data=data, partial=True)
 
     if serializer.is_valid():
         image_instance=serializer.save()
@@ -196,12 +185,6 @@ def add_bilanradio_image(request, pk):
 def add_bilanbio_test(request, pk):
     # Get the BilanBiologique instance for the given consultation (consultation id is pk)
     bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
-
-    if bilan_biologique.laborantin.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a test to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
 
     # Add 'bilan_biologique' to request.data
     data = request.data.copy()
@@ -278,10 +261,11 @@ def recherche_bilan_bio(request):
 @permission_classes([IsAuthenticated])
 def recherche_bilan_radio(request):
     bilans = BilanRadiologique.objects.all()
+
     nss = request.query_params.get('nss', None)
     if nss is not None:
         patient = get_object_or_404(Patient, nss=nss)
-        bilans=bilans.filter(patient=patient)
+        bilans = bilans.filter(patient=patient)
 
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:

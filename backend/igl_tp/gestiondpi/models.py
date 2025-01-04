@@ -48,7 +48,6 @@ class Ordonance(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     valide=models.BooleanField(default=False)
-    date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,8 +106,8 @@ class BilanBioTest(models.Model):
 class OrdonanceMedicament(models.Model):
     ordonance = models.ForeignKey(Ordonance, on_delete=models.CASCADE)
     medicament =  models.CharField(max_length=100)
-    dose = models.FloatField()
-    duree = models.IntegerField(help_text="Duration in days")
+    dose =  models.CharField(max_length=100)
+    duree = models.CharField(max_length=100)
 
 
 class ImageRadio(models.Model):

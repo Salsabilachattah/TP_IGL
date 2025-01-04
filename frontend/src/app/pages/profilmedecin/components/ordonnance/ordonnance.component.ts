@@ -74,7 +74,7 @@ export class OrdonnanceComponent {
       ...this.medecinService.createdConsultation.patient,
     };
     console.log('this.allData', this.allData);
-    this.medecinService.saveOrdonnance(this.rowData.nss,this.allData).subscribe(
+    this.medecinService.saveOrdonnance(this.medecinService.createdConsultation.id,this.allData).subscribe(
       response => {
         console.log('Ordonnance saved successfully', response);
       },

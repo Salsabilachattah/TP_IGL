@@ -1,12 +1,16 @@
 from rest_framework import serializers
 from ..models import Ordonance, OrdonanceMedicament
 
-
-class OrdonnanceMedicamentsSerializer(serializers.ModelSerializer):
+class OrdonnanceCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
+        model = Ordonance
+        fields = ["id",'valide', 'medecin', 'patient']
+
+class OrdonnanceMedicamentsSerializer(serializers.ModelSerializer):
+    class Meta:
         model = OrdonanceMedicament
-        fields = ['medicament', 'dose', 'duree']
+        fields = ["ordonance",'medicament', 'dose', 'duree']
 
 
 class OrdonnanceSerializer(serializers.ModelSerializer):
@@ -15,4 +19,5 @@ class OrdonnanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ordonance
-        fields = ['valide', 'medecin', 'patient', 'date', 'medicaments']
+        fields = ['valide', 'medecin', 'patient',  'medicaments']
+

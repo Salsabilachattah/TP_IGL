@@ -16,7 +16,7 @@ from rest_framework import permissions, authentication
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views.recherche import EmployeListView, MedicamentListView
+from .views.recherche import EmployeListView
 from .views.soin import *
 
 schema_view = get_schema_view(
@@ -60,7 +60,7 @@ urlpatterns = [
     path('bilanradio/<int:pk>/add_image/', add_bilanradio_image, name='bilan-detail'),
     path('bilanradio/<int:pk>/take/', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
-    path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
+    path('consultation/<int:pk>/ordonnance/', creer_ordonance, name='ordonnance'),
     path('ordonance/not_validated/', get_all_non_validated_ordonances, name='pharmacien'),
     path('ordonance/<int:pk>/', validate_ordonance, name='pharmacien'),
     # soin
@@ -71,7 +71,6 @@ urlpatterns = [
     path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),
     path('patients/<int:nss>/soins/', get_soins_par_nss, name='get_soin_par_nss'),
     # recherche
-    path('medicaments/', MedicamentListView.as_view(), name='medicament-recherche--nom'),
     path('employees/', EmployeListView.as_view(), name='medicament--role-nom'),
 
 ]
