@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Patient, Employe, Hopital, Medicament
+from ..models import Patient, Employe, Hopital
 
 
 class HopitalSerializer(serializers.ModelSerializer):
@@ -25,7 +25,3 @@ class EmployeSerializer(serializers.ModelSerializer):
         model = Employe
         fields = '__all__'  # Include ID, name, surname, and role
 
-class MedicamentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Medicament
-        fields = '__all__'

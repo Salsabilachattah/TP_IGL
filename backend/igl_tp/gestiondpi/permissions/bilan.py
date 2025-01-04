@@ -18,5 +18,8 @@ class BilanPermissions(permissions.BasePermission):
         elif request.method == 'POST':
             return request.user.groups.filter(name='medecin').exists()
 
+        elif request.method == 'PATCH':
+            return request.user.groups.filter(name= 'laboratorien').exists()
+
         # Default: deny any other methods (e.g., PUT, DELETE)
         return False

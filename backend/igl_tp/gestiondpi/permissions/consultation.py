@@ -21,4 +21,3 @@ class ConsultationsAllPermissions(permissions.BasePermission):
         elif request.method == 'POST':
             return request.user.groups.filter(name='medecin').exists()
         return False
-

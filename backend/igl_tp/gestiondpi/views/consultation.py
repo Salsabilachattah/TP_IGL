@@ -67,29 +67,13 @@ class ConsultationAllView(APIView):
     )
     def get(self, request, nss):
         patient = get_object_or_404(Patient, nss=nss)
-        consultations = Consultation.objects.filter(Consultation, patient=patient)
+        consultations = Consultation.objects.filter(patient=patient)############
 
         serializer = ConsultationSerializer(consultations, many=True)
-        return Response({"consultations": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
     @swagger_auto_schema(
-        tags=["consultation"],
-        operation_summary = "Modifier diagnostique et resumé",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'diagnostique' : openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                ),
-                'resume' : openapi.Schema(
-                    type=openapi.TYPE_STRING,
-                ),
-            },
-            required=[],  # Indicate that 'description' is required
-        )
-    )
-    @swagger_auto_schema(
-        method="post",
         tags=["consultation"],
         operation_summary="Create consultation",
     )
@@ -109,12 +93,3 @@ class ConsultationAllView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_consultations(self, request, nss):
-    patient = get_object_or_404(Patient, nss=nss)
-    consultations = Consultation.objects.filter(patient=patient)
-    serializer = ConsultationSerializer(instance=consultations, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)

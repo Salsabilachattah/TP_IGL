@@ -22,8 +22,8 @@ class BilanBiologiqueView(APIView):
         tags=["bilan bio"],
         operation_summary = "Get bilan biologique",
     )
-    def get(self, request, consultation_id):
-        bilan = get_object_or_404(BilanBiologique,pk=consultation_id)
+    def get(self, request, pk):
+        bilan = get_object_or_404(BilanBiologique,pk=pk)
         serializer = BilanBioSerializer(bilan)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -40,9 +40,9 @@ class BilanBiologiqueView(APIView):
             required=['description'],  # Indicate that 'description' is required
         )
     )
-    def post(self, request, consultation_id):
-        # Fetch the Consultation instance using the consultation_id from the URL
-        consultation = get_object_or_404(Consultation, pk=consultation_id)
+    def post(self, request, pk):
+        # Fetch the Consultation instance using the pk from the URL
+        consultation = get_object_or_404(Consultation, pk=pk)
 
         serializer = BilanBioCreateSerializer(consultation=consultation,patient=consultation.patient, data=request.data)
         if serializer.is_valid():
@@ -79,8 +79,8 @@ class BilanRadiologiqueView(APIView):
         tags=["bilan radio"],
         operation_summary = "Get bilan radiologique",
     )
-    def get(self, request, consultation_id):
-        bilan = get_object_or_404(BilanBiologique,pk=consultation_id)
+    def get(self, request, pk):
+        bilan = get_object_or_404(BilanBiologique,pk=pk)
         serializer = BilanRadioSerializer(bilan)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -97,10 +97,10 @@ class BilanRadiologiqueView(APIView):
             required=['description'],  # Indicate that 'description' is required
         )
     )
-    def post(self, request, consultation_id):
+    def post(self, request, pk):
 
-        # Fetch the Consultation instance using the consultation_id from the URL
-        consultation = get_object_or_404(Consultation, pk=consultation_id)
+        # Fetch the Consultation instance using the pk from the URL
+        consultation = get_object_or_404(Consultation, pk=pk)
 
         serializer = BilanRadioCreateSerializer(consultation=consultation, patient=consultation.patient, data=request.data)
         if serializer.is_valid():
@@ -188,9 +188,8 @@ def add_bilanradio_image(request, pk):
     request_body=TestSerializer
 )
 @api_view(['POST'])
-@permission_classes([IsAuthenticated,IsLaboratorien])  # Add the IsAuthenticated permission
+@permission_classes([IsAuthenticated, IsLaboratorien])  # Add the IsAuthenticated permission
 def add_bilanbio_test(request, pk):
-
     # Get the BilanBiologique instance for the given consultation (consultation id is pk)
     bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
 
@@ -200,15 +199,23 @@ def add_bilanbio_test(request, pk):
             status=status.HTTP_403_FORBIDDEN
         )
 
+    # Add 'bilan_biologique' to request.data
+    data = request.data.copy()
+    data['bilan_biologique'] = pk
+
     # Create the BilanBioTest instance
-    test = TestSerializer(bilan_biologique=bilan_biologique,data=request.data)
+    serializer = TestSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
 
-    # Return the created test as a response
-    return Response({
-        'message':"Test added successfully",
-    }, status=status.HTTP_201_CREATED)
+        # Return the created test as a response
+        return Response({
+            'message': "Test added successfully",
+            'data': serializer.data
+        }, status=status.HTTP_201_CREATED)
 
-
+    # Handle invalid serializer
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @swagger_auto_schema(
     method='get',
     tags=["bilan bio"],

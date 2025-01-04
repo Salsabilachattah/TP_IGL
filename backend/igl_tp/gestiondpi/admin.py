@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Hopital, Employe, Patient, Ordonance, Consultation, BilanBiologique, BilanRadiologique, Outil, ConsultationOutil, BilanBioTest, Medicament, OrdonanceMedicament, ImageRadio, Soin, SoinMedicament, SoinInfirmier, ObservationEtat, Traitement
+from .models import Hopital, Employe, Patient, Ordonance, Consultation, BilanBiologique, BilanRadiologique, Outil, ConsultationOutil, BilanBioTest,  OrdonanceMedicament, ImageRadio, Soin, SoinMedicament, SoinInfirmier, ObservationEtat, Traitement
 
 admin.site.register(Hopital)
 admin.site.register(Employe)
@@ -11,7 +11,6 @@ admin.site.register(BilanRadiologique)
 admin.site.register(Outil)
 admin.site.register(ConsultationOutil)
 admin.site.register(BilanBioTest)
-admin.site.register(Medicament)
 admin.site.register(OrdonanceMedicament)
 admin.site.register(ImageRadio)
 admin.site.register(Soin)
