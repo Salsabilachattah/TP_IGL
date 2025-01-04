@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component ,Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-bilan-button',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './bilan-button.component.html',
   styleUrl: './bilan-button.component.css'
 })
 export class BilanButtonComponent {
  // Donnée à afficher dans le paragraphe
- paragraphContent: string = "Ceci est un bilan rapide du patient : Nom - Prénom - Médecin traitant.";
+ @Input() paragraphContent: string = ''; 
  show: boolean = true;
 
 

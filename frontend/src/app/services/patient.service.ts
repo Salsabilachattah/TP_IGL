@@ -50,11 +50,24 @@ getConsultations(): Observable<any[]> {
   });
 }
 
-
-
-
-getSoinsByNss(nss: number): Observable<any[]> {
-  return this.http.get<any[]>(`${this.apiUrl}/${nss}/soins/`);
+getConsultationsbynss(nss: string): Observable<any[]> {
+  const url = `${this.apiUrl}${nss}/consultation/`;
+  
+  return this.http.get<any[]>(url, {
+    headers: this.authService.getHeaders(),
+    withCredentials: true,
+  });
 }
+// Méthode pour récupérer tous les soins
+// Méthode pour récupérer tous les soins par NSS
+getAllSoins(nss: number): Observable<any[]> {
+  const url = `${this.apiUrl}${nss}/soins/`; // Construire l'URL en utilisant le NSS
+  return this.http.get<any[]>(url, {
+    headers: this.authService.getHeaders(),
+    withCredentials: true,
+  });
+}
+
+
 }
 

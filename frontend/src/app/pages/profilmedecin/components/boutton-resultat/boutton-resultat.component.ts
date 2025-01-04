@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-boutton-resultat',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './boutton-resultat.component.html',
   styleUrl: './boutton-resultat.component.css'
 })
 export class BouttonResultatComponent {
 // Donnée à afficher dans le paragraphe
-paragraphContent: string = "Ceci est un bilan rapide du patient : Nom - Prénom - Médecin traitant.";
- 
+@Input() paragraphContent: string = '';  
 show:boolean=true;
 
 deletebilan(){

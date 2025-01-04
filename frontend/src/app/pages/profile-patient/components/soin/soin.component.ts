@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SoinButtonComponent } from '../soin-button/soin-button.component';
+import { PatientService } from '../../../../services/patient.service';
+import { AuthService } from '../../../../services/auth.service';
 @Component({
   selector: 'app-soin',
   imports:[CommonModule ,  SoinButtonComponent],
@@ -8,24 +10,51 @@ import { SoinButtonComponent } from '../soin-button/soin-button.component';
   styleUrls: ['./soin.component.css'],
 })
 export class SoinComponent {
-  soins = [
-    { date: '2024-12-25', soin: 'Consultation for general health evaluation', infermier:'ikrem' ,show: false },
-    { date: '2024-12-18', soin: 'Follow-up for previous treatment' ,infermier:'noor',show: false },
-    { date: '2024-12-10', soin: 'Routine check-up' , infermier:'dji',show: false },
-  ];
+  soins: any[] = []; // Liste des soins récupérés
+  nss: number | null = null; // NSS du patient connecté
 
-  ngOnInit() {
-    console.log(this.soins); // Vérifiez que les données sont chargées
+  constructor(private patientService: PatientService, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.initializeNss();
   }
 
-  show: boolean = false;
+  private initializeNss(): void {
+    this.nss = this.authService.getNss();
+    if (this.nss) {
+      this.fetchSoins();
+    } else {
+      console.error('NSS introuvable pour le patient connecté.');
+    }
+  }
 
+  fetchSoins(): void {
+    if (this.nss === null) {
+      console.error('NSS non disponible. Impossible de récupérer les soins.');
+      return;
+    }
 
-displaySoin(index: number) {
-  this.soins[index].show = !this.soins[index].show;
-}
+    this.patientService.getAllSoins(this.nss).subscribe({
+      next: (data) => {
+        console.log('Soins récupérés :', data);
+        this.soins = data.map((soin) => ({
+          date: soin.created_at, // Récupérer la date
+          observation: soin.observation, // Récupérer l'observation
+          show: false, // Ajouter une propriété `show` pour la gestion de l'affichage
+        }));
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des soins :', err);
+      },
+    });
+  }
 
-hideSoin(index: number) {
-  this.soins[index].show = false;
-}
+  // Méthode pour afficher ou masquer les détails d'un soin
+  displaySoin(index: number): void {
+    this.soins[index].show = !this.soins[index].show;
+  }
+
+  hideSoin(index: number): void {
+    this.soins[index].show = false;
+  }
 }

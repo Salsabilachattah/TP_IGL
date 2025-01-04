@@ -14,11 +14,11 @@
       <!-- Table Body -->
       <tbody>
         <tr *ngFor="let consultation of consultations" class="border-b border-blue-300">
-          <td class="px-4 py-2">{{ consultation.date }}</td>
+          <td class="px-4 py-2">{{ consultation.date | date:'short' }}</td>
           <td class="px-4 py-2">
             <button
               class="bg-white text-blue-500 font-semibold py-1 px-4 rounded hover:bg-blue-100 transition"
-              (click)="displayResume(consultation)"
+              (click)="displayResume(consultation,nss)"
             >
               Résumé
             </button>

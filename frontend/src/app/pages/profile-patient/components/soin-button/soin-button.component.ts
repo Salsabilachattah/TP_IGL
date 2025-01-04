@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,9 +9,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SoinButtonComponent {
 // Donnée à afficher dans le paragraphe
-paragraphContent: string = "Ceci est un bilan rapide du patient : Nom - Prénom - Médecin traitant.";
- 
-
+@Input() paragraphContent: string = '';
 show:boolean=true;
 
 deletesoin(){

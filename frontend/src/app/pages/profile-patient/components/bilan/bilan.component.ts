@@ -71,7 +71,15 @@ export class BilanComponent implements OnInit {
   }
   
   
+  hidePrescription(index: number): void {
+    this.consultations[index].show = false; // Cache la prescription
+}
 
+
+
+hideResultat(index: number): void {
+    this.consultations[index].show3 = false; // Cache le résultat
+}
   // Methods to toggle display for prescription, état, résultat
   displayPrescription(index: number): void {
     this.consultations[index].show = !this.consultations[index].show;

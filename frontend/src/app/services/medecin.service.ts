@@ -106,4 +106,28 @@ export class MedecinService {
         })
       );
   }
+
+
+
+  private selectedPatient: any;
+
+ 
+
+  setSelectedPatient(patient: any): void {
+    this.selectedPatient = patient;
+    // Assurez-vous que vous utilisez bien cette méthode lors de la sélection d'un patient
+  console.log("Patient sélectionné dans med serivce:", patient); // Pour le débogage
+
+  }
+
+  getSelectedPatient(): any {
+    return this.selectedPatient;
+  }
+
+
+
+  getPatientByNss(nss: number): Observable<any> {
+    const headers = this.authService.getHeaders(); 
+    return this.http.get<any>(`${this.apiUrl}${nss}/`, { headers, withCredentials: true });
+  }
 }

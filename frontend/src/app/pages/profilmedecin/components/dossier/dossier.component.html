@@ -4,7 +4,7 @@
     <div class="w-full max-w-4xl">
       <!-- Conteneur pour Affichage Info -->
       <div class="w-full">
-        <app-affichageinfo [data]="data" [fieldOrder]="fieldOrder"></app-affichageinfo>
+        <app-affichageinfo [data]="patientData" [fieldOrder]="fieldOrder"></app-affichageinfo>
       </div>
       
       <!-- Radio Group -->
@@ -16,13 +16,13 @@
       <!-- Conteneur des options -->
       <div class="w-full mt-0">
         <ng-container *ngIf="selectedOption === 'A'">
-        <app-perso-med></app-perso-med> 
+          <app-info-perso-med [nss]="nss"></app-info-perso-med>
+ 
         </ng-container>
         <ng-container *ngIf="selectedOption === 'B'">
-         <app-date-resume-container></app-date-resume-container>
-        </ng-container>
+          <app-date-resume-container [nss]="nss"></app-date-resume-container>    </ng-container>
         <ng-container *ngIf="selectedOption === 'C'">
-        <app-bilan></app-bilan>
+        <app-bilan  [nss]="nss | number"></app-bilan>
         </ng-container>
         <ng-container *ngIf="selectedOption === 'D'">
         <app-prescription></app-prescription>   
