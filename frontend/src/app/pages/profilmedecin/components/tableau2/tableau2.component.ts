@@ -75,7 +75,7 @@ loadMore() {
   this.displayedData = this.displayedData.concat(nextData);
 }
 
-  display(button: string) {
+  display(button: string,patient: any) {
   if (button === "Visualiser") {
       this.selectedPatientId = this.selectedPatientId || this.patients[0]?.id;
       this.dossier = !this.dossier;
@@ -93,7 +93,14 @@ loadMore() {
       this.consultation = !this.consultation;
       this.info = false;
       this.dossier = false;
-      this.router.navigate(['/medecin/consultation'])
+      console.log(patient);
+      this.medecinService
+        .createConsultation(patient.role)
+        .subscribe((consultation) => {
+          console.log(consultation); // This will log the consultation after the HTTP request completes
+          console.log(this.medecinService.createdConsultation); // Now, this will show the updated value
+          this.router.navigate(['/medecin/consultation']);
+        });
     }
   }
 }

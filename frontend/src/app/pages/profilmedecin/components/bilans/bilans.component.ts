@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
+import { MedecinService } from '../../../../services/medecin.service';
 
 @Component({
   selector: 'app-bilans',
@@ -11,13 +12,21 @@ import { MenuComponent } from '../../../../components/menu/menu.component';
   styleUrl: './bilans.component.css'
 })
 export class BilansComponent {
-  constructor (private router :Router){}
+  constructor (private router :Router,private medecinService:MedecinService){}
 
-  redigerbilanbio(){
+  redigerbilanradio(){
+   if (this.medecinService.createdConsultation.bilanradio) {
+     alert('bilan radiologique deja redigé');
+     return;
+   }
    this.router.navigate(['/medecin/bilans/demanderadio'])
   }
 
-  redigerbilanradio(){
+  redigerbilanbio(){
+    if (this.medecinService.createdConsultation.bilanbio) {
+      alert('bilan biologique deja redigé');
+      return;
+    }
     this.router.navigate(['/medecin/bilans/demandebio'])
   }
 

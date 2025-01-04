@@ -4,6 +4,7 @@ import { AffichageinfoComponent } from '../../../../components/affichageinfo/aff
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { FormsModule } from '@angular/forms';
+import { MedecinService } from '../../../../services/medecin.service';
 @Component({
   selector: 'app-rediger-resume',
   imports: [AffichageinfoComponent,BouttonretourComponent,MenuComponent,FormsModule],
@@ -12,13 +13,23 @@ import { FormsModule } from '@angular/forms';
 })
 export class RedigerResumeComponent {
   resume :string ='';
-  constructor (private router: Router){}
+  constructor (private router: Router,private medecinService:MedecinService){}
   save(){
     //envoyer au backend
     if(this.resume !=''){
-      alert("Résumé sauvegardé avec succés !"); 
-      this.resume='';
-      this.router.navigate(['/medecin']);
+      this.medecinService
+        .redigerResume(
+          this.medecinService.createdConsultation.id,
+          this.resume
+        )
+        .subscribe((resume) => {
+          alert('Resumé sauvegardé avec succés !');
+          console.log(resume); // This will log the consultation after the HTTP request completes
+          this.medecinService.createdConsultation={}; // Now, this will show the updated value
+          this.resume = '';
+          this.router.navigate(['/medecin']);
+        });
+
     }else{
       alert("Remplissez d'abord!")
     }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AffichageinfoComponent } from '../../../../components/affichageinfo/affichageinfo.component';
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
+import { MedecinService } from '../../../../services/medecin.service';
 @Component({
   selector: 'app-ordonnance',
   imports: [MenuComponent, BouttonretourComponent,CommonModule, FormsModule,AffichageinfoComponent],
@@ -19,7 +20,7 @@ export class OrdonnanceComponent {
   dose: string = '';
   duree: string = '';
 
-  constructor (private router: Router){}
+  constructor (private router: Router,private medecinService:MedecinService){}
   //backend de ce format
   allData: Array<{ [key: string]: any }> = [
     { medicament: 'Paracétamol', doses: '500mg', duree: '5 jours' },
@@ -58,6 +59,10 @@ export class OrdonnanceComponent {
     //envoyer allData au backend
     alert("sauvegarde faite avec succes !");
     this.router.navigate(['/medecin/resume']);
+     this.rowData = {
+       numero: this.medecinService.createdConsultation.patient.nss,
+       ...this.medecinService.createdConsultation.patient,
+     };
   }
  
   rowData = {

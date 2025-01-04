@@ -18,7 +18,7 @@
           <tr *ngFor="let data of displayedData" class="border-b-[0.1rem] h-10 border-white">
             <td *ngFor="let key of dataKeys" class="font-light">{{ data[key] }}</td>
             <td *ngFor="let button of buttonsArray">
-              <button class="font-semibold" (click)="display(button)">
+              <button class="font-semibold" (click)="display(button,data)">
                 {{ button }}
               </button>
             </td>

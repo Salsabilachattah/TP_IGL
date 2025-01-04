@@ -28,7 +28,3 @@ export class NouvelleConsultationComponent {
 
   fieldOrder = ['numero', 'nom', 'prenom'];
 }
-
-
-
-
