@@ -48,7 +48,6 @@ class Ordonance(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     medecin = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     valide=models.BooleanField(default=False)
-    date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -119,6 +118,7 @@ class ImageRadio(models.Model):
 class Soin(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     observation = models.TextField()
+    infirmier = models.ForeignKey(Employe, on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
