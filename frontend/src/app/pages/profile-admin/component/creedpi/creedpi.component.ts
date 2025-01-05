@@ -41,7 +41,7 @@ export class CreedpiComponent {
       alert("Le numéro de sécurité sociale doit être un entier valide.");
       return;
     }
-
+    console.log("front t3iz",processedData)
     this.patientService.createDPI(processedData).subscribe({
       next: (blobResponse) => {
         const imageUrl = URL.createObjectURL(blobResponse); // Crée un URL temporaire

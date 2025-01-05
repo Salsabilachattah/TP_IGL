@@ -39,15 +39,19 @@ export class DossierComponent {
     if (this.patientData && this.patientData.numero !== undefined) {
       this.patientData.numero = this.patientData.numero.toString();
     }
-     // Affecter le rôle à nss
-     if (this.patientData && this.patientData.role) {
-      this.nss = this.patientData.role; // Affecte le rôle à la variable nss
+    if (this.patientData) {
+      if (this.patientData.role && !isNaN(Number(this.patientData.role))) {
+        this.nss = this.patientData.role; // Assigns role to nss if it's a number-like string
+      } else if (this.patientData.nss) {
+        this.nss = this.patientData.nss; // Assigns nss if role is not a number-like string
+      }
     }
+  this.patientData.num=this.nss;
   }
 
   onSelectionChange(value: string): void {
     this.selectedOption = value;
   }
 
-  fieldOrder = ['role', 'nom', 'prenom'];
+  fieldOrder = ['num', 'nom', 'prenom'];
 }

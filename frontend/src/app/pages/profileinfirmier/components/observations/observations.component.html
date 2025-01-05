@@ -23,11 +23,6 @@
       </table>
     </div>
   
-    <app-plusbutton
-      class="plus"
-      *ngIf="displayedData.length < allData.length"
-      (click)="loadMore()"
-    ></app-plusbutton>
 
   <div *ngIf="info">
     <app-form/>
@@ -42,8 +37,8 @@
 </button>             
 <div *ngIf="added" class="text-black flex flex-col place-content-center place-items-center w-3/4 my-3  pb-4  ">
     <div class="flex gap-2  w-full">
-        <input [(ngModel)]="nom" type="text" class="bg-[#FAFAFA] px-4 border   my-6  rounded w-1/3 py-1" 
-        [ngClass]="{ 'border-red-500': !nom }" 
+        <input [(ngModel)]="observation" type="text" class="bg-[#FAFAFA] px-4 border   my-6  rounded w-1/3 py-1" 
+        [ngClass]="{ 'border-red-500': !observation }" 
         placeholder="observation" required />
 
         <input [(ngModel)]="date" type="text" class="bg-[#FAFAFA] px-4  border   my-6  rounded w-1/3 py-1" 
@@ -54,12 +49,9 @@
         [ngClass]="{ 'border-red-500': !hour }" 
         placeholder="heure" required /> 
 
-        <input [(ngModel)]="infirm" type="text" class="bg-[#FAFAFA] px-4  border   my-6  rounded w-1/3 py-1" 
-        [ngClass]="{ 'border-red-500': !infirm }" 
-        placeholder="infirmier" required />
     </div>
 
-    <button (click)="confirmer(nom,date,hour,infirm)"  class="flex text-green-500"> 
+    <button (click)="confirmer(observation,date,hour)"  class="flex text-green-500"> 
         <span>Confirmer</span> 
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l6 6l10 -10"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path></svg>
     </button>

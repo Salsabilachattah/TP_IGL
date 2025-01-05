@@ -21,7 +21,7 @@ export class Tableau2Component implements OnInit {
 
   patients: any[] = [];
   dataKeys: string[] = [];
-  itemsPerPage = 10000;
+  itemsPerPage = 4;
   displayedData: any[] = [];
   selectedPatientId: number | null = null;
 

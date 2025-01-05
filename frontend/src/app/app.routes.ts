@@ -51,8 +51,7 @@ export const routes: Routes = [
   {path:'medecin/bilans/demandebio' , component: DemandebioComponent},
   {path:'medecin/bilans/demanderadio' , component: DemanderadioComponent},
 
-
-  {path:'infirmier/soins' , component: SoinsGComponent},
+  {path:'infirmier/soins/:idpatient' , component: SoinsGComponent},
   {path:'soins' , component: SoinsGComponent},
 
   { path: '**', redirectTo: '' }, // Redirection pour les routes non trouvées

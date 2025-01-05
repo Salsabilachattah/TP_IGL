@@ -5,10 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BrowserMultiFormatReader } from '@zxing/library';
 import { Router } from '@angular/router';
+import { InfirmierService } from '../../../../services/infirmier.service'; 
 import { MedecinService } from '../../../../services/medecin.service';
+import { FormComponent } from '../../../profilmedecin/components/form/form.component';
 @Component({
   selector: 'app-searchbar',
-  imports: [WebcamModule, CommonModule, FormsModule],
+  imports: [WebcamModule, CommonModule, FormsModule,FormComponent],
   templateUrl: './searchbar.component.html',
   styleUrls: ['./searchbar.component.css'],
 })
@@ -20,7 +22,7 @@ export class SearchbarComponent {
 
   private codeReader: BrowserMultiFormatReader; // Initialiser le lecteur de codes QR
 
-  constructor(private router: Router, private MedecinService: MedecinService) {
+  constructor(private router: Router, private MedecinService: MedecinService, private infirmierservice: InfirmierService) {
     this.codeReader = new BrowserMultiFormatReader();
   };
 
@@ -94,7 +96,7 @@ export class SearchbarComponent {
   }*/
 
 
-
+    info : boolean = false;
   affich : boolean = false;
   fields: Array<string> = ['nom', 'prenom', 'nss', 'age'];
     labels: Array<string> = [
@@ -104,7 +106,7 @@ export class SearchbarComponent {
       'Dossier du patient',
       'Consultation',
     ];
-    buttonsArray: Array<string> = ['Visualiser', 'Commencer'];
+    buttonsArray: Array<string> = ['Afficher', 'Commencer'];
     dataKeys: Array<string> = ['nss', 'nom' ,'prenom'];
   rechercher() {
   this.MedecinService.getPatientDetails(this.nss).subscribe({ 
@@ -128,32 +130,35 @@ export class SearchbarComponent {
   consultation: boolean = false;
 
 
-  display(button: string,patient: any) {
-    if (button === "Visualiser") {
-      this.selectedPatientId = patient.id; // Assurez-vous d'utiliser l'ID du patient sélectionné
-      this.dossier = !this.dossier;
-      this.consultation = false;
-  
-      // Mettez à jour le patient sélectionné avant de naviguer
-      this.MedecinService.setSelectedPatient(patient);
-      console.log("Patient sélectionné dans Tableau2Component:", patient);
-  
-      this.router.navigate(['/medecin/dossier']); // Naviguer après avoir mis à jour le patient
+  display(button: string,patient: any,) {
+    if (button === "Afficher") {
+      this.info = !this.info;
+      this.nss = patient.nss;
     } else if (button === "Commencer") {
       this.consultation = !this.consultation;
-      this.dossier = false;
-      console.log(patient);
-      this.MedecinService
-        .createConsultation(patient.role)
-        .subscribe((consultation) => {
-          console.log(consultation); // This will log the consultation after the HTTP request completes
-          console.log(this.MedecinService.createdConsultation); // Now, this will show the updated value
-          this.router.navigate(['/medecin/consultation']);
-        });
+      this.info = false;
+
+      this.infirmierservice.createSoin(patient.nss , '3', 'newSoin').subscribe({
+        next: (response) => {
+          console.log("patient.nss", patient.nss)
+          const createdSoinId = response.id; 
+          localStorage.setItem('IdsoinCree',createdSoinId);
+        },
+        error: (err) => {
+          console.error('Error while creating soin:', err);
+          alert("Une erreur s'est produite lors de la création de soins.");
+        }
+      });
+      
+      
+
+     // this.router.navigate(['/infirmier/soins',patient.nss]);
+    
+     this.router.navigate(['/infirmier/soins',patient.nss]);
     }
   }
 
-
+  
 
 
 

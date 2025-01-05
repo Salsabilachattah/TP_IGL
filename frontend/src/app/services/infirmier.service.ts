@@ -27,6 +27,7 @@ export class InfirmierService {
     ); 
   }
  
+  // Méthode pour récupérer les informations du patient
   Info : Array<any> =[]; 
 
   getInfoPatient(ident: string): Observable<any> {
@@ -45,5 +46,70 @@ export class InfirmierService {
       ); 
   }
 
+    SoinId = localStorage.getItem('IdsoinCree');
+    // Méthode pour envoyer les medicaments 
+    private baseUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/medicaments/`; 
+
+    sendData(soinMedicamentData: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    
+      return this.http.post<any>(this.baseUrl, soinMedicamentData, {
+        withCredentials: true,
+        headers: this.authService.getHeaders(),
+      });
+    }
+    
+    // Méthode pour envoyer les soins
+    private SoinInfUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/infirmiers/`; 
+    sendSoin(soinInfData: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    
+      return this.http.post<any>(this.SoinInfUrl, soinInfData, {
+        withCredentials: true,
+        headers: this.authService.getHeaders(),
+      });
+    }
+
+    // Méthode pour envoyer l etat
+    private SendEtatUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/observations/`; 
+    sendEtat(soinInfData: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+    
+      return this.http.post<any>(this.SendEtatUrl, soinInfData, {
+        withCredentials: true,
+        headers: this.authService.getHeaders(),
+      });
+    }
+   
+    // Méthode pour creer un soin
+
+  private createsoinURL = 'http://127.0.0.1:8000/api/soins/';
+  createSoin(patientId: string, infirmierId: string, observation: string): Observable<any> {
+    const payload = {
+      patient: patientId,
+      infirmier: infirmierId,
+      observation: observation, 
+    };
+
+  return this.http.post<any>(this.createsoinURL, payload, {
+    withCredentials: true,
+    headers: this.authService.getHeaders(),
+  });
 }
+
+
+
+
+  
+
+
+}
+
+
 

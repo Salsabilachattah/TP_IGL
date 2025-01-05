@@ -3,7 +3,7 @@
       *ngFor="let field of fieldOrder"
       class="flex-grow px-4 py-2 text-gray-800 border bg-gray-100"
     >
-      {{ data[field] || 'Valeur manquante' }}
+      {{ data[field] ||data[0][field] || 'Valeur manquante' }}
     </div>
   </div>
   
