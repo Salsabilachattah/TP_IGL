@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from .commun import EmployeSerializer, PatientSerializer
 from ..models import Ordonance, OrdonanceMedicament
 
 class OrdonnanceCreateSerializer(serializers.ModelSerializer):
@@ -16,8 +18,8 @@ class OrdonnanceMedicamentsSerializer(serializers.ModelSerializer):
 class OrdonnanceSerializer(serializers.ModelSerializer):
     # List of OrdonnanceMedicaments
     medicaments = OrdonnanceMedicamentsSerializer(many=True, read_only=True)
-
+    medecin = EmployeSerializer(read_only=True)
+    patient = PatientSerializer(read_only=True)
     class Meta:
         model = Ordonance
-        fields = ['valide', 'medecin', 'patient',  'medicaments']
-
+        fields = "__all__"
