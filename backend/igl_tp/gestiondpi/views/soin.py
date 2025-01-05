@@ -43,14 +43,18 @@ class SoinView(APIView):
     tags=["soin"], 
     operation_summary="Create Soin"
 )
+
+
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def create_soin(request):
     serializer = SoinSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        soin = serializer.save(patient_id=request.data['patient'], infirmier_id=request.data['infirmier'])
+        response_data = SoinSerializer(soin).data
+        return Response(response_data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @swagger_auto_schema(
     method="get",
@@ -89,7 +93,7 @@ def get_soins_par_nss(request,nss):
     )
 )
 
-@api_view(['POST'])
+@api_view(['POST']) #changed (a lot changed in this file)
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
@@ -97,7 +101,8 @@ def add_soin_medicament(request, soin_id):
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @swagger_auto_schema(
     method="post",
@@ -119,6 +124,9 @@ def add_soin_medicament(request, soin_id):
 )
 
 
+
+
+
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
@@ -127,7 +135,8 @@ def add_observation_etat(request, soin_id):
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(
@@ -158,4 +167,5 @@ def add_soin_infermier(request, soin_id):
     if serializer.is_valid():
         serializer.save(soin=soin)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
