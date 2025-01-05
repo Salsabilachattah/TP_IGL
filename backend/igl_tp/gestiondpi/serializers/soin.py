@@ -14,24 +14,15 @@ class EmployeInfoSerializer(serializers.ModelSerializer):
         model = Employe
         fields = ['id', 'nom', 'prenom', 'role']  # Include ID, name, surname, and role
 
-# Serializer for Medicament
-class MedicamentInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Medicament
-        fields = ['nom'] 
         
 # Serializer for SoinMedicament //changed
 class SoinMedicamentSerializer(serializers.ModelSerializer):
-    medicament = MedicamentInfoSerializer()
+   
     class Meta: 
         model = SoinMedicament
-        fields = ['infirmier', 'medicament', 'dose', 'date_time'] 
+        fields = ['soin','infirmier', 'medicament', 'dose', 'date_time'] 
     
-    def create(self, validated_data): 
-        medicament_data = validated_data.pop('medicament') 
-        medicament, created = Medicament.objects.get_or_create(**medicament_data) 
-        soin_medicament = SoinMedicament.objects.create(medicament=medicament, **validated_data)
-        return soin_medicament
+
 
 # Serializer for SoinInfirmier //changed
 class SoinInfirmierSerializer(serializers.ModelSerializer):
