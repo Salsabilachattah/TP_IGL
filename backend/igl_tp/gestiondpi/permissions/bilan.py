@@ -36,7 +36,7 @@ class BilanRadioPermissions(permissions.BasePermission):
         # For GET method, allow access to 'medecin', 'laboratorien', or 'patient' groups
         if request.method == 'GET':
             # Check if the user belongs to any of the allowed groups
-            return request.user.groups.filter(name__in=['medecin', 'laboratorien', 'patient']).exists()
+            return request.user.groups.filter(name__in=['medecin', 'radiologue', 'patient']).exists()
 
         # For POST method, allow only 'medecin' group
         elif request.method == 'POST':
