@@ -1,6 +1,5 @@
 from rest_framework import permissions
 
-
 class BilanPermissions(permissions.BasePermission):
     """
     Custom permission to allow:
@@ -12,15 +11,15 @@ class BilanPermissions(permissions.BasePermission):
         # For GET method, allow access to 'medecin', 'laboratorien', or 'patient' groups
         if request.method == 'GET':
             # Check if the user belongs to any of the allowed groups
-            return request.user.groups.filter(name__in=['medecin', 'laboratorien', 'patient']).exists()
+            return request.user.groups.filter(name__in=['medecin', 'laboratorien', 'radiologue','patient']).exists()
 
         # For POST method, allow only 'medecin' group
-        elif request.method == 'POST':
-            return request.user.groups.filter(name=['medecin' , 'laboratorien'] ).exists()
-        
+        if request.method == 'POST':
+            return request.user.groups.filter(name__in='medecin').exists()
 
-        elif request.method == 'PATCH':
-            return request.user.groups.filter(name='laboratorien').exists()
+        if request.method =='PATCH':
+            return request.user.groups.filter(name__in= [ 'laboratorien', 'radiologue']).exists()
 
         # Default: deny any other methods (e.g., PUT, DELETE)
         return False
+

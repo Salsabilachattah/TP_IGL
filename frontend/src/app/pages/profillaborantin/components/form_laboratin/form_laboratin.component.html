@@ -29,7 +29,7 @@
   
 
     <div>
-      <span id="date" class="text-lg">Date: {{ bilan.date_debut || '' }}</span>
+      <span id="date" class="text-lg">Date: {{ today | date: 'dd/MM/yyyy' }}</span>
     </div>
 
     <div>

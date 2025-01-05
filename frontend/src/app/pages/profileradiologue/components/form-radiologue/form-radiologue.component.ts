@@ -16,8 +16,8 @@ import { MenuComponent } from '../../../../components/menu/menu.component';
 })
 export class form_radiologueComponent {
   public fields: string[] = ['Compte rendu'];
+  today: Date = new Date();
 
-  selectedImage: string | null = null; // To store a single image preview
 
   bilan: any; // Stockage du bilan unique
 nss: string | null = null;
@@ -62,17 +62,21 @@ loadBilan(): void {
 }
 
 
-  
+
+
 
 onFormSubmit(formData: { [key: string]: string }): void {
   // Mettre à jour les données du bilan localement
   console.log('Consultation:', this.bilan.consultation);  // Affiche toute la consultation
   console.log('bilan:', this.bilan);  // Affiche toute la consultation
 
+  // Mettre à jour le compte rendu et la validité
   this.bilan.compte_rendu = formData['Compte rendu'] || '';
   this.bilan.valide = true; // Marquer comme traité
 
-  
+  // Mettre à jour la date de fin avec la date actuelle
+  this.bilan.date_fin = new Date().toISOString(); // La date actuelle (au format ISO 8601)
+
   // Envoyer les données mises à jour au serveur en utilisant l'ID du bilan
   this.bilanService.updateBilanradio(this.bilan.consultation, this.bilan).subscribe(
     (response) => {
@@ -87,12 +91,9 @@ onFormSubmit(formData: { [key: string]: string }): void {
 }
 
 
-
-
-
-
-
-
+selectedImage: string | ArrayBuffer | null = null;
+  fileToUpload: File | null = null;
+  bilanId: number = 123;  // The ID of the bilan (you can get it dynamically)
 
 
   // Function to trigger the hidden file input
@@ -106,22 +107,46 @@ onFormSubmit(formData: { [key: string]: string }): void {
   // Function to handle file selection
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-
+  
     if (input?.files && input.files[0]) {
       const file = input.files[0];
-
-      // Generate data URL for preview
+  
+      // Generate data URL for preview (optional step for image preview)
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
-          this.selectedImage = reader.result as string; // Store preview
+          this.selectedImage = reader.result as string; // Store preview in selectedImage
         }
       };
       reader.readAsDataURL(file);
+      
+      // Call function to upload image (passing file to backend)
+      this.uploadImage(file);
     }
   }
-  nom: string = 'Ikram';
-  prenom: string = 'Doe';
-  numDossier: string = '123456';
 
+  // Function to upload the image to the server
+  uploadImage(file: File): void {
+    if (file) {
+      // Prepare FormData for the image file upload
+      const formData = new FormData();
+      formData.append('image', file); // Append the selected image file to the FormData
+      
+      // Call the backend service to upload the image
+      this.bilanService.uploadImage(this.bilan.consultation, formData).subscribe(
+        (response) => {
+          console.log('Image uploaded successfully:', response);
+          alert('Image uploaded successfully!');
+        },
+        (error) => {
+          console.error('Image upload failed:', error);
+          alert('Image upload failed!');
+        }
+      );
+    } else {
+      console.warn('No image selected!');
+      alert('Please select an image first!');
+    }
+  }
+  
 }

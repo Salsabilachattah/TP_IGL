@@ -4,28 +4,29 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from setuptools.tests.test_bdist_egg import Test
+from flask import Flask, send_from_directory
 from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioTest, ImageRadio, Employe, Patient
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
     BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer, ImageRadioSerializer
-from ..permissions.bilan import BilanPermissions
+from ..permissions.bilan import BilanPermissions 
 from rest_framework.response import Response
 from rest_framework import status,permissions
 from django.shortcuts import get_object_or_404
 
 
-
 class BilanBiologiqueView(APIView):
-    permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
+    permission_classes = [IsAuthenticated , BilanPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
         tags=["bilan bio"],
         operation_summary = "Get bilan biologique",
     )
     def get(self, request, pk):
-        consultation=get_object_or_404(Consultation, pk=pk)
-        bilan = get_object_or_404(BilanBiologique,consultation=consultation)
-        serializer = BilanBioSerializer(bilan)
+        bilan = get_object_or_404(BilanBiologique,pk=pk)
+        tests = BilanBioTest.objects.filter(bilan_biologique=bilan)
+        serializer = BilanBioSerializer(bilan,tests=tests)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -44,8 +45,10 @@ class BilanBiologiqueView(APIView):
     def post(self, request, pk):
         # Fetch the Consultation instance using the pk from the URL
         consultation = get_object_or_404(Consultation, pk=pk)
-
-        serializer = BilanBioCreateSerializer(consultation=consultation,patient=consultation.patient, data=request.data)
+        data=request.data
+        data["consultation"]=pk
+        data["patient"]=consultation.patient.nss
+        serializer = BilanBioCreateSerializer( data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "BilanBiologique created successfully"},status=status.HTTP_201_CREATED)
@@ -56,11 +59,10 @@ class BilanBiologiqueView(APIView):
     @swagger_auto_schema(
         tags=["bilan bio"],
         operation_summary = "Edit resume et valide"
+
     )
     def patch(self ,request, pk):
-        consultation = get_object_or_404(Consultation, pk=pk)
-        bilan_bio = get_object_or_404(BilanBiologique, consultation=consultation)
-
+        bilan_bio = get_object_or_404(BilanBiologique, pk=pk)
         serializer = BilanBioEditSerializer(bilan_bio, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -73,16 +75,16 @@ class BilanBiologiqueView(APIView):
 
 
 class BilanRadiologiqueView(APIView):
-    permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
+    permission_classes = [IsAuthenticated , BilanPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
         tags=["bilan radio"],
         operation_summary = "Get bilan radiologique",
     )
     def get(self, request, pk):
-        consultation = get_object_or_404(Consultation, pk=pk)
-        bilan = get_object_or_404(BilanBiologique,consultation=consultation)
-        serializer = BilanRadioSerializer(bilan)
+        bilan_radiologique = get_object_or_404(BilanBiologique,pk=pk)
+        images= ImageRadio.objects.filter(bilan_radiologique=bilan_radiologique)
+        serializer = BilanRadioSerializer(bilan_radiologique,images=images)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
@@ -102,8 +104,10 @@ class BilanRadiologiqueView(APIView):
 
         # Fetch the Consultation instance using the pk from the URL
         consultation = get_object_or_404(Consultation, pk=pk)
-
-        serializer = BilanRadioCreateSerializer(consultation=consultation, patient=consultation.patient, data=request.data)
+        data=request.data
+        data["consultation"]=pk
+        data["patient"]=consultation.patient.nss
+        serializer = BilanRadioCreateSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "BilanRadiologique created successfully"}, status=status.HTTP_201_CREATED)
@@ -159,15 +163,9 @@ class BilanRadiologiqueView(APIView):
 @permission_classes([IsAuthenticated, IsRadiologue])
 @parser_classes([MultiPartParser, FormParser])
 def add_bilanradio_image(request, pk):
-    bilan_radiologique = get_object_or_404(BilanRadiologique, pk=pk)
-
-    if bilan_radiologique.radiologue.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a radio to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
-
-    serializer=ImageRadioSerializer(bilan_radiologique=bilan_radiologique,data=request.data, partial=True)
+    data=request.data
+    data["bilan_radiologique"]=pk
+    serializer=ImageRadioSerializer(data=data, partial=True)
 
     if serializer.is_valid():
         image_instance=serializer.save()
@@ -177,6 +175,7 @@ def add_bilanradio_image(request, pk):
         }, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @swagger_auto_schema(
     method='post',
@@ -189,12 +188,6 @@ def add_bilanradio_image(request, pk):
 def add_bilanbio_test(request, pk):
     # Get the BilanBiologique instance for the given consultation (consultation id is pk)
     bilan_biologique = get_object_or_404(BilanBiologique, pk=pk)
-
-    if bilan_biologique.laborantin.user != request.user:
-        return Response(
-            {"detail": "You are not authorized to add a test to this bilan."},
-            status=status.HTTP_403_FORBIDDEN
-        )
 
     # Add 'bilan_biologique' to request.data
     data = request.data.copy()
@@ -213,7 +206,6 @@ def add_bilanbio_test(request, pk):
 
     # Handle invalid serializer
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 @swagger_auto_schema(
     method='get',
     tags=["bilan bio"],
@@ -239,28 +231,41 @@ def get_last_two_bilans(request, nss):
     tags=["bilan bio"],
     operation_summary = "Get all bilans for patient, can search by nss and valide"
 )
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def recherche_bilan_bio(request):
     bilans = BilanBiologique.objects.all()
 
+    # Filter by 'nss'
     nss = request.query_params.get('nss', None)
     if nss is not None:
         patient = get_object_or_404(Patient, nss=nss)
-        bilans=bilans.filter(patient=patient)
+        bilans = bilans.filter(patient=patient)
 
+    # Filter by 'valide'
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:
         if valide_param.lower() in ['true', 'false']:
             valide = valide_param.lower() == 'true'
             bilans = bilans.filter(valide=valide)
         else:
-            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    serializer = BilanBioSerializer(bilans, many=True)
+    # Serialize bilans and include related tests
+    bilans_data = []
+    for bilan in bilans:
+        tests = BilanBioTest.objects.filter(bilan_biologique=bilan)
+        serializer = BilanBioSerializer(bilan)
+        tests_serializer = TestSerializer(tests, many=True)
+        bilan_data=serializer.data
+        bilan_data["tests"]=tests_serializer.data
+        bilans_data.append(bilan_data)
 
-    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+    return Response({'bilans': bilans_data}, status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(
@@ -272,25 +277,37 @@ def recherche_bilan_bio(request):
 @permission_classes([IsAuthenticated])
 def recherche_bilan_radio(request):
     bilans = BilanRadiologique.objects.all()
+
+    # Filter by 'nss'
     nss = request.query_params.get('nss', None)
     if nss is not None:
         patient = get_object_or_404(Patient, nss=nss)
-        bilans=bilans.filter(patient=patient)
+        bilans = bilans.filter(patient=patient)
 
+    # Filter by 'valide'
     valide_param = request.query_params.get('valide', None)
     if valide_param is not None:
         if valide_param.lower() in ['true', 'false']:
             valide = valide_param.lower() == 'true'
             bilans = bilans.filter(valide=valide)
         else:
-            return Response({'detail': "'valide' must be a boolean value ('true' or 'false')."},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'detail': "'valide' must be a boolean value ('true' or 'false')."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    serializer = BilanRadioSerializer(bilans, many=True)
+    # Serialize bilans and include related tests
+    bilans_data = []
+    for bilan in bilans:
+        images = ImageRadio.objects.filter(bilan_radiologique=bilan)
+        serializer = BilanRadioSerializer(bilan)
+        images_serializer = ImageRadioSerializer(images, many=True)
 
-    return Response({'bilans': serializer.data}, status=status.HTTP_200_OK)
+        bilan_data=serializer.data
+        bilan_data["images"]=images_serializer.data
+        bilans_data.append(bilan_data)
 
-
+    return Response({'bilans': bilans_data}, status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(
@@ -299,15 +316,13 @@ def recherche_bilan_radio(request):
     operation_summary = "Take bilan bio"
 )
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])  # Only authenticated laboratorien can access this
+@permission_classes([IsAuthenticated, IsLaboratorien])  # Only authenticated laboratorien can access this
 def take_bilan_bio(request, pk):
     # Get the 'Employe' instance for the authenticated user, or return 404 if not found
     employe = get_object_or_404(Employe, user=request.user)
 
     # Get the corresponding 'BilanBiologique' instance, or return 404 if not found
-    consultation = get_object_or_404(Consultation, pk=pk)
-    bilan_bio = get_object_or_404(BilanBiologique, consultation=consultation)
-
+    bilan_bio = get_object_or_404(BilanBiologique, consultation__pk=pk)
 
     # Set the laboratorien (laborantin) to the 'Employe' instance
     bilan_bio.laborantin = employe
@@ -327,11 +342,13 @@ def take_bilan_radio(request, pk):
     employe = get_object_or_404(Employe, user=request.user)
 
     # Get the corresponding 'BilanRadiologique' instance, or return 404 if not found
-    consultation = get_object_or_404(Consultation, pk=pk)
-    bilan_radio = get_object_or_404(BilanRadiologique, consultation=consultation)
+    bilan_radio = get_object_or_404(BilanRadiologique, consultation__pk=pk)
 
     # Set the laboratorien (radiologue) to the 'Employe' instance
     bilan_radio.radiologue = employe
     bilan_radio.save()
 
     return Response({"detail": "Bilan radiologique updated successfully."}, status=status.HTTP_200_OK)
+
+
+

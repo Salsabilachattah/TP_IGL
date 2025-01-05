@@ -58,6 +58,7 @@ urlpatterns = [
     path('bilanradio/',recherche_bilan_radio, name = 'bilan-radio-detail'),
     path('bilanradio/<int:pk>/', BilanRadiologiqueView.as_view(), name='bilan-radio-detail'),
     path('bilanradio/<int:pk>/add_image/', add_bilanradio_image, name='bilan-detail'),
+
     path('bilanradio/<int:pk>/take/', take_bilan_radio, name='bilan-radio-take'),
     # Ordonance ET SGPH
     path('patients/<int:nss>/ordonnance/', creer_ordonance, name='ordonnance'),
@@ -76,4 +77,5 @@ urlpatterns = [
 
 ]
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -26,6 +26,7 @@ export class DemandeLaboratinComponent {
   fetchNonTreatedBilans(): void {
     this.bilanService.getNonTreatedBilans().subscribe({
       next: (response) => {
+        console.log(response)
         this.nonTreatedDemandes = response.bilans;
       },
       error: (err) => {
@@ -38,6 +39,7 @@ export class DemandeLaboratinComponent {
   fetchTreatedBilans(): void {
     this.bilanService.getTreatedBilans().subscribe({
       next: (response) => {
+        console.log(response)
         this.treatedDemandes = response.bilans;
       },
       error: (err) => {

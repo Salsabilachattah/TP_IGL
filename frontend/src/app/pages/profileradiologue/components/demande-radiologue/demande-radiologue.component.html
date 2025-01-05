@@ -34,6 +34,7 @@
             Traiter
           </button>
         </div>
+
         <p class="text-gray-500 text-sm mt-1">Date: {{ demande.date_debut | date }}</p>
         <p class="text-gray-500 text-sm">Description:</p>
         <p class="text-gray-700 text-sm break-words">
@@ -55,13 +56,27 @@
             Modifier
           </button>
         </div>
+        
+<!-- Display images for each demande -->
+<div *ngIf="demande.images && demande.images.length > 0" class="mt-2">
+  <div *ngFor="let image of demande.images">
+    <img
+      [src]="image"
+      alt="Bilan Image"
+      class="w-full h-auto rounded-lg shadow-sm mt-2"
+    />
+  </div>
+</div>
+
+
+
         <p class="text-gray-500 text-sm mt-2">Fait le: {{ demande.date_fin | date }}</p>
         <p class="text-gray-500 text-sm">Validé par: {{ demande.radiologue?.nom || 'N/A' }} {{ demande.radiologue?.prenom || 'N/A' }}</p>
         <p class="text-gray-500 text-sm">Description:</p>
         <p class="text-gray-700 text-sm">{{ demande.description || 'Aucune description fournie' }}</p>
         <p class="text-black-500 text-sm mt-2">Compte rendu:</p>
         <p class="text-gray-800 text-sm">{{ demande.compte_rendu || 'Pas de compte rendu' }}</p>
-
+        
       </div>
     </div>
   </div>

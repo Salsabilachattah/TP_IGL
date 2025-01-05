@@ -9,17 +9,11 @@ import { MenuComponent } from '../../../../components/menu/menu.component'; // E
 import { BouttonretourComponent } from '../../../../components/bouttonretour/bouttonretour.component';
 import { BilanService } from '../../../../services/bilan.service';
 import { AuthService } from '../../../../services/auth.service';
+import { BilanResponse } from '../../../../models/bilan.model';
+import { BilanBioTest } from '../../../../models/bilan.model';
+
 Chart.register(...registerables);
-interface BilanResponse {
-  bilans: Array<{ 
-    id: number; 
-    date_debut: string;
-    tests: Array<{
-      type: string;
-      valeur: number;
-    }>;
-  }>;
-}
+
 @Component({
   selector: 'app-form_laboratin',
   imports:[BouttonretourComponent,MenuComponent, FormComponent   ,CommonModule],
@@ -29,17 +23,26 @@ interface BilanResponse {
 export class form_laboratinComponent implements OnInit{
   public chart: any; // Référence au graphique
   public fields2: string[] = ['glycémie avant','glycémie apres', 'préssion arterielle avant','préssion arterielle apres', 'cholestérol avant', 'cholestérol apres'];
+  today: Date = new Date();
+
 
 
   bilan: any; // Stockage du bilan unique
 nss: string | null = null;
 valide: boolean = false; // Par défaut, non traité
 
+ // Variables pour stocker les résultats des tests
+ cholestAvant: number | null = null;
+ cholestApres: number | null = null;
+ ferAvant: number | null = null;
+ ferApres: number | null = null;
+ hypertAvant: number | null = null;
+ hypertApres: number | null = null;
+
 constructor(
   private route: ActivatedRoute,
   private bilanService: BilanService,
   private authService: AuthService,
-  private http: HttpClient
 ) {}
 
 
@@ -53,6 +56,7 @@ ngOnInit(): void {
 
     if (this.nss) {
       this.loadBilan();
+      this.loadLastTwoBilans();
     }
   });
 }
@@ -77,7 +81,62 @@ loadBilan(): void {
 }
 
 
-  
+ 
+// Charger les deux derniers bilans biologiques
+loadLastTwoBilans(): void {
+  this.bilanService.getBilanByNssAndValide(this.nss as string, true).subscribe(
+    (response) => {
+      const bilans = response.bilans;
+
+      if (bilans && bilans.length > 0) {
+        // Trier les bilans par date décroissante
+        bilans.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        // Vérifier le nombre de bilans disponibles
+        if (bilans.length === 1) {
+          // S'il n'y a qu'un seul bilan, extraire uniquement les valeurs "Avant"
+          this.extractTestValues(bilans[0], null);
+          console.warn('Un seul bilan trouvé pour ce patient.');
+        } else if (bilans.length >= 2) {
+          // Extraire les deux derniers bilans
+          const [lastBilan, secondLastBilan] = bilans;
+          this.extractTestValues(lastBilan, secondLastBilan);
+        }
+      } else {
+        console.warn('Aucun bilan trouvé pour ce patient.');
+      }
+    },
+    (error) => {
+      console.error('Erreur lors de la récupération des bilans biologiques :', error);
+    }
+  );
+}
+
+// Extraire les valeurs des tests des bilans
+extractTestValues(lastBilan: any, secondLastBilan: any | null): void {
+  const getTestValue = (bilan: any, type: string): number | null => {
+    const test = bilan?.tests?.find((t: any) => t.type === type);
+    return test ? test.valeur : null;
+  };
+
+  // Stocker les valeurs des tests
+  if (secondLastBilan) {
+    this.cholestAvant = getTestValue(secondLastBilan, 'cholesterol');
+    this.ferAvant = getTestValue(secondLastBilan, 'fer');
+    this.hypertAvant = getTestValue(secondLastBilan, 'hypertension');
+  } else {
+    // Si aucun second bilan, les valeurs "Avant" restent null
+    this.cholestAvant = null;
+    this.ferAvant = null;
+    this.hypertAvant = null;
+  }
+
+  this.cholestApres = getTestValue(lastBilan, 'cholesterol');
+  this.ferApres = getTestValue(lastBilan, 'fer');
+  this.hypertApres = getTestValue(lastBilan, 'hypertension');
+}
+
+
 
 onFormSubmit(formData: { [key: string]: string }): void {
   // Mettre à jour les données du bilan localement
@@ -101,7 +160,6 @@ onFormSubmit(formData: { [key: string]: string }): void {
   );
 }
 
-//**deuxieme formulair pour les donnees du graph */
 
 
 //**deuxieme formulair pour les donnees du graph */
@@ -146,98 +204,108 @@ onFormSubmit2(formData: { [key: string]: string | number }): void {
     }
   });
 }
-
-
 generateGraph(): void {
   const ctx = document.getElementById('myChart') as HTMLCanvasElement;
 
   // Adjust the canvas dimensions to reduce the chart size
-  ctx.width = 600;  // Desired width
+  ctx.width = 600; // Desired width
   ctx.height = 400; // Desired height
 
-  // Make sure to check if the chart already exists and destroy it before creating a new one
+  // Destroy the chart if it already exists
   if (this.chart) {
     this.chart.destroy();
   }
 
-  const nss = this.bilan?.patient?.nss;  // Get the NSS dynamically
+  // Define the labels for the x-axis (e.g., Cholestérol, Fer, Hypertension)
+  const labels = ['Cholestérol', 'Fer', 'Hypertension'];
 
-  if (!nss) {
-    console.error("NSS not found!");
-    return;
+  // Prepare the "Avant" dataset
+  const datasets = [];
+
+  // If "Avant" data exists (not null), add it to the dataset
+  if (
+    this.cholestAvant !== null ||
+    this.ferAvant !== null ||
+    this.hypertAvant !== null
+  ) {
+    datasets.push({
+      label: 'Avant',
+      data: [
+        this.cholestAvant, 
+        this.ferAvant, 
+        this.hypertAvant
+      ], // Data for "Avant"
+      backgroundColor: '#FFB6C1', // Soft red for "Avant"
+    });
   }
 
-  // Use HttpClient to make the GET request
-this.http.get<BilanResponse>(`http://localhost:8080/api/patients/${nss}/bilanbio/lasttwo/`)
-    .subscribe(response => {
-      const bilans = response.bilans;
-
-      const labels: string[] = []; // Explicitly define the type of labels as string[]
-      const glycemyData: number[] = []; // Explicitly define the type of glycemyData as number[]
-      const pressureData: number[] = []; // Explicitly define the type of pressureData as number[]
-      const cholesterolData: number[] = []; // Explicitly define the type of cholesterolData as number[]
-
-      bilans.forEach(bilan => {
-        bilan.tests.forEach(test => {
-          labels.push(test.type);  // labels are strings
-          if (test.type === 'Glycémie') glycemyData.push(test.valeur);
-          if (test.type === 'Pression artérielle') pressureData.push(test.valeur);
-          if (test.type === 'Cholestérol') cholesterolData.push(test.valeur);
-        });
-      });
-
-      // Now create the chart
-      this.chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Glycémie',
-              data: glycemyData,
-              backgroundColor: '#FF7F7F',
-            },
-            {
-              label: 'Pression artérielle',
-              data: pressureData,
-              backgroundColor: '#7FBFFF',
-            },
-            {
-              label: 'Cholestérol',
-              data: cholesterolData,
-              backgroundColor: '#FFBF7F',
-            }
-          ]
-        },
-        options: {
-          responsive: false,
-          plugins: {
-            legend: {
-              display: true
-            },
-            tooltip: {
-              enabled: true
-            }
-          },
-          scales: {
-            x: {
-              ticks: {
-                maxRotation: 45,
-                minRotation: 0
-              }
-            },
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'g/L'
-              }
-            }
-          }
-        }
-      });
+  // If "Après" data exists (not null), add it to the dataset, but remove the label
+  if (
+    this.cholestApres !== null ||
+    this.ferApres !== null ||
+    this.hypertApres !== null
+  ) {
+    datasets.push({
+      label: '',  // Empty label to hide the label
+      data: [
+        this.cholestApres, 
+        this.ferApres, 
+        this.hypertApres,
+      ], // Data for "Après"
+      backgroundColor: '#ADD8E6', // Soft blue for "Après"
     });
+  }
+
+  // If both are null, display only the values without a label (fallback case)
+  if (datasets.length === 0) {
+    datasets.push({
+      label: 'Valeurs',
+      data: [
+        this.cholestAvant || this.cholestApres,
+        this.ferAvant || this.ferApres,
+        this.hypertAvant || this.hypertApres,
+      ], // Use whichever value is available
+      backgroundColor: '#ADD8E6', // Default color
+    });
+  }
+
+  // Create the chart
+  this.chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels, // X-axis labels (group names)
+      datasets: datasets, // Dynamically generated datasets
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: {
+          display: true,
+        },
+        tooltip: {
+          enabled: true,
+        },
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Tests',
+          },
+          stacked: false, // Bars grouped side by side
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Valeurs (g/L)',
+          },
+        },
+      },
+    },
+  });
 }
+
 
 
 

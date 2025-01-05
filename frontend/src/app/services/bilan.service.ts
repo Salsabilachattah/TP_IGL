@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from './auth.service';
-import { BilanBioTest , BilanBiologique , BilanResponse } from '../models/bilan.model';
+import { BilanBioTest , BilanBiologique , BilanResponse, BilanResponseRadio } from '../models/bilan.model';
+import { Bilan , Image } from '../models/bilan.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class BilanService {
   private apiUrl = 'http://127.0.0.1:8080/api/bilanbio/'; // Base URL for bilans
   private apiUrl2 = 'http://127.0.0.1:8080/api/bilanradio/'; // Base URL for bilans
   private apiUrl3 = 'http://127.0.0.1:8080/api/patients/'; // Base URL for patients
+  private apiUrl4 = 'http://127.0.0.1:8080/'; // Base URL static
 
   constructor(
     private http: HttpClient,
@@ -32,6 +34,8 @@ export class BilanService {
       withCredentials: true,
     });
   }
+
+  
 
   getBilanByNssAndValide(nss: string, valide: boolean): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?nss=${nss}&valide=${valide}`, {
@@ -98,12 +102,14 @@ export class BilanService {
   
 
   // Fetch treated bilans
-  getTreatedBilansradio(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl2}?valide=true`, {
+  getTreatedBilansradio(): Observable<BilanResponseRadio> {
+    return this.http.get<BilanResponseRadio>(`${this.apiUrl2}?valide=true`, {
       headers: this.authService.getHeaders(),
       withCredentials: true,
     });
   }
+
+  
 
   // Example method to update a bilan (optional, for future use)
   // Méthode pour mettre à jour un bilan
@@ -115,6 +121,20 @@ export class BilanService {
     
   }
   
+  uploadImage(pk: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl2}${pk}/add_image/`, formData, {
+      headers: this.authService.getHeaders(),
+      withCredentials: true, 
+    } );
+  }
+
+// Fetch image URLs
+generateImageUrl(fileName: string | undefined): string {
+  const apiUrl = 'http://localhost:8080'; // Your base API URL
+  return fileName ? `${apiUrl}/static/${fileName}` : '' ; // Construct the full URL
+}
+
+
   getBilanByIdradio(bilanId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl2}${bilanId}/`, {
       headers: this.authService.getHeaders(),
@@ -130,7 +150,7 @@ export class BilanService {
   }
 
   getLastTwoBilans(nss: string): Observable<BilanResponse> {
-    const url = `${this.apiUrl3}${nss}/bilanbio/lasttwo`; // Ajout dynamique de l'ID
+    const url = `${this.apiUrl3}${nss}/bilanbio/lasttwo`; // Generate the URL dynamically
     return this.http.get<BilanResponse>(url, {
       headers: this.authService.getHeaders(),
       withCredentials: true,
