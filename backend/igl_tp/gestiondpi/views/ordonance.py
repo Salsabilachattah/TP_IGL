@@ -28,7 +28,7 @@ from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsS
 )
 @api_view(["GET"])
 @permission_classes([IsAuthenticated,IsPharmacien])
-def get_all_non_validated_ordonances(self, request): # Get all non-validated ordonnances
+def get_all_non_validated_ordonances( request): # Get all non-validated ordonnances
     ordonnances = Ordonance.objects.filter(valide=False)
     serializer = OrdonnanceSerializer(ordonnances, many=True)
     return Response(serializer.data)
@@ -40,7 +40,7 @@ def get_all_non_validated_ordonances(self, request): # Get all non-validated ord
 )
 @api_view(["POST"])
 @permission_classes([IsAuthenticated,IsPharmacien])
-def validate_ordonance(self, request, pk): # pk is the id of the ordonnance to validate
+def validate_ordonance( request, pk): # pk is the id of the ordonnance to validate
     ordonnance = get_object_or_404(Ordonance, pk=pk)
     ordonnance.valide = True # Validate it
     ordonnance.save()
@@ -52,7 +52,7 @@ def validate_ordonance(self, request, pk): # pk is the id of the ordonnance to v
 )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsMedecin])
-def envoyer_ordonance_email(self, request, ordonnance_id):
+def envoyer_ordonance_email( request, ordonnance_id):
     ordonnance =get_object_or_404(Ordonance,id=ordonnance_id)
 
     # Send email to pharmacien for validation
