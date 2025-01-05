@@ -19,13 +19,12 @@ class SoinView(APIView):
         tags=["soin"],
         operation_summary="Retrieve Soin by ID",
     )
-
     def get(self, request, soin_id):
         soin = get_object_or_404(Soin, pk=soin_id)
         serializer = SoinSerializer(soin)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema( 
+    @swagger_auto_schema(
         tags=["soin"],
         operation_summary="Update Soin by ID",
     )
@@ -38,13 +37,11 @@ class SoinView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@swagger_auto_schema( 
-    method="post", 
-    tags=["soin"], 
+@swagger_auto_schema(
+    method="post",
+    tags=["soin"],
     operation_summary="Create Soin"
 )
-
-
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def create_soin(request):
@@ -63,9 +60,9 @@ def create_soin(request):
 )
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_soins_par_nss(request,nss):
+def get_soins_par_nss(request, nss):
     patient = get_object_or_404(Patient, nss=nss)
-    serializer = SoinSerializer(patient=patient,many=True)
+    serializer = SoinSerializer(patient=patient, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -76,33 +73,78 @@ def get_soins_par_nss(request,nss):
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
+            'infirmier': openapi.Schema(
+                type=openapi.TYPE_INTEGER,
+                description='Infirmier id'
+            ),
             'medicaments': openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=openapi.Items(
                     type=openapi.TYPE_OBJECT,
-                    properties={ 'medicament': openapi.Schema(type=openapi.TYPE_INTEGER, description='Medicament id'),
-                                 'dose': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament dose', example='500mg'),
-                                 'quantity': openapi.Schema(type=openapi.TYPE_INTEGER, description='Medicament quantity', example=30),
-                                 'duree': openapi.Schema(type=openapi.TYPE_INTEGER, description='Duree in days', example=7)
-                               }
+                    properties={'medicament': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament name'),
+                                'dose': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament dose',
+                                                       example='50.0'),
+                                'date_time': openapi.Schema( type=openapi.TYPE_STRING,format=openapi.FORMAT_DATETIME, description='Date and time')
+                                }
                 ),
                 description='List of medicaments in the ordonnance'
             )
         },
-        required=['medicaments']
+        required=['infirmier', 'medicaments']
     )
 )
-
-@api_view(['POST']) #changed (a lot changed in this file)
+@api_view(['POST'])  # changed (a lot changed in this file)
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
     soin = get_object_or_404(Soin, pk=soin_id)
-    serializer = SoinMedicamentSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(soin=soin)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    infirmier_id = request.data.get('infirmier')
+    medicament_data_list = request.data.get('medicaments', [])
+
+    created_medicaments = []
+    for medicament_data in medicament_data_list:
+        medicament_data['soin'] = soin.id  # Assign the soin_id to each medication
+        medicament_data['infirmier'] = infirmier_id  # Assign the same infirmier to each medication
+        serializer = SoinMedicamentSerializer(data=medicament_data)
+        if serializer.is_valid():
+            serializer.save(soin=soin)
+            created_medicaments.append(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(created_medicaments, status=status.HTTP_201_CREATED)
+
+
+@swagger_auto_schema(
+    method="get",
+    tags=["soin"],
+    operation_summary="Get Medicaments of a Specific Soin",
+    responses={
+        200: openapi.Response(
+            description="List of medicaments for the specified soin",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'soin': openapi.Schema(type=openapi.TYPE_INTEGER, description='Soin id'),
+                        'infirmier': openapi.Schema(type=openapi.TYPE_INTEGER, description='Infirmier id'),
+                        'medicament': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament name'),
+                        'dose': openapi.Schema(type=openapi.TYPE_STRING, description='Medicament dose', example=50.0),
+                        'date_time': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME,
+                                                    description='Date and time', example='2025-01-05T12:00:00Z')
+                    }
+                )
+            )
+        )
+    }
+)
+@api_view(['GET'])
+@permission_classes([IsInfirmier])
+def get_soin_medicaments(request, soin_id):
+    soin = get_object_or_404(Soin, pk=soin_id)
+    soin_medicaments = SoinMedicament.objects.filter(soin=soin)
+    serializer = SoinMedicamentSerializer(soin_medicaments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @swagger_auto_schema(
     method="post",
@@ -118,15 +160,10 @@ def add_soin_medicament(request, soin_id):
     responses={201: openapi.Response(
         description="Observation added to Soin successfully",
         schema=ObservationEtatSerializer()
-    ), 
-    400: openapi.Response( description="Invalid data provided",
-    )}
+    ),
+        400: openapi.Response(description="Invalid data provided",
+                              )}
 )
-
-
-
-
-
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
@@ -140,9 +177,41 @@ def add_observation_etat(request, soin_id):
 
 
 @swagger_auto_schema(
+    method="get",
+    tags=["soin"],
+    operation_summary="Get Observations of a Specific Soin",
+    responses={
+        200: openapi.Response(
+            description="List of observations for the specified soin",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'soin': openapi.Schema(type=openapi.TYPE_INTEGER, description='Soin id'),
+                        'infirmier': openapi.Schema(type=openapi.TYPE_INTEGER, description='Infirmier id'),
+                        'observation': openapi.Schema(type=openapi.TYPE_STRING, description='Observation'),
+                        'date_time': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME,
+                                                    description='Date and time', example='2025-01-05T12:00:00Z')
+                    }
+                )
+            )
+        )
+    }
+)
+@api_view(['GET'])
+@permission_classes([IsInfirmier])
+def get_observation_etats(request, soin_id):
+    soin = get_object_or_404(Soin, pk=soin_id)
+    observations = ObservationEtat.objects.filter(soin=soin)
+    serializer = ObservationEtatSerializer(observations, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
     method="post",
     tags=["soin"],
-    operation_summary="Add Infirmier to Soin",
+    operation_summary="Add SoinInfirmier to Soin",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
@@ -154,11 +223,10 @@ def add_observation_etat(request, soin_id):
         description="Infirmier added to Soin successfully",
         schema=SoinInfirmierSerializer()
     ),
-    400: openapi.Response(
-        description="Invalid data provided",
-    )}
+        400: openapi.Response(
+            description="Invalid data provided",
+        )}
 )
-
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_soin_infermier(request, soin_id):
@@ -169,3 +237,35 @@ def add_soin_infermier(request, soin_id):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    method="get",
+    tags=["soin"],
+    operation_summary="Get SoinInfirmiers of a Specific Soin",
+    responses={
+        200: openapi.Response(
+            description="List of infirmiers for the specified soin",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=openapi.Items(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'soin': openapi.Schema(type=openapi.TYPE_INTEGER, description='Soin id'),
+                        'infirmier': openapi.Schema(type=openapi.TYPE_INTEGER, description='Infirmier id'),
+                        'description': openapi.Schema(type=openapi.TYPE_STRING, description='Description'),
+                        'date_time': openapi.Schema(type=openapi.TYPE_STRING, format=openapi.FORMAT_DATETIME,
+                                                    description='Date and time', example='2025-01-05T12:00:00Z')
+                    }
+                )
+            )
+        )
+    }
+)
+@api_view(['GET'])
+@permission_classes([IsInfirmier])
+def get_soin_infirmiers(request, soin_id):
+    soin = get_object_or_404(Soin, pk=soin_id)
+    infirmiers = SoinInfirmier.objects.filter(soin=soin)
+    serializer = SoinInfirmierSerializer(infirmiers, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
