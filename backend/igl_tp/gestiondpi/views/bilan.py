@@ -10,7 +10,7 @@ from ..models import BilanBiologique, Consultation, BilanRadiologique, BilanBioT
 from ..permissions.auth import IsRadiologue, IsLaboratorien
 from ..serializers.bilan import BilanBioSerializer, BilanRadioSerializer, BilanBioEditSerializer, \
     BilanRadioEditSerializer, TestSerializer, BilanRadioCreateSerializer, BilanBioCreateSerializer, ImageRadioSerializer
-from ..permissions.bilan import BilanPermissions
+from ..permissions.bilan import BilanBioPermissions,BilanRadioPermissions
 from rest_framework.response import Response
 from rest_framework import status,permissions
 from django.shortcuts import get_object_or_404
@@ -18,7 +18,7 @@ from django.shortcuts import get_object_or_404
 
 
 class BilanBiologiqueView(APIView):
-    permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
+    permission_classes = [IsAuthenticated,BilanBioPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
         tags=["bilan bio"],
@@ -73,7 +73,7 @@ class BilanBiologiqueView(APIView):
 
 
 class BilanRadiologiqueView(APIView):
-    permission_classes = [IsAuthenticated,BilanPermissions]  # Only allow admins to create groups
+    permission_classes = [IsAuthenticated,BilanRadioPermissions]  # Only allow admins to create groups
 
     @swagger_auto_schema(
         tags=["bilan radio"],
