@@ -68,8 +68,17 @@ urlpatterns = [
     path('soins/<int:soin_id>/', SoinView.as_view(), name='soin-detail'),
     path('soins/', create_soin, name='soin-create'),
     path('soins/<int:soin_id>/medicaments/', add_soin_medicament, name='add-soin-medicament'),
-    path('soins/<int:soin_id>/infirmiers/', add_soin_infermier, name='add-soin-infirmier'),
+    # Get Medicaments of a Specific Soin
+    path('soin/<int:soin_id>/medicaments/get/', get_soin_medicaments, name='get_soin_medicaments'),
+    # Add SoinInfirmier to Soin
+    path('soins/<int:soin_id>/soin_infirmiers/', add_soin_infermier, name='add-soin-infirmier'),
+    # Get SoinInfirmiers of a Specific Soin
+    path('soin/<int:soin_id>/soin_infirmiers/get/', get_soin_infirmiers, name='get_soin_infirmiers'),
+    # Add Observation Etat to Soin
     path('soins/<int:soin_id>/observations/', add_observation_etat, name='add-observation-etat'),
+    # Get Observations of a Specific Soin
+    path('soin/<int:soin_id>/observations/get/', get_observation_etats, name='get_observation_etats'),
+    
     path('patients/<int:nss>/soins/', get_soins_par_nss, name='get_soin_par_nss'),
     # recherche
     path('employees/', EmployeListView.as_view(), name='medicament--role-nom'),
