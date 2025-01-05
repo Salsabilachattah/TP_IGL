@@ -35,10 +35,17 @@ export class RedigerResumeComponent {
     }
   }
 
-  rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
-  };
-  fieldOrder = ['numero', 'nom', 'prenom'];
+  ngOnInit(): void {
+    this.rowData = { numero: this.medecinService.createdConsultation.patient.nss,
+   ...this.medecinService.createdConsultation.patient
+   };
+ }
+ rowData = {
+   numero: '',
+   nom: '',
+   prenom: ''
+ };
+
+ fieldOrder = ['numero', 'nom', 'prenom'];
+
 }

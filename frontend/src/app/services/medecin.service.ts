@@ -75,8 +75,7 @@ export class MedecinService {
           return description;
         })
       );
-  }
-  createBilanBioConsultation(id: string, description: string): Observable<any> {
+  } createBilanBioConsultation(id: string, description: string): Observable<any> {
     const headers = this.authService.getHeaders(); // Get the headers
     const url = `${this.baseUrl}bilanbio/${id}/`; // Construct the URL with the NSS
 
@@ -106,10 +105,24 @@ export class MedecinService {
         })
       );
   }
+  saveOrdonnance(id: string, ordonnance: any): Observable<any> {
+    const headers = this.authService.getHeaders(); // Get the headers
+    const url = `${this.baseUrl}consultation/${id}/ordonnance/`; // Construct the URL with the ID
+    console.log('iddd', id);
+  // ordonnance.medecin = this.authService.getUserInfo; // Store the doctor information
+    return this.http
+      .post<any>(url, ordonnance, { headers, withCredentials: true })
+      .pipe(
+        map((res) => {
+          this.createdConsultation.ordonnance = ordonnance;
+          console.log(res); // Print the response
+          console.log(this.createdConsultation.ordonnance); // Print the ordonnance
+          return res;
+        })
+      );
+  }
 
-
-
-  private selectedPatient: any;
+  selectedPatient: any;
 
  
 

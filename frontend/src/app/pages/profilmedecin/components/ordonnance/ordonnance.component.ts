@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,6 +22,7 @@ export class OrdonnanceComponent {
 
   constructor (private router: Router,private medecinService:MedecinService){}
   //backend de ce format
+
   allData: Array<{ [key: string]: any }> = [
     { medicament: 'Paracétamol', doses: '500mg', duree: '5 jours' },
       { medicament: 'Ibuprofène', doses: '200mg', duree: '3 jours' },
@@ -35,7 +36,18 @@ export class OrdonnanceComponent {
   get dataKeys(): string[] {
     return this.allData.length > 0 ? Object.keys(this.allData[0]) : [];
   }
-
+  ngOnInit() {
+    this.rowData = {
+      nss: this.medecinService.createdConsultation.patient.nss,
+      nom: this.medecinService.createdConsultation.patient.nom,
+      prenom: this.medecinService.createdConsultation.patient.prenom
+    };
+  }
+  rowData = {
+    nss: '',
+    nom: '',
+    prenom: '',
+  };
   add() {
     this.added = !this.added;
     console.log('this.added', this.added);
@@ -56,21 +68,27 @@ export class OrdonnanceComponent {
   }
 
   sauvegarder(){
-    //envoyer allData au backend
-    alert("sauvegarde faite avec succes !");
+    console.log('this.medecinService.createdConsultation.patient', this.medecinService.createdConsultation);
+    this.rowData = {
+      numero: this.medecinService.createdConsultation.patient.nss,
+      ...this.medecinService.createdConsultation.patient,
+    };
+    console.log('this.allData', this.allData);
+    this.medecinService.saveOrdonnance(this.medecinService.createdConsultation.id,this.allData).subscribe(
+      response => {
+        console.log('Ordonnance saved successfully', response);
+      },
+      error => {
+        console.error('Error saving ordonnance', error);
+      }
+    );
+   
     this.router.navigate(['/medecin/resume']);
-     this.rowData = {
-       numero: this.medecinService.createdConsultation.patient.nss,
-       ...this.medecinService.createdConsultation.patient,
-     };
+
   }
  
-  rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
-  };
 
-  fieldOrder = ['numero', 'nom', 'prenom'];
+
+  fieldOrder = ['nss', 'nom', 'prenom'];
 
 }

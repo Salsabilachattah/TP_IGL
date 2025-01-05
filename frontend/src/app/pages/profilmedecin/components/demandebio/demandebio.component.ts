@@ -33,11 +33,15 @@ export class DemandebioComponent {
       alert("Remplissez d'abord!")
     }
   }
-
+  ngOnInit(): void {
+     this.rowData = { numero: this.medecinService.createdConsultation.patient.nss,
+    ...this.medecinService.createdConsultation.patient
+    };
+  }
   rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John'
+    numero: '',
+    nom: '',
+    prenom: ''
   };
 
   fieldOrder = ['numero', 'nom', 'prenom'];

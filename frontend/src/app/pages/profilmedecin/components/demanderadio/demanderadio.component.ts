@@ -42,11 +42,17 @@ export class DemanderadioComponent {
     }
   }
 
-  rowData = {
-    numero: '001',
-    nom: 'Doe',
-    prenom: 'John',
-  };
+  ngOnInit(): void {
+    this.rowData = { numero: this.medecinService.createdConsultation.patient.nss,
+   ...this.medecinService.createdConsultation.patient
+   };
+ }
+ rowData = {
+   numero: '',
+   nom: '',
+   prenom: ''
+ };
 
-  fieldOrder = ['numero', 'nom', 'prenom'];
+ fieldOrder = ['numero', 'nom', 'prenom'];
+
 }

@@ -69,20 +69,10 @@ export class Tableau2Component implements OnInit {
 
 
 
-
 loadMore() {
   const currentLength = this.displayedData.length;
   const nextData = this.patients.slice(currentLength, currentLength + this.itemsPerPage);
   this.displayedData = this.displayedData.concat(nextData);
-}
-private selectedPatient: any;
-
-setSelectedPatient(patient: any): void {
-  this.selectedPatient = patient;
-}
-
-getSelectedPatient(): any {
-  return this.selectedPatient;
 }
 
   display(button: string,patient: any) {
@@ -97,7 +87,7 @@ getSelectedPatient(): any {
       console.log("Patient sélectionné dans Tableau2Component:", patient);
   
       this.router.navigate(['/medecin/dossier']); // Naviguer après avoir mis à jour le patient
-    }else if (button === "Commencer") {
+    } else if (button === "Commencer") {
       this.consultation = !this.consultation;
       this.info = false;
       this.dossier = false;
