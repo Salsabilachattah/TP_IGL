@@ -129,3 +129,17 @@ def creer_ordonance(request, pk):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@swagger_auto_schema(
+    method="get",
+    tags=["ordonance"],
+    operation_summary="Get all ordonances for a patient",
+    responses={
+        status.HTTP_200_OK: OrdonnanceSerializer
+    }
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated,IsPharmacien])
+def get_ordonances_by_nss( request,nss): # Get all non-validated ordonnances
+    ordonnances = Ordonance.objects.filter(patient__nss=nss)
+    serializer = OrdonnanceSerializer(ordonnances, many=True)
+    return Response(serializer.data)
