@@ -142,4 +142,9 @@ def creer_ordonance(request, pk):
 def get_ordonances_by_nss( request,nss): # Get all non-validated ordonnances
     ordonnances = Ordonance.objects.filter(patient__nss=nss)
     serializer = OrdonnanceSerializer(ordonnances, many=True)
-    return Response(serializer.data)
+    ordonances_data = serializer.data
+    for ordonance in ordonances_data:
+        medicaments = OrdonanceMedicament.objects.filter(ordonance_id=ordonance["id"])
+        medicaments = OrdonnanceMedicamentsSerializer(medicaments,many=True)
+        ordonance["medicaments"] = medicaments.data
+    return Response(ordonances_data, status=status.HTTP_200_OK)
