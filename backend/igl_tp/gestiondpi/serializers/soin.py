@@ -14,26 +14,42 @@ class EmployeInfoSerializer(serializers.ModelSerializer):
         model = Employe
         fields = ['id', 'nom', 'prenom', 'role']  # Include ID, name, surname, and role
 
-
-
-# Serializer for SoinMedicament
+# Serializer for Medicament
+class MedicamentInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medicament
+        fields = ['nom'] 
+        
+# Serializer for SoinMedicament //changed
 class SoinMedicamentSerializer(serializers.ModelSerializer):
-    infirmier = EmployeInfoSerializer(read_only=True)
-    class Meta: model = SoinMedicament
-    fields = ['infirmier', 'medicament', 'dose', 'date_time']
-# Serializer for SoinInfirmier
+    medicament = MedicamentInfoSerializer()
+    class Meta: 
+        model = SoinMedicament
+        fields = ['infirmier', 'medicament', 'dose', 'date_time'] 
+    
+    def create(self, validated_data): 
+        medicament_data = validated_data.pop('medicament') 
+        medicament, created = Medicament.objects.get_or_create(**medicament_data) 
+        soin_medicament = SoinMedicament.objects.create(medicament=medicament, **validated_data)
+        return soin_medicament
+
+# Serializer for SoinInfirmier //changed
 class SoinInfirmierSerializer(serializers.ModelSerializer):
-    infirmier = EmployeInfoSerializer(read_only=True)
+    infirmier = serializers.PrimaryKeyRelatedField(queryset=Employe.objects.all())
+
     class Meta:
         model = SoinInfirmier
         fields = ['infirmier', 'description', 'date_time']
-        # Serializer for ObservationEtat
+
+
+# Serializer for ObservationEtat
 
 class ObservationEtatSerializer(serializers.ModelSerializer):
     infirmier = EmployeInfoSerializer(read_only=True)
     class Meta:
         model = ObservationEtat
         fields = ['infirmier', 'observation', 'date_time']
+
 # Main serializer for the Soin model
 class SoinSerializer(serializers.ModelSerializer):
     patient = PatientInfoSerializer(read_only=True)
@@ -43,4 +59,4 @@ class SoinSerializer(serializers.ModelSerializer):
     observation_etat = ObservationEtatSerializer(many=True, read_only=True, source='observationetat_set')
     class Meta:
         model = Soin
-        fields = [ 'patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament', 'soin_infirmier', 'observation_etat']
+        fields = [ 'id','patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament', 'soin_infirmier', 'observation_etat']
