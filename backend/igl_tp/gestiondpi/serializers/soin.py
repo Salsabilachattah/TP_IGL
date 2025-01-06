@@ -26,20 +26,18 @@ class SoinMedicamentSerializer(serializers.ModelSerializer):
 
 # Serializer for SoinInfirmier //changed
 class SoinInfirmierSerializer(serializers.ModelSerializer):
-    infirmier = serializers.PrimaryKeyRelatedField(queryset=Employe.objects.all())
 
     class Meta:
         model = SoinInfirmier
-        fields = ['infirmier', 'description', 'date_time']
+        fields = ['infirmier','soin', 'description', 'date_time']
 
 
 # Serializer for ObservationEtat
 
 class ObservationEtatSerializer(serializers.ModelSerializer):
-    infirmier = EmployeInfoSerializer(read_only=True)
     class Meta:
         model = ObservationEtat
-        fields = ['infirmier', 'observation', 'date_time']
+        fields = ['infirmier','soin', 'observation', 'date_time']
 
 # Main serializer for the Soin model
 class SoinSerializer(serializers.ModelSerializer):
