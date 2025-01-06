@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { form_laboratinComponent } from '../../../profillaborantin/components/form_laboratin/form_laboratin.component';
 import { MenuComponent } from '../../../../components/menu/menu.component';
+import { BilanService } from '../../../../services/bilan.service';
+import { Image, Bilan } from '../../../../models/bilan.model';
 @Component({
   selector: 'app-demande-radiologue',
   imports: [MenuComponent,CommonModule,  RouterModule , form_laboratinComponent],
@@ -11,21 +13,53 @@ import { MenuComponent } from '../../../../components/menu/menu.component';
 })
 export class DemandeRadiologueComponent {
   activeTab: string = 'nonTreated'; // Default tab
+    nonTreatedDemandes: any[] = [];
+    treatedDemandes: any[] = [];
+    imageUrls: string[] = []; // Array to store image URLs
 
-  // Sample data for demonstration
-  nonTreatedDemandes = [
-    { id:'1',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum.' },
-    {id:'2', name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum.Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    { id:'3',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum.Lorem ipsum lorem ipsum lorem ipsum lorem ipsumLorem ipsum lorem ipsum lorem ipsum lorem ipsum' },
-    ];
+    constructor(private bilanService: BilanService) {}
+  
+    ngOnInit(): void {
+      this.fetchNonTreatedBilans();
+      this.fetchTreatedBilans();
+    }
+  
+    // Fetch non-treated bilans
+    fetchNonTreatedBilans(): void {
+      this.bilanService.getNonTreatedBilansradio().subscribe({
+        next: (response) => {
+          console.log("les reponse",response.bilans);
+          this.nonTreatedDemandes = response.bilans;
+        },
+        error: (err) => {
+          console.error('Error fetching non-treated bilans:', err);
+        }
+      });
+    }
+  
+    fetchTreatedBilans(): void {
+      this.bilanService.getTreatedBilansradio().subscribe({
+        next: (response) => {
+          console.log('Treated Bilans:', response.bilans);
+          this.treatedDemandes = response.bilans.map((bilan: Bilan) => {
+            // Extract file names from images
+            const images = (bilan.images || []).map((image: any) => {
+              const fileName = image.image.split('/').pop(); // Extract file name from the image path
+              return this.bilanService.generateImageUrl(fileName); // Generate the full URL
+            });
+    
+            return { ...bilan, images }; // Add the processed images back to the bilan
+          });
+        },
+        error: (err) => {
+          console.error('Error fetching treated bilans:', err);
+        },
+      });
+    }
 
-  treatedDemandes = [
-    { id:'4',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum',compteRendu: 'Lorem ipsum lorem ipsum lorem', medcin:'Dr. ikram',by: 'Dr. John Doe', image: 'path_to_image_1.jpg' },
-    { id:'5',name: 'Bediat Djiane', date: '30-10-2024',description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum', compteRendu: 'Lorem ipsum lorem ipsum lorem',medcin:'Dr. noor', by: 'Dr. Jane Smith', image: 'path_to_image_2.jpg' },
-    { id:'6',name: 'Bediat Djiane', date: '30-10-2024', description: 'Lorem ipsum lorem ipsum lorem ipsum lorem ipsum',compteRendu: 'Lorem ipsum lorem ipsum lorem', medcin:'Dr. salso',by: 'Dr. Emily Brown', image: 'path_to_image_3.jpg' },
-     ];
+    
 
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
-  }
+    setActiveTab(tab: string): void {
+      this.activeTab = tab;
+    }
 }

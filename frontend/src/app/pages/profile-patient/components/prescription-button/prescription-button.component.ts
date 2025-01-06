@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
+import { Component ,Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+interface Medicament {
+  medicament: string; // Assurez-vous que le nom de la propriété soit correct
+  dose: string;
+  duree: string;
+}
 @Component({
   selector: 'app-prescription-button',
+  standalone:true,
   imports: [CommonModule],
   templateUrl: './prescription-button.component.html',
   styleUrl: './prescription-button.component.css'
 })
 export class prescriptionButtonComponent {
-// Donnée à afficher dans le paragraphe
-paragraphContent: string = "Ceci est un bilan rapide du patient : Nom - Prénom - Médecin traitant.";
- 
-show:boolean=true;
+    @Input() medicaments: Medicament[] = []; // Utilisez le type 'Medicament'
 
-deletepres(){
-  this.show=false;
-}
+  show: boolean = true;
 
+  deletepres() {
+    this.show = false;
+  }
 }

@@ -20,7 +20,7 @@
             </button>
             <app-bilan-button
       *ngIf="consultation.show"
-      [paragraphContent]="consultation.description"
+      [paragraphContent]="consultation.compte_rendu || consultation.resultat || 'Pas de contenue'"
       (closeModal)="displayPrescription(i)">
     </app-bilan-button>     </td>
           <td class="px-4 py-2">{{ consultation.valide ? 'Valide' : 'Non Valide' }}</td>   <td class="px-4 py-2">

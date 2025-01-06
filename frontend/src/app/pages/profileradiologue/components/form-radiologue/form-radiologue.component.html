@@ -1,19 +1,18 @@
-
-<div class=" p-4 rounded-lg mx-auto my-8 sm:max-w-4xl">
- <app-menu></app-menu> <!-- Header for Patient Info -->
+<div class="p-4 rounded-lg mx-auto my-8 sm:max-w-4xl">
+  <app-menu></app-menu><!-- Header for Patient Info -->
   <div class="patient-info mb-0 text-black space-y-4">
     <div class="flex justify-between items-center">
       <div>
-        <label for="nom" class="font-semibold text-lg">Nom:  </label>
-        <span id="nom" class="text-base">{{ nom }}</span> <!-- Replace with actual data -->
+        <label for="nom" class="font-semibold text-lg">Nom: </label>
+        <span id="nom" class="text-base">{{ bilan.patient?.nom || 'N/A' }}</span> <!-- Replace with actual data -->
       </div>
       <div>
-        <label for="prenom" class="font-semibold text-lg">Prénom:  </label>
-        <span id="prenom" class="text-base">{{ prenom }}</span> <!-- Replace with actual data -->
+        <label for="prenom" class="font-semibold text-lg">Prénom: </label>
+        <span id="prenom" class="text-base">{{ bilan.patient?.prenom || 'N/A' }}</span> <!-- Replace with actual data -->
       </div>
       <div>
-        <label for="numDossier" class="font-semibold text-lg">Numéro de dossier:  </label>
-        <span id="numDossier" class="text-base">{{ numDossier }}</span> <!-- Replace with actual data -->
+        <label for="numDossier" class="font-semibold text-lg">Num de sécurite social: </label>
+        <span id="num de securite social" class="text-base">{{ bilan.patient?.nss || '' }}</span> <!-- Replace with actual data -->
       </div>
     </div>
   </div>
@@ -21,33 +20,31 @@
   <!-- Line Below -->
   <div class="border-b-2 border-gray-300 mt-4"></div>
 </div>
+
+<div class="container bg-[#507bbc] p-8 rounded-lg mx-auto my-8 max-w-full sm:max-w-4xl">
+  <h1 class="title text-white text-3xl font-bold mb-6 mb-0 text-center">Bilan</h1>
+
+  <!-- Displaying static information (Nom, Medcin, Date, Description) -->
+  <div class="details mb-6 text-white space-y-4">
   
-  <div class="container bg-[#507bbc] p-8 rounded-lg mx-auto my-8 max-w-full sm:max-w-4xl">
-    <h1 class="title text-white text-3xl font-bold mb-6 text-center">Bilan radiologique</h1>
-  
-    <!-- Displaying static information (Nom, Medcin, Date, Description) -->
-    <div class="details mb-6 text-white space-y-4">
-      <div class="">
-        <span id="medcin" class="text-lg">Dr. Jean Dupont</span>
-      </div>
-  
-      <div class="">
-        <span id="date" class="text-lg">25 Décembre 2024</span>
-      </div>
-  
-      <div class="">
-        <span id="description" class="text-lg">Consultation pour évaluation de la santé générale.</span>
-        
-      </div>
+
+    <div>
+      <span id="date" class="text-lg">Date: {{ today | date: 'dd/MM/yyyy' }}</span>
     </div>
-  
-    <!-- Form Component -->
-    <div class="mb-6">
-      <app-form [labels]="fields"></app-form>
+
+    <div>
+      <span id="description" class="text-lg">Description: {{ bilan.description || 'pas de description' }}</span>
     </div>
-  
-    <!-- Generate Graph Button -->
-   
+  </div>
+
+  <!-- Form Component -->
+  <div class="mb-6">
+    <app-form
+      [labels]="['Compte rendu']"
+      (formSubmit)="onFormSubmit($event)"
+    ></app-form>
+  </div>
+
 
     <div class="">
         <span id="importe" class="text-lg text-white">Importer la radio</span>
@@ -69,7 +66,7 @@
           type="button"
           (click)="triggerFileInput()"
         >
-          Importer
+          Ajouter une image médicale
         </button>
       </div>
       

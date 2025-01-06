@@ -29,7 +29,7 @@
             </button>
             <app-boutton-resultat
             *ngIf="consultation.show3"
-            [paragraphContent]="consultation.compte_rendu"
+            [paragraphContent]="consultation.compte_rendu || consultation.resultat || 'Pas de contenue'"
             (closeModal)="displayResultat(i)">
           </app-boutton-resultat>
           </td>

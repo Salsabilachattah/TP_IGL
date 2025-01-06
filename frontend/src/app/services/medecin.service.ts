@@ -143,4 +143,14 @@ export class MedecinService {
     const headers = this.authService.getHeaders(); 
     return this.http.get<any>(`${this.apiUrl}${nss}/`, { headers, withCredentials: true });
   }
+
+  getOrdonnancesByNss(nss: number): Observable<any[]> {
+    const headers = this.authService.getHeaders();
+    const url = `${this.apiUrl}${nss}/ordonnances/`; // URL complète
+    return this.http.get<any[]>(url, {
+      headers,
+      withCredentials: true
+    });
+  }
+
 }

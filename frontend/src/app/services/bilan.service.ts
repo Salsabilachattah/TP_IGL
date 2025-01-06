@@ -6,6 +6,9 @@ import { AuthService } from './auth.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { catchError, throwError } from 'rxjs';
+import { BilanBioTest , BilanBiologique , BilanResponse, BilanResponseRadio } from '../models/bilan.model';
+import { Bilan , Image } from '../models/bilan.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +16,8 @@ import { catchError, throwError } from 'rxjs';
 export class BilanService {
   private apiUrl = 'http://127.0.0.1:8000/api/bilanbio/'; // Base URL for bilans
   private apiUrl2 = 'http://127.0.0.1:8000/api/bilanradio/'; // Base URL for bilans
+  private apiUrl3 = 'http://127.0.0.1:8000/api/patients/'; // Base URL for patients
+  private apiUrl4 = 'http://127.0.0.1:8000/'; // Base URL static
 
   constructor(
     private http: HttpClient,
@@ -68,7 +73,7 @@ export class BilanService {
     });
   }
   addBilanBioTest(id: number, data: { type: string; valeur: number | string }): Observable<any> {
-    const url = `${this.apiUrl}/bilanbio/${id}/add_test/`; // Ajout dynamique de l'ID
+    const url = `${this.apiUrl}${id}/add_test/`; // Ajout dynamique de l'ID
     return this.http.post(url, data,{
         headers: this.authService.getHeaders(),
         withCredentials: true, 
@@ -110,6 +115,21 @@ export class BilanService {
     
   }
   
+
+  uploadImage(pk: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl2}${pk}/add_image/`, formData, {
+      headers: this.authService.getHeaders(),
+      withCredentials: true, 
+    } );
+  }
+
+  // Fetch image URLs
+generateImageUrl(fileName: string | undefined): string {
+  const apiUrl = 'http://localhost:8080'; // Your base API URL
+  return fileName ? `${apiUrl}/static/${fileName}` : '' ; // Construct the full URL
+}
+
+
   getBilanByIdradio(bilanId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl2}${bilanId}/`, {
       headers: this.authService.getHeaders(),
@@ -126,6 +146,13 @@ export class BilanService {
 
 
 
+  getLastTwoBilans(nss: string): Observable<BilanResponse> {
+    const url = `${this.apiUrl3}${nss}/bilanbio/lasttwo`; // Generate the URL dynamically
+    return this.http.get<BilanResponse>(url, {
+      headers: this.authService.getHeaders(),
+      withCredentials: true,
+    });
+  }
 
 
 
