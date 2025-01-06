@@ -96,21 +96,18 @@ def get_soins_par_nss(request, nss):
 @api_view(['POST'])  # changed (a lot changed in this file)
 @permission_classes([IsInfirmier])
 def add_soin_medicament(request, soin_id):
-    soin = get_object_or_404(Soin, pk=soin_id)
-    infirmier_id = request.data.get('infirmier')
-    medicament_data_list = request.data.get('medicaments', [])
-
-    created_medicaments = []
-    for medicament_data in medicament_data_list:
-        medicament_data['soin'] = soin.id  # Assign the soin_id to each medication
-        medicament_data['infirmier'] = infirmier_id  # Assign the same infirmier to each medication
-        serializer = SoinMedicamentSerializer(data=medicament_data)
-        if serializer.is_valid():
-            serializer.save(soin=soin)
-            created_medicaments.append(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(created_medicaments, status=status.HTTP_201_CREATED)
+    infirmier=get_object_or_404( Employe,user=request.user)
+    medicament_data = request.data
+    medicament_data['soin'] = soin_id  # Assign the soin_id to each medication
+    medicament_data['infirmier'] = infirmier.id  # Assign the same infirmier to each medication
+    print(medicament_data)
+    serializer = SoinMedicamentSerializer(data=medicament_data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @swagger_auto_schema(
@@ -167,10 +164,13 @@ def get_soin_medicaments(request, soin_id):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_observation_etat(request, soin_id):
-    soin = get_object_or_404(Soin, pk=soin_id)
-    serializer = ObservationEtatSerializer(data=request.data)
+    infirmier=get_object_or_404( Employe,user=request.user)
+    observation_data = request.data
+    observation_data['soin'] = soin_id  # Assign the soin_id to each medication
+    observation_data['infirmier'] = infirmier.id  # Assign the same infirmier to each medication
+    serializer = ObservationEtatSerializer(data=observation_data)
     if serializer.is_valid():
-        serializer.save(soin=soin)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -230,10 +230,13 @@ def get_observation_etats(request, soin_id):
 @api_view(['POST'])
 @permission_classes([IsInfirmier])
 def add_soin_infermier(request, soin_id):
-    soin = get_object_or_404(Soin, pk=soin_id)
-    serializer = SoinInfirmierSerializer(data=request.data)
+    infirmier=get_object_or_404( Employe,user=request.user)
+    soin_data = request.data
+    soin_data['soin'] = soin_id  # Assign the soin_id to each medication
+    soin_data['infirmier'] = infirmier.id  # Assign the same infirmier to each medication
+    serializer = SoinInfirmierSerializer(data=soin_data)
     if serializer.is_valid():
-        serializer.save(soin=soin)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
