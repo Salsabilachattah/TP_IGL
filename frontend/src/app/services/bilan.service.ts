@@ -14,10 +14,10 @@ import { Bilan , Image } from '../models/bilan.model';
   providedIn: 'root',
 })
 export class BilanService {
-  private apiUrl = 'http://127.0.0.1:8080/api/bilanbio/'; // Base URL for bilans
-  private apiUrl2 = 'http://127.0.0.1:8080/api/bilanradio/'; // Base URL for bilans
-  private apiUrl3 = 'http://127.0.0.1:8080/api/patients/'; // Base URL for patients
-  private apiUrl4 = 'http://127.0.0.1:8080/'; // Base URL static
+  private apiUrl = 'http://127.0.0.1:8000/api/bilanbio/'; // Base URL for bilans
+  private apiUrl2 = 'http://127.0.0.1:8000/api/bilanradio/'; // Base URL for bilans
+  private apiUrl3 = 'http://127.0.0.1:8000/api/patients/'; // Base URL for patients
+  private apiUrl4 = 'http://127.0.0.1:8000/'; // Base URL static
 
   constructor(
     private http: HttpClient,

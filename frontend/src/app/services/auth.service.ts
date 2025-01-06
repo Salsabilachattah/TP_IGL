@@ -52,7 +52,7 @@ type User = (Employe | Patient) & {
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = 'http://localhost:8000';
   public user: User | null = null;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
   // 1. Retrieve the access token from localStorage
