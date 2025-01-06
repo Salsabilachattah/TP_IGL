@@ -8,8 +8,8 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class MedecinService {
-  private apiUrl = 'http://127.0.0.1:8000/api/patients/'; // URL de l'API Django
-  private baseUrl = 'http://127.0.0.1:8000/api/'; // URL de l'API Django
+  private apiUrl = 'http://127.0.0.1:8080/api/patients/'; // URL de l'API Django
+  private baseUrl = 'http://127.0.0.1:8080/api/'; // URL de l'API Django
 
   liste: Array<any> = [];
   createdConsultation: any = {};
@@ -143,4 +143,14 @@ export class MedecinService {
     const headers = this.authService.getHeaders(); 
     return this.http.get<any>(`${this.apiUrl}${nss}/`, { headers, withCredentials: true });
   }
+
+  getOrdonnancesByNss(nss: number): Observable<any[]> {
+    const headers = this.authService.getHeaders();
+    const url = `${this.apiUrl}${nss}/ordonnances/`; // URL complète
+    return this.http.get<any[]>(url, {
+      headers,
+      withCredentials: true
+    });
+  }
+
 }

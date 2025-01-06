@@ -4,15 +4,15 @@
     <div class="flex justify-between items-center">
       <div>
         <label for="nom" class="font-semibold text-lg">Nom: </label>
-        <span id="nom" class="text-base">{{ nom }}</span> <!-- Replace with actual data -->
+        <span id="nom" class="text-base">{{ bilan.patient?.nom || 'N/A' }}</span> <!-- Replace with actual data -->
       </div>
       <div>
         <label for="prenom" class="font-semibold text-lg">Prénom: </label>
-        <span id="prenom" class="text-base">{{ prenom }}</span> <!-- Replace with actual data -->
+        <span id="prenom" class="text-base">{{ bilan.patient?.prenom || 'N/A' }}</span> <!-- Replace with actual data -->
       </div>
       <div>
-        <label for="numDossier" class="font-semibold text-lg">Numéro de dossier: </label>
-        <span id="numDossier" class="text-base">{{ numDossier }}</span> <!-- Replace with actual data -->
+        <label for="numDossier" class="font-semibold text-lg">Num de sécurite social: </label>
+        <span id="num de securite social" class="text-base">{{ bilan.patient?.nss || '' }}</span> <!-- Replace with actual data -->
       </div>
     </div>
   </div>
@@ -26,25 +26,43 @@
 
   <!-- Displaying static information (Nom, Medcin, Date, Description) -->
   <div class="details mb-6 text-white space-y-4">
+  
+
     <div>
-      <span id="medcin" class="text-lg">Dr. Jean Dupont</span>
+      <span id="date" class="text-lg">Date: {{ today | date: 'dd/MM/yyyy' }}</span>
     </div>
 
     <div>
-      <span id="date" class="text-lg">25 Décembre 2024</span>
-    </div>
-
-    <div>
-      <span id="description" class="text-lg">Consultation pour évaluation de la santé générale.</span>
+      <span id="description" class="text-lg">Description: {{ bilan.description || 'pas de description' }}</span>
     </div>
   </div>
 
   <!-- Form Component -->
   <div class="mb-6">
-    <app-form [labels]="fields"></app-form>
+    <app-form
+      [labels]="['Résultat']"
+      (formSubmit)="onFormSubmit($event)"
+    ></app-form>
   </div>
-</div>
 
+  
+  </div>
+  <div class="flex justify-center items-center min-h-screen ">
+    <h1 class="text-3xl font-bold text-center text-gray-900">
+      <span class="relative">
+        <span class="absolute inset-0 text-transparent stroke-gray-900 stroke-2">
+          Si vous voulez générer un graphique, entrez les informations suivantes
+        </span>
+        Si vous voulez générer un graphique, entrez les informations suivantes
+      </span>
+    </h1>
+  </div>
+    <div class="mb-6">
+      <app-form
+      [labels]="['Cholestérol', 'Fer tests', 'Hypertension']"
+      (formSubmit)="onFormSubmit2($event)"
+    ></app-form>
+  </div>
 <!-- Last Button Aligned to the Right -->
 <div class="flex justify-end p-4">
   <button
@@ -55,6 +73,8 @@
     Générer graphique
   </button>
   
-</div><app-bouttonretour></app-bouttonretour>
- 
-<canvas id="myChart"></canvas>
+</div> 
+<div class="flex justify-center items-center my-6">
+  <canvas id="myChart" ></canvas>
+</div>
+<app-bouttonretour></app-bouttonretour>
