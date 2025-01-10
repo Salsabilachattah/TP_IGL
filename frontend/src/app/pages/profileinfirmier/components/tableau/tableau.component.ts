@@ -17,18 +17,7 @@ export class TableauComponent {
   consultation: boolean = false;
 
   @Input() labels: Array<string> = [];
-  //normalement input
-  /*
-  allData: Array<{ [key: string]: any }> = [
-    { nom: 'Marmouze', prenom: 'Nor' },
-    { nom: 'Bedjghit', prenom: 'Djinane' },
-    { nom: 'Badaoui', prenom: 'Ikram' },
-    { nom: 'Chattah', prenom: 'Salsabila' },
-    { nom: 'Boukabous', prenom: 'Malak' },
-    { nom: 'Hassam', prenom: 'Amar' }
-  ];*/
-
-  //je vais changer pour obtenir allData du backend
+// get the data from the backend 
   allData : Array <any> = [];
   
 
@@ -62,7 +51,6 @@ export class TableauComponent {
 
       this.infirmierservice.createSoin(patient.nss , '3', 'newSoin').subscribe({
         next: (response) => {
-          console.log("patient.nss", patient.nss)
           const createdSoinId = response.id; 
           localStorage.setItem('IdsoinCree',createdSoinId);
         },
@@ -72,10 +60,7 @@ export class TableauComponent {
         }
       });
       
-      
-
-     // this.router.navigate(['/infirmier/soins',patient.nss]);
-    
+        
      this.router.navigate(['/infirmier/soins',patient.nss]);
     }
   }
@@ -84,7 +69,6 @@ export class TableauComponent {
     this.infirmierservice.getListePatients().subscribe({
       next: (data) => {
         this.allData = data;
-        console.log(data);
        // this.dataKeys = this.allData.length > 0 ? Object.keys(this.allData[0]) : [];
       },
       error: (err) => {

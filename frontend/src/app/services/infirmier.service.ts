@@ -62,7 +62,7 @@ export class InfirmierService {
     }
     
     // Méthode pour envoyer les soins
-    private SoinInfUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/infirmiers/`; 
+    private SoinInfUrl = `http://127.0.0.1:8000/api/soins/${this.SoinId}/soin_infirmiers/`; 
     sendSoin(soinInfData: any): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json'

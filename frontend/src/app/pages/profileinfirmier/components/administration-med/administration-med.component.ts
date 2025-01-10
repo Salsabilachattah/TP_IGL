@@ -74,8 +74,7 @@ export class AdministrationMedComponent {
       const dateTime = `${date}T${hour}:00Z`;
       this.allData.push({ nom: med, dose: parseFloat(dose), date: date, heure: hour});
       const dataToSend = {
-        'medicament': {'nom': med}, 
-        'infirmier': 3, 
+        'medicament': med, 
         'dose': dose,
         'date_time': dateTime 
       };
@@ -85,6 +84,7 @@ export class AdministrationMedComponent {
           this.med = '' ; this.dose = '' ; this.date = '' ; this.hour = '';
         },
         error: (err) => {
+          
           alert("Une erreur s'est produite lors de la sauvegarde ( verifiez le format des données saisies ).");
         }
       });

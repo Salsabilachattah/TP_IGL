@@ -61,7 +61,6 @@ export class ObservationsComponent {
       const dateTime = `${date}T${hour}:00Z`;
       const dataToSend = {
         'observation': observation, 
-        'infirmier': 3, 
         'date_time': dateTime 
       };
     

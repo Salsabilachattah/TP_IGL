@@ -64,8 +64,7 @@ export class SoinsComponent {
       const dateTime = `${date}T${hour}:00Z`;  
   
       const dataToSend = {
-        'description': description,  
-        'infirmier': 3, 
+        'description': description,   
         'date_time': dateTime  
       };
   
