@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Ordonance, Patient, Employe, Consultation, OrdonanceMedicament
-from ..permissions.auth import IsMedecin,  
+from ..permissions.auth import IsMedecin
 from django.core.mail import send_mail
 from django.conf import settings
 
