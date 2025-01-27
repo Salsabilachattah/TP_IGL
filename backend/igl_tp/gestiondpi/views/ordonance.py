@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Ordonance, Patient, Employe, Consultation, OrdonanceMedicament
-from ..permissions.auth import IsMedecin, IsPharmacien
+from ..permissions.auth import IsMedecin,  
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -27,7 +27,7 @@ from ..serializers.ordonance import OrdonnanceSerializer, OrdonnanceMedicamentsS
     }
 )
 @api_view(["GET"])
-@permission_classes([IsAuthenticated,IsPharmacien])
+@permission_classes([IsAuthenticated ])
 def get_all_non_validated_ordonances( request): # Get all non-validated ordonnances
     ordonnances = Ordonance.objects.filter(valide=False)
     serializer = OrdonnanceSerializer(ordonnances, many=True)
@@ -39,7 +39,7 @@ def get_all_non_validated_ordonances( request): # Get all non-validated ordonnan
     operation_summary="Validate ordonance",
 )
 @api_view(["POST"])
-@permission_classes([IsAuthenticated,IsPharmacien])
+@permission_classes([IsAuthenticated ])
 def validate_ordonance( request, pk): # pk is the id of the ordonnance to validate
     ordonnance = get_object_or_404(Ordonance, pk=pk)
     ordonnance.valide = True # Validate it
@@ -138,7 +138,7 @@ def creer_ordonance(request, pk):
     }
 )
 @api_view(["GET"])
-@permission_classes([IsAuthenticated,IsPharmacien])
+@permission_classes([IsAuthenticated])
 def get_ordonances_by_nss( request,nss): # Get all non-validated ordonnances
     ordonnances = Ordonance.objects.filter(patient__nss=nss)
     serializer = OrdonnanceSerializer(ordonnances, many=True)
