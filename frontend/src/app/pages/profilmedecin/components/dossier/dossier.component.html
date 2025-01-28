@@ -25,10 +25,10 @@
         <app-bilan  [nss]="nss | number"></app-bilan>
         </ng-container>
         <ng-container *ngIf="selectedOption === 'D'">
-        <app-prescription></app-prescription>   
+        <app-prescription  [nss]="nss"></app-prescription>   
           </ng-container>
           <ng-container *ngIf="selectedOption === 'E'">
-           <app-soin></app-soin>
+           <app-soin ></app-soin>
           </ng-container>
       </div>
   

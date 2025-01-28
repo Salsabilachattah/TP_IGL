@@ -144,7 +144,7 @@ export class SearchbarComponent {
       this.dossier = false;
       console.log(patient);
       this.MedecinService
-        .createConsultation(patient.role)
+        .createConsultation(patient.nss)
         .subscribe((consultation) => {
           console.log(consultation); // This will log the consultation after the HTTP request completes
           console.log(this.MedecinService.createdConsultation); // Now, this will show the updated value
