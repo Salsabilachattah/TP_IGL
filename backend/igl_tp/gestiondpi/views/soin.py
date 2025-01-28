@@ -61,9 +61,12 @@ def create_soin(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_soins_par_nss(request, nss):
-    patient = get_object_or_404(Patient, nss=nss)
-    serializer = SoinSerializer(patient=patient, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    data = {'patient':nss}
+    serializer = SoinSerializer(data=data)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=404)
+
 
 
 @swagger_auto_schema(
