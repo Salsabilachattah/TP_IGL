@@ -19,3 +19,4 @@ djoser==2.3.1
 djangorestframework-simplejwt==5.3.1
 pytest==8.3.4
 filelock==3.16.1
+mysqlclient=2.2.7
