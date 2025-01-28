@@ -1,6 +1,6 @@
-<div class=" w-full justify-center items-center   ">
+<div class=" w-full justify-center items-center ">
     <div class="w-full  flex flex-col border">
-        <h1 class="border font-thin bg-gray-100 px-6 md:px-[4rem] py-[0.75rem] text-center ">Rechercher le patient par</h1>
+        <h1 class="border font-medium bg-gray-100 px-6 md:px-[4rem] py-[0.75rem] text-center ">Rechercher le patient par</h1>
         <div class="place-content-center place-items-center p-4">
             <div class="flex flex-col gap-4 sm:flex-row bg-[#FDFDFD] items-center">
                 <input 
@@ -45,7 +45,7 @@
                 </button>
             </div>
             <div *ngIf="webcamImage" class="mt-4">
-                <h3>Photo capturée :</h3>
+                <h3>Code QR capturé:</h3>
                 <img 
                     [src]="webcamImage.imageAsDataUrl" 
                     alt="Image capturée" 
@@ -54,33 +54,33 @@
         </div>
         <button 
             (click)="rechercher()" 
-            class="shadow-xl bg-[#87CAE9] px-10 py-2 mb-1 mt-0 mx-auto text-white rounded-md w-full sm:w-1/2 h-10 transition-colors duration-300 hover:bg-[#356bba]"
+            class="shadow-xl bg-[#1E3A8A] px-10 py-2 mb-1 mt-0 mx-auto text-white rounded-md w-full sm:w-1/2 h-10 transition-colors duration-300 hover:bg-[#87CAE9]"
           >  Rechercher
         </button>
-    </div>
-</div>
 
 
-<div *ngIf="affich">
-    <table class="w-full text-black">
 
-        <thead class="bg-gray-200">
+<div *ngIf="affich" class="ml-4">
+    <p class="font-bold underline decoration-[#1E3A8A] text-[#1E3A8A]">Patient recherché : </p>
+    <table class="w-full text-black ">
+
+        <thead class="">
           <tr class="h-10">
             <th
               *ngFor="let label of labels"
               class="text-left font-semibold text-xs uppercase relative"
             >
-              <div class="border-x-[0.05rem] h-1/2 w-full absolute top-1/4"></div>
-              <span class="relative px-2"> {{label}} </span>
+              <div class="h-1/2 w-full absolute top-1/4"></div>
+              <span class="relative font-medium "> {{label}} </span>
             </th>
           </tr>
         </thead>
 
-        <tbody class="bg-gray-100">
+        <tbody class="">
           <tr *ngFor="let data of displayedData" class="border-b-[0.1rem] h-10 border-white">
             <td *ngFor="let key of dataKeys" class="font-light">{{ data[key] }}</td>
             <td *ngFor="let button of buttonsArray">
-              <button class="font-semibold" (click)="display(button,data)">
+              <button class="font-semibold " (click)="display(button,data)">
                 {{ button }}
               </button>
             </td>
@@ -90,4 +90,7 @@
 </div>
 <div *ngIf="info">
   <app-form [nss]= "nss"/>
+</div>
+
+</div>
 </div>
