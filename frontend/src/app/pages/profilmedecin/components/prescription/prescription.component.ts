@@ -23,7 +23,7 @@ interface Ordonnance {
   styleUrls: ['./prescription.component.css'],
 })
 export class PrescriptionComponent {
-  @Input() nss: number | null = null; // Ajouter ici
+  @Input() nss: string | number | null = null;
 
   prescription: Ordonnance[] = [];
 
