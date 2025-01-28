@@ -22,11 +22,11 @@ interface nomicament {
 })
 export class SoinsComponent {
   added:boolean=false;
-  labels: string[]=["Description du soin", "Date","Heure","Infirmier"];
+  labels: string[]=["Description du soin", "Date","Heure"];
   description: string = '' ;  date: string = '';  hour:string = '' ;
   //backend
   allData: any[] = [
-    { description: 'exemple (suivez ce format)' , date: 'AAAA-MM-JJ', heure: "HH:MM" }, 
+    { description: 'Exemple (suivez ce format)' , date: 'AAAA-MM-JJ', heure: "HH:MM" }, 
     
   ];
 

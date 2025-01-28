@@ -4,22 +4,21 @@
     <div class="flex items-center justify-center px-24 w-full pb-8">
       <table class="w-full text-black">
 
-        <thead class="bg-gray-100">
+        <thead >
           <tr class="h-10">
             <th
               *ngFor="let label of labels"
               class="text-left font-semibold text-xs uppercase relative"
             >
-              <div class="border-x-[0.05rem] h-1/2 w-full absolute top-1/4"></div>
-              <span class="relative px-2">{{ label }}</span>
+              <div class=" h-1/2 w-full absolute top-1/4"></div>
+              <span class="relative place-content-center place-items-center text-sm">{{ label }}</span>
             </th>
           </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let data of displayedData" class="border-b-[0.1rem] h-10 border-white">
-            <td *ngFor="let key of dataKeys" class="font-light">{{ data[key] }}</td>
-            
+            <td *ngFor="let key of dataKeys" class="font-normal text-gray-400">{{ data[key] }}</td>
           </tr>
         </tbody>
       </table>
@@ -32,39 +31,39 @@
   
   
   <button (click)="add()" class="flex place-items-center ">
-    <span class="font-semibold">Ajouter</span> 
-    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 30 30" fill="none">
+    <span class="font-bold ">Ajouter une nouvelle donnée</span> 
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 30 30" fill="none" >
         <path d="M23.75 16.25H16.25V23.75H13.75V16.25H6.25V13.75H13.75V6.25H16.25V13.75H23.75V16.25Z" fill="black"/>
     </svg>
 </button>             
 <div *ngIf="added" class="text-black flex flex-col place-content-center place-items-center w-3/4 my-3  pb-4  ">
     <div class="flex gap-2  w-full">
-        <input [(ngModel)]="med" type="text" class="bg-[#FAFAFA] px-4 border   my-6  rounded w-1/3 py-1" 
+        <input [(ngModel)]="med" type="text" class="bg-[#FFFFFF] px-4 border  rounded w-1/3 py-1" 
         [ngClass]="{ 'border-red-500': !med }" 
         placeholder="médicament" required />
 
-        <input [(ngModel)]="dose" type="text" class="bg-[#FAFAFA] px-4  border  my-6   rounded w-1/3 py-1" 
+        <input [(ngModel)]="dose" type="text" class="bg-[#FFFFFF] px-4  border   rounded w-1/3 py-1" 
         [ngClass]="{ 'border-red-500': !dose }" 
         placeholder="dose" required />
 
-        <input [(ngModel)]="date" type="text" class="bg-[#FAFAFA] px-4  border   my-6  rounded w-1/3 py-1" 
+        <input [(ngModel)]="date" type="text" class="bg-[#FFFFFF] px-4  border   rounded w-1/3 py-1" 
         [ngClass]="{ 'border-red-500': !date }" 
         placeholder="date" required /> 
 
-        <input [(ngModel)]="hour" type="text" class="bg-[#FAFAFA] px-4  border   my-6  rounded w-1/3 py-1" 
+        <input [(ngModel)]="hour" type="text" class="bg-[#FFFFFF] px-4  border rounded w-1/3 py-1" 
         [ngClass]="{ 'border-red-500': !hour }" 
         placeholder="heure" required /> 
 
        
     </div>
 
-    <button (click)="confirmer(med,dose,date,hour)"  class="flex text-green-500"> 
+    <button (click)="confirmer(med,dose,date,hour)"  class="flex font-bold text-green-500 mt-4"> 
         <span>Confirmer</span> 
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="24" stroke-dashoffset="24" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11l6 6l10 -10"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="24;0"/></path></svg>
     </button>
     
 
 </div>
-<button (click)="sauvegarder()" class=" bg-[#87CAE9] text-white px-8 py-2 m-4 rounded font-semibold place-content-center place-items-center hover:bg-[#356bba]"> Enregistrer les soins </button>
+<button (click)="sauvegarder()" class=" bg-[#87CAE9] text-white mt-2 px-8 py-2 rounded font-semibold place-content-center place-items-center hover:bg-[#356bba]"> Enregistrer les soins </button>
 
 </div>

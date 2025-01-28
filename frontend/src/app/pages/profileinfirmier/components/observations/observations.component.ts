@@ -26,7 +26,7 @@ export class ObservationsComponent {
   observation: string = '' ;  date: string = '';  hour:string = '' ;
   //backend
   allData: any[] = [
-    { observation: 'exemple (Suivez ce format)' , date: 'AAAA-MM-JJ', heure: "HH:MM"},
+    { observation: 'Exemple (Suivez ce format)' , date: 'AAAA-MM-JJ', heure: "HH:MM"},
   ];
 
   info: boolean = false;

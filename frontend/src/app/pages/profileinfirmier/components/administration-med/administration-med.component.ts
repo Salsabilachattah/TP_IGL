@@ -38,7 +38,7 @@ export class AdministrationMedComponent {
 
 
   allData: Medicament[] = [
-    { nom: "exemple(suivez le format)", dose: 500, date: 'AAAA-MM-JJ', heure: "HH:MM" ,},
+    { nom: "Exemple (Suivez ce format)", dose: 100, date: 'AAAA-MM-JJ', heure: "HH:MM" ,},
   ];
   dataKeys: string[] = Object.keys(this.allData[0]);
 
@@ -52,13 +52,7 @@ export class AdministrationMedComponent {
   constructor(private router: Router, private http: HttpClient , private infirmierService : InfirmierService) { 
     this.displayedData = this.allData.slice(0, this.itemsPerPage);
   }
-/*
-  loadMore() {
-    const currentLength = this.displayedData.length;
-    const nextData = this.allData.slice(currentLength, currentLength + this.itemsPerPage);
-    this.displayedData = [...this.displayedData, ...nextData];
-  }
-*/
+
   display(button: string) {
     if (button === "Afficher") {
       this.info = !this.info;
@@ -84,8 +78,7 @@ export class AdministrationMedComponent {
           this.med = '' ; this.dose = '' ; this.date = '' ; this.hour = '';
         },
         error: (err) => {
-          
-          alert("Une erreur s'est produite lors de la sauvegarde ( verifiez le format des données saisies ).");
+          alert("Une erreur s'est produite lors de la sauvegarde ( vérifiez le format des données saisies ).");
         }
       });
       const currentLength = this.displayedData.length;

@@ -1,12 +1,16 @@
-<div *ngIf="data && fieldOrder.length" class="flex w-full max-w-4xl bg-white  p-4 ">
-    <div
-      *ngFor="let field of fieldOrder"
-      class="flex-grow px-4 py-2 text-gray-800 border bg-gray-100"
-    >
-      {{ data[field] ||data[0][field] || 'Valeur manquante' }}
-    </div>
+
+<div *ngIf="data && fieldOrder.length" class="flex flex-col ">
+  <div class="">
+    <p class="font-bold text-lg text-center">Bonjour !</p>
+    <p class="text-center">Vous remplissez les informations relatives au patient :</p>
   </div>
-  
+  <div class="flex justify-center space-x-8 py-2 pb-12 text-gray-800">
+    <span *ngFor="let field of fieldOrder">
+      {{ data[field] || data[0][field] || 'Valeur manquante' }}
+    </span>
+  </div>
+</div>
+
   <!-- Si aucune donnée -->
   <div *ngIf="!data || !fieldOrder.length" class="text-red-500">
     Aucune donnée disponible
