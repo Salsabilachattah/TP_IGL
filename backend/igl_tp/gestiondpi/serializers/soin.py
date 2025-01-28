@@ -41,11 +41,17 @@ class ObservationEtatSerializer(serializers.ModelSerializer):
 
 # Main serializer for the Soin model
 class SoinSerializer(serializers.ModelSerializer):
-    patient = PatientInfoSerializer(read_only=True)
     infirmier = EmployeInfoSerializer(read_only=True)
     soin_medicament = SoinMedicamentSerializer(many=True, read_only=True, source='soinmedicament_set')
     soin_infirmier = SoinInfirmierSerializer(many=True, read_only=True, source='soininfirmier_set')
     observation_etat = ObservationEtatSerializer(many=True, read_only=True, source='observationetat_set')
+
     class Meta:
         model = Soin
-        fields = [ 'id','patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament', 'soin_infirmier', 'observation_etat']
+        fields = ['id', 'patient', 'infirmier', 'observation', 'created_at', 'updated_at', 'soin_medicament',
+                  'soin_infirmier', 'observation_etat']
+        extra_kwargs = {
+            'observation': {'required': False},  # Makes 'observation' optional
+        }
+
+
