@@ -1,10 +1,10 @@
 
-<div *ngIf="data && fieldOrder.length" class="flex flex-col ">
+<div class="text-center  text-gray-400" *ngIf="data && fieldOrder.length" class="flex flex-col ">
   <div class="">
-    <p class="font-bold text-lg text-center">Bonjour !</p>
-    <p class="text-center">Vous remplissez les informations relatives au patient :</p>
+    
+    <p class="text-center  text-gray-400">Vous remplissez les informations relatives au patient :</p>
   </div>
-  <div class="flex justify-center space-x-8 py-2 pb-12 text-gray-800">
+  <div class="flex justify-center space-x-8 py-2 pb-12">
     <span *ngFor="let field of fieldOrder">
       {{ data[field] || data[0][field] || 'Valeur manquante' }}
     </span>

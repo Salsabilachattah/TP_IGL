@@ -1,7 +1,22 @@
 <div class="relative h-screen w-full overflow-hidden">
     <app-background-video></app-background-video>
     <div class="relative z-10 flex flex-col items-center justify-center h-full text-white">
+      <div class="absolute top-4 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 z-20">
+        <img src="assets/Images/logo.webp" alt="Logo HealthCare" class="h-10">
+        <div class="flex flex-col items-start">
+          <span class="text-white text-lg font-bold">HealthCare</span>
+          <span class="text-gray-300  "style="font-size: 0.55rem;">Votre santé,un  clic plus près</span>
+         
+        </div>
+      </div>
+      
+      
+      
+      
+      
       <h1 *ngIf="!showLoginForm" class="text-4xl font-bold">Bienvenue</h1>
+      <p *ngIf="!showLoginForm" class="text-base text-center text-white mt-2 max-w-md mx-auto">Simplifiez la gestion hospitalière avec HeatlthCare, votre outil clé en main pour une santé optimisée</p>
+
       <button 
         *ngIf="!showLoginForm" 
         (click)="showForm()" 
@@ -17,7 +32,7 @@
   
       <!-- Formulaire de connexion affiché conditionnellement -->
       <div *ngIf="showLoginForm" class="relative w-full max-w-[400px] p-6 mx-auto mt-10 bg-white/90 shadow-lg rounded-lg flex flex-col items-center max-h-[80vh] overflow-auto">
-        <p class="text-[#ffc934] text-center text-2xl font-bold mb-8 tracking-wide">Bienvenue</p>
+        <p class="text-[#ffc934] text-center text-2xl font-bold mb-8 tracking-wide"></p>
         <form class="w-full" (ngSubmit)="submitForm()">
           <!-- Champ Username -->
           <div class="relative mb-8">
@@ -71,6 +86,11 @@
           <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">{{ errorMessage }}</div>
         </form>
       </div>
+    </div>
+    
+    <!-- Copyright superposé -->
+    <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-sm text-white  px-4 py-2 ">
+      Copyright © 2025. All rights reserved to HealthCare.
     </div>
   </div>
   

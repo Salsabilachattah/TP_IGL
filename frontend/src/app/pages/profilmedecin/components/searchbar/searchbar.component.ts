@@ -75,23 +75,6 @@ export class SearchbarComponent {
     }
     return new Blob([uintArray], { type: 'image/jpeg' });
   }
-/*
-  rechercher() {
-
-    this.MedecinService.getPatientDetails(this.nss).subscribe({
-      next: (patient) => {
-        const tableau2Component = this.router.routerState.root.children[0].component as unknown as Tableau2Component;
-        tableau2Component.updatePatientDetails(patient);
-        console.log("Patient trouvé:", patient);
-      },
-      error: (err) => {
-        console.error("Erreur lors de la recherche du patient:", err);
-      }
-    });
-    // Envoie du NSS ou de l'image au backend
-    console.log("NSS recherché:", this.nss);
-   
-  }*/
 
 
 
@@ -162,19 +145,3 @@ export class SearchbarComponent {
 
 
 }
-
-/*
-export class StatsComponent {
-
-
-  ngOnInit(): void {
-    this.patientService.getNombrePatients().subscribe({
-      next: (data) => {
-        this.nombre_patient = data.toString(); // Convertir en chaîne de caractères
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des données :', err);
-      }
-    });
-  }
-}*/
