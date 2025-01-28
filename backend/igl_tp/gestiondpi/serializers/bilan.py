@@ -38,7 +38,7 @@ class BilanBioEditSerializer(serializers.ModelSerializer):
 class BilanBioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanBiologique
-        fields = ['description', 'consultation']
+        fields = ["patient",'description', 'consultation']
 
     def validate_description(self, value):
         if not value or value.strip() == "":
@@ -49,7 +49,7 @@ class BilanBioCreateSerializer(serializers.ModelSerializer):
 class BilanRadioCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BilanRadiologique
-        fields = ['description', 'consultation']
+        fields = ["patient",'description', 'consultation']
 
     def validate_description(self, value):
         if not value or value.strip() == "":
