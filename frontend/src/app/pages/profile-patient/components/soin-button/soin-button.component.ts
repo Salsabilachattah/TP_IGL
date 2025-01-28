@@ -7,9 +7,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './soin-button.component.html',
   styleUrl: './soin-button.component.css'
 })
-export class SoinButtonComponent {
-// Donnée à afficher dans le paragraphe
-@Input() paragraphContent: string = '';
+export class SoinButtonComponent {// Donnée à afficher dans le paragraphe
+  paragraphContent: string = "test soin";
+   
 show:boolean=true;
 
 deletesoin(){

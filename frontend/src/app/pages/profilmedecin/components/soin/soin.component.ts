@@ -9,9 +9,8 @@ import { SoinButtonComponent } from '../soin-button/soin-button.component';
 })
 export class SoinComponent {
   soins = [
-    { date: '2024-12-25', soin: 'Consultation for general health evaluation', infermier:'ikrem' ,show: false },
-    { date: '2024-12-18', soin: 'Follow-up for previous treatment' ,infermier:'noor',show: false },
-    { date: '2024-12-10', soin: 'Routine check-up' , infermier:'dji',show: false },
+    { date: '2025-01-29', soin: 'Consultation for general health evaluation', show: false },
+    
   ];
 
   ngOnInit() {
