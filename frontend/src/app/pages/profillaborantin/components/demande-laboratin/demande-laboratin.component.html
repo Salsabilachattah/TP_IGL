@@ -46,7 +46,7 @@
     <div *ngIf="activeTab === 'treated'" class="grid grid-cols-3 gap-4">
       <div *ngFor="let demande of treatedDemandes" class="p-4 border rounded-lg shadow-sm">
         <div class="flex justify-between">
-          <h3 class="font-semibold">Nom: {{ demande.patient?.nom || 'N/A' }} {{ demande.patient?.prenom || 'N/A' }}</h3>
+          <h3 class="font-semibold">Nom: {{ demande.patient?.nom || 'Bedjghit ' }} {{ demande.patient?.prenom || 'Hichem' }}</h3>
           <button
             class="text-blue-600 text-sm"
             [routerLink]="['/form-laboratin']"

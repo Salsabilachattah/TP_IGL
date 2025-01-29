@@ -229,7 +229,7 @@ generateGraph(): void {
     this.hypertAvant !== null
   ) {
     datasets.push({
-      label: 'Avant',
+      label: 'Aprés',
       data: [
         this.cholestAvant, 
         this.ferAvant, 
@@ -246,7 +246,7 @@ generateGraph(): void {
     this.hypertApres !== null
   ) {
     datasets.push({
-      label: '',  // Empty label to hide the label
+      label: 'Avant',  // Empty label to hide the label
       data: [
         this.cholestApres, 
         this.ferApres, 

@@ -125,7 +125,7 @@ export class BilanService {
 
   // Fetch image URLs
 generateImageUrl(fileName: string | undefined): string {
-  const apiUrl = 'http://localhost:8080'; // Your base API URL
+  const apiUrl = 'http://localhost:8000'; // Your base API URL
   return fileName ? `${apiUrl}/static/${fileName}` : '' ; // Construct the full URL
 }
 
