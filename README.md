@@ -1,17 +1,36 @@
-# TP_IGL
-when you want to create a new feature :
--  you need to create an issue first, then assign it to yourself
--  then create a branch and link it to the issue.
+# About TP_IGL
+This repository hosts HealthCare, a website developed as part of the IGL (Introduction au Génie Logiciel) module.  
 
-- issue naming convention :
-  - `frontend-your-feature` or `backend-your-feature`
-    
+# to run the back-end :
+```bash
+cd backend
+```
+- Activate the virtual environmenet :
+```bash
+python -m venv .venv
+./.venv/Scripts/activate.ps1
+```
+- install dependencies
+```bash
+python install -r requirements.txt
+```
+- run the server 
+`python ./igl_tp/manage.py runserver`
 
--⚠️ **Warning:** two of us shouldn't work in the same features, as this will cause conflicts when merging.
+# to run the front-end :
+```bash
+cd frontend
+  ```
+- install dependencies 
+```bash
+npm install
+```
+- run the server 
+```bash
+ng serve
+```
 
-# to run backend :
-- `cd backend`
-- `python -m venv .venv`
-- `./.venv/Scripts/activate.ps1` or `source ./.venv/Scripts/activate` on linux
-- `python install -r requirements`
-- `python ./igl_tp/manage.py runserver`
+# view website
+- The website hasn't been deployed yet . To test it , run both back and front and visit the link : [http://localhost:{port_number}](http://localhost:4200)
+
+
