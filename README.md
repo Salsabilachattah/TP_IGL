@@ -12,7 +12,7 @@ python -m venv .venv
 ```
 - install dependencies
 ```bash
-python install -r requirements.txt
+pip install -r requirements.txt
 ```
 - run the server 
 `python ./igl_tp/manage.py runserver`
@@ -28,6 +28,18 @@ npm install
 - run the server 
 ```bash
 ng serve
+```
+# to run functional test
+```bash
+cd tests-selenium
+```
+- install dependencies
+```bash
+pip install -r requirements.txt
+```
+- run the script , and choose one of the options that appear in the terminal
+```bash
+python tests_authentification.py
 ```
 
 # view website
